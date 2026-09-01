@@ -6,6 +6,7 @@ from core.database import supabase_admin
 import uuid
 import os
 import mailtrap as mt
+from datetime import datetime, timezone
 
 def send_wish_email(wish: dict):
     token = os.getenv("MAILTRAP_API_TOKEN")
