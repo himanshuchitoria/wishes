@@ -32,7 +32,7 @@ export default function SettingsPage() {
         const { data: { session } } = await supabase.auth.getSession();
         if (!session) return;
         
-        const res = await fetch('http://localhost:8000/api/settings', {
+        const res = await fetch('https://wishesbackend.vercel.app/api/settings', {
           headers: { 'Authorization': `Bearer ${session.access_token}` }
         });
         if (res.ok) {
@@ -62,7 +62,7 @@ export default function SettingsPage() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) throw new Error('Not authenticated');
       
-      const res = await fetch('http://localhost:8000/api/settings', {
+      const res = await fetch('https://wishesbackend.vercel.app/api/settings', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ export default function SettingsPage() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
       
-      const res = await fetch('http://localhost:8000/api/wishes', {
+      const res = await fetch('https://wishesbackend.vercel.app/api/wishes', {
         headers: { 'Authorization': `Bearer ${session.access_token}` }
       });
       

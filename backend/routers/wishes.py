@@ -16,7 +16,7 @@ def send_wish_email(wish: dict):
     sender_email = f"{wish.get('sender_email_prefix', 'hello')}@{domain}"
     recipient_email = wish['recipient_email']
     recipient_name = wish.get('recipient_name', 'there')
-    app_url = os.getenv("NEXT_PUBLIC_APP_URL", "http://localhost:3000")
+    app_url = os.getenv("NEXT_PUBLIC_APP_URL", "https://wishes.chitoria.dev")
     reveal_url = f"{app_url}/reveal/{wish['reveal_token']}?source=email"
     vibe = wish.get('vibe', 'roast')
     sender_alias = wish.get('sender_alias') or "Someone Special"

@@ -38,7 +38,7 @@ export default function BirthdayRevealPage() {
   useEffect(() => {
     const fetchReveal = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/api/reveal/${revealToken}`);
+        const res = await fetch(`https://wishesbackend.vercel.app/api/reveal/${revealToken}`);
         if (res.ok) {
           const data = await res.json();
           setWish(data.wish);
@@ -51,7 +51,7 @@ export default function BirthdayRevealPage() {
           
           if (urlParams.get('source') === 'email') {
             // Background call to mark as read
-            fetch(`http://localhost:8000/api/reveal/${revealToken}/read`, { method: 'POST' })
+            fetch(`https://wishesbackend.vercel.app/api/reveal/${revealToken}/read`, { method: 'POST' })
               .catch(err => console.error('Failed to mark as read', err));
           }
         } else if (res.status === 404) {

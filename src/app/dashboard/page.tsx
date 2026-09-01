@@ -44,7 +44,7 @@ export default function DashboardPage() {
         const { data: { session } } = await supabase.auth.getSession();
         if (!session) return;
         
-        const res = await fetch('http://localhost:8000/api/wishes', {
+        const res = await fetch('https://wishesbackend.vercel.app/api/wishes', {
           headers: {
             'Authorization': `Bearer ${session.access_token}`
           },
@@ -71,7 +71,7 @@ export default function DashboardPage() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
       
-      const res = await fetch(`http://localhost:8000/api/wishes/${id}`, {
+      const res = await fetch(`https://wishesbackend.vercel.app/api/wishes/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${session.access_token}`
