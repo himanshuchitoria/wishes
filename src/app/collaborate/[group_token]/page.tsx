@@ -309,6 +309,8 @@ export default function GroupContributionPage() {
           <span>Create Free Board for a Friend</span>
         </Link>
       </div>
+      </>
+      )}
     </div>
   );
 }
