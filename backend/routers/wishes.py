@@ -61,34 +61,34 @@ def send_wish_email(wish: dict):
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Happy Birthday!</title>
         <style>
-            @keyframes float {
-                0% { padding-top: 0px; padding-bottom: 10px; }
-                50% { padding-top: 10px; padding-bottom: 0px; }
-                100% { padding-top: 0px; padding-bottom: 10px; }
-            }
-            @keyframes pulse-glow {
-                0% { text-shadow: 0 0 10px rgba(244,63,94,0.4); opacity: 0.9; }
-                50% { text-shadow: 0 0 20px rgba(245,158,11,0.7); opacity: 1; }
-                100% { text-shadow: 0 0 10px rgba(244,63,94,0.4); opacity: 0.9; }
-            }
-            @keyframes sparkle {
-                0%, 100% { opacity: 0.4; color: #a1a1aa; }
-                50% { opacity: 1; color: #f59e0b; }
-            }
-            .animated-sign {
+            @keyframes float {{
+                0% {{ padding-top: 0px; padding-bottom: 10px; }}
+                50% {{ padding-top: 10px; padding-bottom: 0px; }}
+                100% {{ padding-top: 0px; padding-bottom: 10px; }}
+            }}
+            @keyframes pulse-glow {{
+                0% {{ text-shadow: 0 0 10px rgba(244,63,94,0.4); opacity: 0.9; }}
+                50% {{ text-shadow: 0 0 20px rgba(245,158,11,0.7); opacity: 1; }}
+                100% {{ text-shadow: 0 0 10px rgba(244,63,94,0.4); opacity: 0.9; }}
+            }}
+            @keyframes sparkle {{
+                0%, 100% {{ opacity: 0.4; color: #a1a1aa; }}
+                50% {{ opacity: 1; color: #f59e0b; }}
+            }}
+            .animated-sign {{
                 animation: float 4s ease-in-out infinite;
                 margin-bottom: 30px;
-            }
-            .text-glow {
+            }}
+            .text-glow {{
                 animation: pulse-glow 3s ease-in-out infinite;
                 background: linear-gradient(135deg, #fff, #f43f5e);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
-            }
-            .star { display: inline-block; animation: sparkle 3s infinite; }
-            .star-1 { animation-delay: 0s; }
-            .star-2 { animation-delay: 1s; }
-            .star-3 { animation-delay: 2s; }
+            }}
+            .star {{ display: inline-block; animation: sparkle 3s infinite; }}
+            .star-1 {{ animation-delay: 0s; }}
+            .star-2 {{ animation-delay: 1s; }}
+            .star-3 {{ animation-delay: 2s; }}
         </style>
     </head>
     <body style="margin: 0; padding: 0; background-color: #050505; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
