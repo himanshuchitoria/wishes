@@ -7,3 +7,4 @@ pyjwt
 requests
 python-multipart
 mailtrap
+google-genai
