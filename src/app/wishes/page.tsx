@@ -39,7 +39,7 @@ export default function WishQueuePage() {
         const { data: { session } } = await supabase.auth.getSession();
         if (!session) return;
         
-        const res = await fetch('https://wishesbackend.vercel.app/api/wishes', {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"}/wishes`, {
           headers: {
             'Authorization': `Bearer ${session.access_token}`
           },
@@ -63,7 +63,7 @@ export default function WishQueuePage() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
       
-      const res = await fetch(`https://wishesbackend.vercel.app/api/wishes/${wish.id}/deliver_now`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"}/wishes/${wish.id}/deliver_now`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${session.access_token}`
@@ -93,7 +93,7 @@ export default function WishQueuePage() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
       
-      const res = await fetch(`https://wishesbackend.vercel.app/api/wishes/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"}/wishes/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${session.access_token}`

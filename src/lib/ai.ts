@@ -23,7 +23,7 @@ export async function generateWishContent(params: AIGenerateParams): Promise<{ h
       token = data.session?.access_token || '';
     }
 
-    const res = await fetch('https://wishesbackend.vercel.app/api/generate', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"}/generate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

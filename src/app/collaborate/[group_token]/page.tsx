@@ -43,7 +43,7 @@ export default function GroupContributionPage() {
   useEffect(() => {
     const fetchBoard = async () => {
       try {
-        const res = await fetch(`https://wishesbackend.vercel.app/api/collaborate/${groupToken}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"}/collaborate/${groupToken}`);
         if (res.ok) {
           const data = await res.json();
           setWish(data.wish);
@@ -89,7 +89,7 @@ export default function GroupContributionPage() {
         const formData = new FormData();
         formData.append('file', mediaFile);
         
-        const uploadRes = await fetch('https://wishesbackend.vercel.app/api/storage/upload', {
+        const uploadRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"}/storage/upload`, {
           method: 'POST',
           body: formData,
         });
@@ -109,7 +109,7 @@ export default function GroupContributionPage() {
         image_url: finalImageUrl,
         avatar_seed: name.toLowerCase().replace(/\s+/g, ''),
       };
-      const res = await fetch(`https://wishesbackend.vercel.app/api/collaborate/${groupToken}/contribute`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"}/collaborate/${groupToken}/contribute`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

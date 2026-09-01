@@ -209,7 +209,7 @@ export default function WishStudioPage() {
         const formData = new FormData();
         formData.append('file', mediaFile);
         
-        const uploadRes = await fetch('https://wishesbackend.vercel.app/api/storage/upload', {
+        const uploadRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"}/storage/upload`, {
           method: 'POST',
           body: formData,
           // Note: When using FormData, fetch automatically sets the correct Content-Type with boundary
@@ -229,7 +229,7 @@ export default function WishStudioPage() {
         setIsUploading(false);
       }
       
-      const res = await fetch('https://wishesbackend.vercel.app/api/wishes', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"}/wishes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
