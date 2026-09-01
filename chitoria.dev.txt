@@ -1,0 +1,585 @@
+This is a great utility concept with strong viral potential. If someone receives a highly personalized, unique birthday wish from your platform, the natural next step for them is to use the platform for someone else's upcoming birthday.
+
+However, since standard calendar apps and Facebook already remind people of birthdays, this website needs a unique "hook" to stand out. Let's brainstorm how to elevate this from a simple scheduled text to a memorable experience, outline the features, and build a roadmap for monetization.
+
+1. The Creative "Hooks" (How to Attract Users)
+To make people actively want to use this, we need to offer something they can't easily do themselves.
+
+The "Hyper-Personalized AI" Angle: Instead of a generic "Happy Birthday," the sender inputs 3-4 funny or specific facts about the person (e.g., "loves cold pizza," "tripped over a dog last week," "obsessed with Batman"). The platform generates a hilarious custom poem, a roast, or a heartfelt letter.
+
+The "Digital Time Capsule": Allow users to record video or audio messages months in advance. On the birthday, the recipient gets a secure link to unlock their "capsule."
+
+The "Interactive Reveal": Instead of just sending a text, send a link to a digital scratch-off card, a mini-puzzle, or a quiz about the sender that they have to pass to reveal their anonymous message or gift.
+
+Group Stash (Collaborative): Allow the creator to generate a link to send to a friend group. Everyone drops in a text, photo, or meme, and the platform compiles it into a beautiful digital board delivered at midnight.
+
+2. Core Functionalities (The MVP)
+To build this, you'll need a solid frontend (React/Vite would be perfect for a snappy, interactive UI) and a reliable backend with task scheduling (like Python/FastAPI with a background worker like Celery for time-zone-accurate delivery).
+
+For the Sender (User Dashboard):
+
+Contact & Date Manager: Add names, birthdates, relationships, and time zones.
+
+Message Builder: Options to write their own text, use an AI generator, or upload media.
+
+Delivery Options: Choose between Email, SMS, or WhatsApp (via Twilio or Meta API).
+
+Identity Toggle: Send as "Real Name," "Secret Admirer," or "Mystery Friend."
+
+Security & Moderation (Crucial for the "Anonymous" Feature):
+
+Risk Warning: Purely anonymous messaging platforms always attract spam and bullying.
+
+The Fix: If a message is sent anonymously, the recipient must have a clear "Block Sender" or "Report" button. You might also want to run anonymous messages through an AI moderation filter (like OpenAI's moderation API) before delivery to block harmful content.
+
+For the Recipient:
+
+The Landing Page: A beautifully animated webpage where they view their message/video (this is also your prime real estate to show them a "Create one for your friend" button).
+
+3. Monetization Strategy
+Start with a frictionless free tier to build the user base, then introduce natural upsells.
+
+Freemium Model:
+
+Free: Scheduled email deliveries, standard text, generic digital cards.
+
+Premium (One-time fee or subscription): WhatsApp delivery, SMS delivery, video uploads, premium AI-generated songs/poems, and group board collaborations.
+
+Affiliate Integrations (High Potential): When a user is setting up a reminder, prompt them with: "Want to add a real gift?" Integrate with affiliate networks for Amazon, local florists, or digital gift cards (Starbucks, Netflix). You take a commission on any gift purchased through your link.
+
+Physical Postcards (Phase 2): Connect your backend to an API like Lob or Postgrid. Users pay $3-$5, and your platform automatically prints and mails a physical, customized birthday card to the recipient's actual mailbox a week before their birthday.
+
+Balancing both sentimental and funny content significantly expands your target audience, as people have very different relationships with their friends, siblings, and partners. To do both well, the platform needs to make the "vibe" a core part of the setup process.
+
+Here is how you can build the platform to handle both seamlessly:
+
+1. The "Vibe Selector" Engine
+When a user sets up a contact, make the mood the very first question. This dictates the UI and the options they see next.
+
+The Vibe Slider: Give them a slider or distinct tags: Tearjerker (Sentimental) ↔ Sweet ↔ Casual ↔ Snarky ↔ Full Roast (Funny).
+
+Dynamic Templates: If they select "Roast," the UI suggests options like "Send a fake cease-and-desist letter about them getting too old." If they select "Tearjerker," it offers "Collaborative Group Video Board."
+
+2. Tailored AI Prompts (The Magic Trick)
+Since you are likely building a robust backend to handle the scheduling, you can pass the "Vibe Selector" data directly into an LLM prompt as a system instruction.
+
+Funny: The user inputs "Loves cold pizza, crashed my car in 2022." The AI generates a customized, slightly passive-aggressive "anonymous" poem.
+
+Sentimental: The user inputs "Helped me through college, always remembers my dog's name." The AI drafts a highly polished, emotionally resonant letter that the user can tweak.
+
+3. The "Escalating Birthday" (Upsell Feature)
+Why send just one message? You can offer a "Full Day Takeover" package that utilizes both emotions.
+
+10:00 AM: An anonymous, highly confusing/funny text arrives (e.g., "A secret agent has been dispatched to investigate your sudden aging. Happy Birthday.").
+
+5:00 PM: A sincere, heartfelt email or WhatsApp arrives from the actual sender with a real gift card attached.
+
+4. Anonymous vs. Named Execution
+
+Funny/Anonymous: Works best as a short, punchy text message or a link to a mini-game (like a scratch-off card that reveals a funny insult before saying Happy Birthday).
+
+Sentimental/Named: Works best as a rich landing page. When the recipient clicks the link, they see a clean, beautifully designed page with a custom message, perhaps a looping background video, or a photo collage.
+
+5. Branding the Duality
+If you want to pull off both, the branding of the website itself needs to be clean, modern, and slightly playful—not too childish, and not too corporate. It should feel like a premium tool.
+
+If we map out the database and backend logic for this, the "Wish Payload" will need to store the contact details, the scheduled timestamp, the delivery method (SMS/Email), and this "Vibe" metadata tag.
+
+Do you want to start mapping out the database schema for how users and their scheduled wishes will be stored, or would you rather figure out a catchy name and domain first?
+
+To keep the architecture lean, efficient, and 100% free-tier compatible (using free serverless tiers, PostgreSQL free limits, and free email APIs like Resend), the entire platform can be structured into 8 core pages.
+
+Landing Page (/)
+The public storefront explaining the concept, showcasing examples of funny vs. sentimental reveals, and driving signups with a direct CTA.
+
+Authentication Page (/auth)
+A unified Login / Sign-Up / Password Reset interface with Email/Password and Google OAuth.
+
+Dashboard / Birthday Hub (/dashboard)
+The central user portal displaying a chronological calendar of upcoming birthdays, countdown cards, delivery status badges, and quick-add actions.
+
+Wish Studio (/create or /wishes/new)
+The main creation flow wizard where the sender selects the vibe (Roast vs. Sentimental), configures the date/timezone, drafts or generates the message, toggles anonymity, and selects the delivery method.
+
+Scheduled Queue & History (/wishes)
+A management table where users can view, edit, preview, duplicate, cancel, or check the delivery logs of pending and past wishes.
+
+Group Contribution Hub (/collaborate/:group_token)
+A lightweight, accessible shared page where invited friends and family can submit their own short notes, photos, or memes into a collective birthday vault without needing a full account.
+
+The Birthday Reveal Page (/reveal/:wish_id)
+The mobile-first, interactive destination page the recipient opens on their birthday to unlock their customized card, scratch-off, roast, or sentimental board.
+
+Account & Preferences (/settings)
+User profile management, default time zone configuration, email delivery preferences, and export/delete data options.
+
+To get users to actually sign up and use the platform, a basic "welcome" page won't work. The modern standard for a high-converting web app is a structured funnel that hooks the user immediately, explains the value, and removes any friction.
+
+Here is the optimal UI/UX layout and the specific tech stack required to keep the platform robust and completely free to host.
+
+1. UI/UX Structure: The Landing Page (/)
+The page needs to be divided into a clear, scrolling narrative designed to convert visitors into creators.
+
+Hero Section (Above the Fold): You have about 3 seconds to explain what the site does before they leave.
+
+Headline: Needs to be punchy and contrast the dual nature of the app. (e.g., "The Birthday Wish They'll Never Forget—Or Never Live Down.")
+
+Sub-headline: Clear value proposition. ("Schedule hyper-personalized, AI-crafted, or completely anonymous birthday reveals in under 2 minutes. 100% free.")
+
+Primary CTA: A high-contrast button: "Create a Wish — It's Free."
+
+Visual: A dynamic, looping split-screen animation. On the left, a phone receives a beautiful "Tearjerker" letter. On the right, a phone receives a "Brutal Roast" scratch-off card.
+
+How It Works (The 3-Step Guide): Keep the cognitive load low. Use icons and short text.
+
+Pick the Vibe: Choose anything from sweet to snarky.
+
+Drop the Details: Tell us a few quirks and set the timezone.
+
+We Do the Rest: Delivered precisely on their special day.
+
+The Interactive "Vibe" Showcase: This is your best selling point. Include an interactive slider on the page. When the user drags the slider left towards "Sentimental," they see an example of a heartfelt group board. When they drag it right towards "Roast," they see a hilarious, AI-generated insult poem.
+
+FAQ / Trust Section: Address the two biggest objections immediately: "Is it really anonymous?" (Yes, with safe-guards) and "Is it actually free?" (Yes, with optional premium upgrades).
+
+Final CTA (Below the Fold): Repeat the "Create a Wish" button at the very bottom so they don't have to scroll back up to start.
+
+2. Backend Requirements (The "100% Free" Tech Stack)
+To avoid hallucinations and ensure you can actually build this without paying out of pocket for servers right away, you need a modern serverless architecture. This stack is the industry standard for bootstrapping high-performance apps for free:
+
+Frontend & API Gateway: Next.js hosted on Vercel. Next.js allows you to build the UI (React) and your backend API routes in the same repository. Vercel's free tier can handle massive amounts of traffic without breaking a sweat.
+
+Database: Supabase or Neon. Both offer serverless PostgreSQL databases with incredibly generous free tiers. You will use this to store user accounts, recipient details, and the pending "Wish Payloads."
+
+The Scheduler (The Core Engine): You need a way to trigger messages at exactly midnight in different time zones. Since serverless functions (like Vercel) go to sleep when not in use, you cannot run a continuous timer.
+
+The Solution: Use Upstash (QStash). It is a serverless message queue. When a user creates a wish, you send a delayed message to QStash with the delivery timestamp. At that exact moment, QStash wakes up your Next.js API to send the email/SMS. It has a robust free tier.
+
+Delivery Infrastructure:
+
+Email (Free): Resend (allows 3,000 free emails per month). Ideal for delivering the links to the reveal pages.
+
+SMS/WhatsApp (Premium Only): Twilio. Note: SMS APIs do not have viable free tiers. You must gate SMS/WhatsApp delivery behind your paid "Premium" tier so the user's payment covers the API cost.
+
+Should we map out the database schema to handle these timezones and delivery methods, or do you want to dive into the UI flow for the Wish Studio (/create) next?
+
+Setting up dynamic sender addresses like anonymous@chitoria.dev or cheers@chitoria.dev is the perfect move. Using a tool like Resend, you simply verify your chitoria.dev domain once via DNS records, and the API allows you to dynamically change the "from" name and prefix for every single email you dispatch.
+
+Here is the breakdown for Page 2: Authentication Page (/auth).
+
+1. UI/UX Structure: The Authentication Page
+Since users are trusting you with their friends' contact information and delivery dates, the login screen needs to feel highly secure, clean, and frictionless.
+
+The Layout (Split Screen): On desktop, use a 50/50 split.
+
+Left Side: The functional login/signup form centered on a clean white/light background.
+
+Right Side: A branded graphic, a looping animation of a birthday reveal, or a rotating carousel of user testimonials/funny generated roasts to reinforce the platform's value.
+
+The "Frictionless" Entry:
+
+Primary Action: A prominent "Continue with Google" button. The majority of users will use this to avoid creating another password.
+
+Secondary Action: Standard Email/Password login, neatly tucked below a visual "OR" divider.
+
+Contextual Messaging: If a user lands here because they clicked "Save my Group Board" from the collaborative page, the header should dynamically say, "Create an account to save and manage your group board," rather than a generic "Welcome back."
+
+Post-Auth Routing: Immediately upon successful login or signup, redirect the user directly to the Dashboard (/dashboard) with a welcome toast notification.
+
+2. Backend Requirements
+Handling authentication manually is a massive security risk and time sink. Since you are aiming for a robust, free architecture, you should outsource this entirely to a managed service.
+
+The Auth Provider: Supabase Auth. Since Supabase is acting as your PostgreSQL database, using their built-in authentication is the smartest move. It is completely free for up to 50,000 monthly active users.
+
+Google OAuth Integration: You will need to create a project in the Google Cloud Console, generate OAuth client IDs, and plug them into your Supabase dashboard. This allows the "Continue with Google" button to work natively.
+
+Database Triggers (Crucial Step): You need to map the auth system to your public database. Write a Supabase Postgres Trigger so that every time a new user signs up via the Auth API, a new row is automatically created in your public.users table containing their id, email, and account creation timestamp. This allows you to link "Birthday Wishes" to a specific user.
+
+Session Management: Supabase handles the JWT (JSON Web Tokens) for you. If you are using React/Vite, you will use the @supabase/supabase-js library to listen for auth state changes and securely store the active session in local storage or cookies, protecting your private routes.
+
+1. UI/UX Structure: The Dashboard / Birthday Hub (/dashboard)
+The dashboard is the command center where users manage their contacts, monitor scheduled deliveries, and quickly trigger new wishes. It must be scannable in seconds.
+
+Top Navigation & Summary Metrics
+Header Bar: User avatar/profile menu, user's default timezone indicator, and a high-contrast primary CTA: + Schedule a Wish.
+
+Quick Metric Cards:
+
+Upcoming (Next 30 Days): Count of imminent birthdays.
+
+Scheduled: Total active queues pending delivery.
+
+Delivered: Total successful sends with an "Open Rate / Viewed" indicator.
+
+Main Content Area: Dual-View Layout (List & Calendar)
+View Toggle: Switch between a chronological Timeline Card View (default) and a Monthly Calendar Grid.
+
+Chronological Birthday Cards:
+
+Card Header: Recipient name, relationship tag (e.g., "Best Friend", "Sibling"), and a countdown badge (In 3 days, Tomorrow, Today at 12:00 AM).
+
+Vibe & Channel Badges: Visual pills like 🔥 Full Roast, 💌 Sentimental, 🕶️ Anonymous, and 📧 Email via chitoria.dev.
+
+Status Indicator: Scheduled (Queued), Draft, Delivered & Opened, or Delivered (Unopened).
+
+Action Menu (3 dots): Preview Reveal Page, Edit Wish, Reschedule, Pause, or Delete.
+
+Empty State (Zero Data): If the user has no contacts yet, show a lightweight visual guide: "You haven't added anyone yet. Add your best friend's birthday and set up a roast or tearjerker in under 60 seconds." with an immediate inline input field.
+
+2. Backend Requirements
+The backend for the dashboard requires fast querying, time-zone calculation, and strict security rules.
+
+Database Schema (Supabase / PostgreSQL)
+You will need a dedicated table for storing scheduled wishes and contacts.
+
+SQL
+create type wish_status as enum ('draft', 'scheduled', 'delivered', 'failed', 'cancelled');
+create type wish_vibe as enum ('roast', 'sentimental', 'sweet', 'funny', 'custom');
+
+create table public.wishes (
+    id uuid default gen_random_uuid() primary key,
+    user_id uuid references auth.users(id) on delete cascade not null,
+    recipient_name text not null,
+    recipient_email text not null,
+    recipient_phone text,
+    birth_date date not null,
+    delivery_time time default '00:00:00' not null,
+    delivery_timezone text not null default 'UTC',
+    vibe wish_vibe default 'sentimental' not null,
+    is_anonymous boolean default false not null,
+    sender_alias text, -- e.g., 'Secret Admirer' or 'Himanshu'
+    sender_email_prefix text default 'cheers', -- sends from {prefix}@chitoria.dev
+    message_payload jsonb not null default '{}'::jsonb, -- stores text, AI prompt inputs, media URLs
+    status wish_status default 'scheduled' not null,
+    qstash_message_id text, -- ID returned by Upstash for cancellation/rescheduling
+    created_at timestamp with time zone default now() not null,
+    updated_at timestamp with time zone default now() not null
+);
+Security & Row Level Security (RLS)
+Enable Supabase RLS immediately so users can never read or mutate other users' contacts or messages:
+
+SQL
+alter table public.wishes enable row level security;
+
+create policy "Users can only manage their own wishes"
+on public.wishes
+for all
+using (auth.uid() = user_id);
+Next Birthday Calculation Engine
+Because a person's birth_date includes their birth year (e.g., 1998-10-15), the backend needs to compute the next upcoming anniversary in the recipient's timezone.
+
+Database View / Function: Create a PostgreSQL function or generated column that normalizes the date to the current or next calendar year, producing an exact next_delivery_timestamp.
+
+API Response: The GET /api/wishes endpoint returns the records sorted by next_delivery_timestamp asc, allowing the frontend to render the immediate countdowns without client-side timezone calculation bugs.
+
+1. UI/UX Structure: The Wish Studio (/create)
+This is the core engine of the app. Because there are many settings (dates, timezones, vibes, anonymity), a single long scrolling form will overwhelm users and cause them to bounce. The best UX practice here is a Multi-Step Wizard with a Live Preview.
+
+The Layout: Split-Screen Builder
+Left Column (The Controls): A 4-step interactive form.
+
+Right Column (The Live Preview): A sticky mobile-phone mockup that updates in real-time, showing exactly what the recipient's Reveal Page will look like based on the inputs.
+
+The 4-Step Wizard Flow
+Step 1: The Target (Who & When)
+
+Inputs: Name, Email/Phone.
+
+Date Picker: Birthdate.
+
+Timezone Selector: Crucial for accurate midnight delivery. (Auto-detect the user's timezone, but allow them to change it to the recipient's).
+
+Step 2: The Vibe Check
+
+A visual slider: Tearjerker ↔ Sweet ↔ Casual ↔ Snarky ↔ Brutal Roast.
+
+Background theme selection for the Reveal Page (e.g., dark mode for roasts, soft gradients for sweet messages).
+
+Step 3: The Content & AI Assistant
+
+Users can write their own message from scratch OR use the AI.
+
+AI Prompt Form: 3 small inputs: "What's an inside joke?", "What's their best trait?", "What's an embarrassing memory?"
+
+Generate Button: Streams the AI-generated text directly into a text editor where the user can manually tweak it.
+
+Step 4: Delivery & Disguise
+
+Identity Toggle: Send as Myself vs Send Anonymously.
+
+If Anonymous: A dropdown to select the chitoria.dev sender alias (e.g., secret@chitoria.dev, truth@chitoria.dev, or cheers@chitoria.dev).
+
+Submit Button: "Lock it in & Schedule".
+
+2. Backend Requirements
+This page handles the most complex logic in the app: AI text generation and precise job scheduling.
+
+The AI Generation Endpoint (POST /api/generate)
+Tech Stack: Next.js Edge Functions + OpenAI API (or Google Gemini API).
+
+Logic: You pass the "Vibe" and the 3 bullet points of context to the LLM.
+
+System Prompting: You will need highly specific system prompts based on the vibe. For example, if vibe == 'roast', the system prompt is: "You are a sarcastic comedian. Write a short, punchy 4-line birthday roast using the following facts. Do not use generic birthday cliches."
+
+Streaming: Use Vercel's AI SDK to stream the text back to the UI character-by-character, creating a fast, magical UX.
+
+The Scheduling Endpoint (POST /api/wishes)
+When the user clicks "Schedule", the frontend sends the finalized payload to this endpoint. The endpoint executes a strict sequence:
+
+Time Calculation: Converts the recipient's birthdate and local timezone into an exact UTC Unix Timestamp for delivery.
+
+Supabase Insert: Saves the complete Wish Payload (recipient details, text, vibe, theme) into the public.wishes table with status = 'scheduled'.
+
+The QStash Dispatch (Crucial):
+
+The API makes a REST call to Upstash QStash.
+
+It tells QStash: "Store this request. Do not execute it until [Target UTC Timestamp]. When that time comes, make a POST request to my /api/deliver endpoint with this Wish ID."
+
+Update Record: QStash returns a message_id. The API updates the Supabase row to save this ID. This is required so you can cancel or reschedule the QStash job later if the user edits the wish.
+
+1. UI/UX Structure: Scheduled Queue & History (/wishes)
+While the Dashboard (/dashboard) provides a high-level overview and immediate countdowns, this page acts as the detailed data table for power users to manage, filter, and audit their entire history of generated wishes.
+
+The Layout: Tabbed Data Table
+Top Navigation Tabs: Pending (Scheduled) | Delivered | Drafts/Failed.
+
+Search & Filter Bar:
+
+Search by recipient name or email.
+
+Filter dropdowns for Vibe (Roast, Sentimental) and Identity (Anonymous, Real Name).
+
+The Data Grid / List View: For a developer-friendly UI (like a React/Vite table component), include these columns:
+
+Recipient: Name + Avatar/Initials.
+
+Scheduled For: Formatted Date + Time (Local & UTC tooltip).
+
+Delivery Method: Email (@chitoria.dev) or Link.
+
+Theme/Vibe: Visual pill tag.
+
+Status Badge: 🟠 Pending, 🟢 Sent, 🔴 Cancelled.
+
+Actions (The "Meatball" Menu ...):
+
+If Pending: Edit, Reschedule, Send Now (override schedule), Cancel.
+
+If Delivered: View Reveal Page, Duplicate (for next year), Delete Record.
+
+UX Micro-Interactions
+Live Preview Modal: Clicking any row shouldn't navigate away. It should slide out a side-panel or modal showing the mobile-phone preview of what the recipient will see, ensuring the sender can double-check the AI-generated roast or sentimental text before it locks in.
+
+2. Backend Requirements
+This page requires standard CRUD operations, but with a critical layer of synchronization to your serverless message queue (QStash). If the database state changes, the queue must be updated simultaneously to prevent accidental deliveries.
+
+API Endpoints
+GET /api/wishes (Fetch with Pagination): Uses Supabase queries with .limit() and .range() to fetch user-specific records. Includes URL search parameters for filtering by status.
+
+PATCH /api/wishes/:id (Update/Reschedule):
+
+If the user changes the text/vibe, update the message_payload in PostgreSQL.
+
+If the user changes the delivery date/time, this requires a complex transaction:
+
+Call Upstash QStash API to DELETE the existing scheduled message using the saved qstash_message_id.
+
+Create a NEW scheduled message in QStash with the new timestamp.
+
+Update the PostgreSQL row with the new delivery_time and the new qstash_message_id.
+
+DELETE /api/wishes/:id (Cancel/Revoke):
+
+Must trigger the QStash delete endpoint to kill the pending webhook.
+
+Instead of a hard SQL delete, it is often safer to do a soft delete (UPDATE wishes SET status = 'cancelled') so the user maintains a history of what they built.
+
+Security / Edge Cases
+The "Point of No Return": If a user tries to edit or cancel a wish that is scheduled to send within the next 2 minutes, the UI should block the action or show a warning that the job might have already been picked up by the queue worker.
+
+Timezone Normalization: Always fetch and display times converted back to the sender's local browser timezone (using JavaScript's Intl.DateTimeFormat), even though the backend strictly stores and compares against UTC.
+
+1. UI/UX Structure: Group Contribution Hub (/collaborate/:group_token)
+This page is built for virality and low friction. The creator shares this link in a WhatsApp or iMessage group chat. Crucially, contributors must not be forced to create an account. Any friction here kills participation.
+
+The Layout: Mobile-First "Digital Guestbook"
+The Header (Context & Urgency):
+
+Title dynamically reflects the vibe: "Drop a tearjerker for Sarah" or "Add your most brutal roast for Himanshu."
+
+Countdown Timer: A sticky banner at the top (e.g., ⏱️ Board locks in: 24h 12m) to create urgency.
+
+The Contribution Form (Above the Fold):
+
+Name Input: "Your Name / Alias" (Required).
+
+Text Area: The message block. Include dynamic placeholder text based on the vibe (e.g., "Remember that time we...").
+
+Media Uploader: A simple button to attach 1 photo or GIF.
+
+Submit Button: "Add to the Board."
+
+The Live Board (Below the Fold):
+
+A Pinterest-style masonry grid showing the notes and photos other friends have already added.
+
+Psychological hook: Seeing other people's funny or sweet messages acts as social proof and encourages the current user to write something better.
+
+The Upsell (Bottom CTA): After a user successfully submits their note, show a subtle banner: "Want to do this for your best friend? Create a free automated birthday board." This is how the app grows organically.
+
+2. Backend Requirements
+Since this page is public-facing and accepts user-generated content (UGC), it requires careful token management and storage limits to protect your free tier.
+
+Database Schema Expansion (Supabase)
+You need a new table to store individual contributions, tied to the main wish.
+
+SQL
+create table public.group_contributions (
+    id uuid default gen_random_uuid() primary key,
+    wish_id uuid references public.wishes(id) on delete cascade not null,
+    contributor_name text not null,
+    message text,
+    image_url text, -- URL to Supabase Storage
+    created_at timestamp with time zone default now() not null
+);
+
+-- Add a secure token to the main wishes table
+alter table public.wishes add column group_token uuid default gen_random_uuid();
+alter table public.wishes add column is_group_board boolean default false;
+Security & Token Logic (GET /api/collaborate/:token)
+No ID Guessing: Never expose the wish_id in the URL. Use the random UUID group_token. The endpoint queries the database for the wish matching this token.
+
+Expiration Check: The API must check the delivery_time. If the current time is within 1 hour of delivery, the API returns a 403 Locked status, and the UI displays: "This board is sealed and currently being delivered!"
+
+Image Storage & Optimization (Supabase Storage)
+If you let people upload massive 10MB iPhone photos, you will blow through your 1GB free Supabase Storage limit instantly.
+
+Client-Side Compression: Use a library like browser-image-compression in React to automatically compress user images down to < 500KB before sending them to your server.
+
+Bucket Rules: Configure your Supabase Storage bucket (birthday_media) to strictly reject any file larger than 2MB and only accept .jpg, .png, and .gif MIME types.
+
+1. UI/UX Structure: The Birthday Reveal Page (/reveal/:reveal_token)
+This is the entire payoff of the application. The recipient receives an email (e.g., from cheers@chitoria.dev) with a link. When they click it, the experience must feel premium, highly interactive, and flawlessly optimized for mobile screens.
+
+The Layout: Interactive & Vibe-Driven
+State 1: The Time-Gate (If opened early)
+
+If they click the link before midnight, they do not see the message.
+
+UI: A sleek, pulsing countdown clock with text: "Someone has secured a message for you. It unlocks in 04:12:09."
+
+State 2: The "Unboxing" Interaction
+
+When the time arrives, don't just show plain text. Require an interaction.
+
+Sentimental Vibe: A digital envelope they have to swipe up to open.
+
+Roast Vibe: A digital scratch-off ticket they have to wipe with their finger, or a fake "System Error" screen that glitches into the funny message.
+
+State 3: The Payload Display
+
+Single Message: The AI-generated or custom text is displayed beautifully with large, readable typography.
+
+Group Board: A smooth, scrolling masonry grid of all the notes and photos collected from the Group Contribution Hub.
+
+Sender Reveal: At the bottom, "Sent with love/spite by [Sender Alias or Real Name]."
+
+State 4: The Viral Loop (Crucial for Growth)
+
+Once they finish reading, a sticky banner appears at the bottom: "Pay it forward. Schedule a brutal roast or sweet message for someone's next birthday. 100% Free." This turns the recipient into a new user.
+
+2. Backend Requirements
+This page requires strict access control (time-gating) and acts as the trigger for the sender's read-receipts.
+
+Database Expansion: The Reveal Token
+You must never use the primary id or the group_token for the reveal link to prevent users from guessing URLs and accessing other people's data.
+
+SQL
+alter table public.wishes add column reveal_token uuid default gen_random_uuid() unique;
+alter table public.wishes add column opened_at timestamp with time zone;
+The Webhook & Delivery Execution (POST /api/deliver)
+This is the endpoint that Upstash QStash hits at exact local midnight.
+
+Validation: Verifies the request came from QStash via signing secrets.
+
+Fetch Data: Pulls the recipient email and reveal_token.
+
+Dispatch: Uses the Resend API to trigger an email template: "Himanshu sent you a birthday surprise. Click here to unlock it: chitoria.dev/reveal/{reveal_token}".
+
+Update Status: Updates the row in PostgreSQL to status = 'delivered'.
+
+The Reveal Endpoint (GET /api/reveal/:token)
+When the recipient opens the Next.js frontend page, it fetches the data from this endpoint.
+
+Security Check 1 (Time): If current_timestamp < delivery_time, return a 403 status with only the countdown time. Strip out the actual message payload so it cannot be inspected in the network tab.
+
+Security Check 2 (Data minimization): Only return the exact fields needed for the UI (message, vibe, sender alias, group contributions). Never return the sender's account email or phone number.
+
+Read Receipts: If the payload is successfully delivered, fire an asynchronous background update: UPDATE wishes SET opened_at = now() WHERE reveal_token = {token}. This instantly updates the sender's Dashboard to show "Delivered & Opened."
+
+1. UI/UX Structure: Account & Preferences (/settings)
+While this page isn't the "sexy" part of the app, it is critical for user retention, privacy compliance, and reducing friction during the creation process.
+
+The Layout: Segmented Side-Navigation
+Use a standard left-aligned sidebar with sections to keep the cognitive load light.
+
+Section 1: Profile & Identity
+
+Display Name: The default name used if they choose not to send anonymously.
+
+Email: (Usually read-only if they signed in via Google OAuth).
+
+Default Sender Alias: A dropdown to select their preferred "From" address (e.g., locking in anonymous@chitoria.dev as their default).
+
+Section 2: App Preferences (Friction Reducers)
+
+Default Timezone: Crucial. Auto-detect this on signup using Intl.DateTimeFormat().resolvedOptions().timeZone. Setting a default here means the user doesn't have to manually select their timezone every time they use the Wish Studio.
+
+Section 3: Notifications
+
+Delivery Receipts: Toggle: "Email me when my scheduled wish is successfully sent."
+
+Read Receipts: Toggle: "Email me the exact moment they open the reveal link."
+
+Section 4: The Danger Zone (Trust & Privacy)
+
+Export Data: A button to download a .json file of all their scheduled wishes and contacts.
+
+Delete Account: A red button that requires them to type their email to confirm. Offering an easy exit builds massive trust for a platform handling personal contact data.
+
+2. Backend Requirements
+Because Supabase separates authentication data (auth.users schema) from public application data (public schema) for security, you need a dedicated profile table to store these preferences.
+
+Database Schema (Supabase Profiles)
+You will create a profiles table that automatically syncs with new sign-ups.
+
+SQL
+create table public.profiles (
+    id uuid references auth.users(id) on delete cascade primary key,
+    display_name text,
+    default_timezone text default 'UTC',
+    notify_on_delivery boolean default true,
+    notify_on_open boolean default true,
+    created_at timestamp with time zone default now()
+);
+
+-- Trigger to auto-create a profile when a new user signs up
+create or replace function public.handle_new_user() 
+returns trigger as $$
+begin
+  insert into public.profiles (id, display_name)
+  values (new.id, new.raw_user_meta_data->>'full_name');
+  return new;
+end;
+$$ language plpgsql security definer;
+
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
+API Endpoints (/api/settings)
+PATCH /api/settings: Updates the public.profiles table when a user changes a toggle or timezone.
+
+GET /api/export: Queries all wishes and group_contributions where user_id = auth.uid() and formats the response as a downloadable JSON blob.
+
+DELETE /api/account: This is a sensitive operation. You cannot just delete the public.profiles row; you must delete the actual auth user. You will need to use the @supabase/supabase-js Admin API (using your secure Service Role Key on the Next.js server) to call supabase.auth.admin.deleteUser(id). Because of the ON DELETE CASCADE rules on your tables, this single action will instantly wipe their profile, all their scheduled wishes, and all group contributions, keeping you 100% GDPR compliant.
