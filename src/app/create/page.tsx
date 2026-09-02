@@ -602,6 +602,9 @@ export default function WishStudioPage() {
                       setIsAnonymous(isAnon);
                       if (!isAnon) {
                         setSenderAlias(realName);
+                        if (realName) {
+                          setSenderPrefix(realName.toLowerCase().replace(/[^a-z0-9]/g, ''));
+                        }
                       } else {
                         // Reset back to vibe default if toggled back to anonymous
                         const config = VIBE_CONFIGS[vibe];
@@ -643,6 +646,11 @@ export default function WishStudioPage() {
                       <option value="truth">truth</option>
                       <option value="secret">secret</option>
                       <option value="anonymous">anonymous</option>
+                      {!isAnonymous && realName && (
+                        <option value={realName.toLowerCase().replace(/[^a-z0-9]/g, '')}>
+                          {realName.toLowerCase().replace(/[^a-z0-9]/g, '')}
+                        </option>
+                      )}
                     </select>
                     <span className="text-sm text-zinc-400 font-mono">@chitoria.dev</span>
                   </div>
