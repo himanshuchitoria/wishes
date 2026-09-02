@@ -60,6 +60,7 @@ export interface UserProfile {
   email: string;
   default_timezone: string;
   default_sender_alias: string;
+  default_email_prefix: string;
   notify_on_delivery: boolean;
   notify_on_open: boolean;
   created_at: string;

@@ -117,17 +117,39 @@ export default function SettingsPage() {
     }
   };
 
-  const handleDeleteAccount = () => {
+  const handleDeleteAccount = async () => {
     if (confirmDeleteEmail !== profile?.email) {
       toast('Email does not match. Account deletion cancelled.', 'error');
       return;
     }
 
     soundFX.playPop();
-    localStorage.clear();
-    toast('Your account and all associated wishes have been permanently wiped (GDPR).', 'info');
-    setShowDeleteModal(false);
-    window.location.href = '/';
+    setIsSaving(true);
+    
+    try {
+      if (!supabase) throw new Error('Supabase not loaded');
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error('Not authenticated');
+      
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"}/settings/account`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`
+        }
+      });
+      
+      if (!res.ok) throw new Error('Failed to delete account on the server');
+      
+      await supabase.auth.signOut();
+      localStorage.clear();
+      toast('Your account and all associated wishes have been permanently wiped (GDPR).', 'info');
+      setShowDeleteModal(false);
+      window.location.href = '/';
+    } catch (e) {
+      console.error(e);
+      toast('Failed to delete account.', 'error');
+      setIsSaving(false);
+    }
   };
 
   if (!profile) {
@@ -191,7 +213,7 @@ export default function SettingsPage() {
                 type="email"
                 disabled
                 value={profile.email}
-                className="w-full px-3.5 py-2.5 bg-zinc-950/50 border border-zinc-800/60 rounded-xl text-sm text-zinc-500 cursor-not-allowed"
+                className="w-full px-3.5 py-2.5 bg-zinc-900 border border-zinc-700 rounded-xl text-sm text-zinc-300 cursor-not-allowed"
               />
             </div>
           </div>
@@ -201,10 +223,23 @@ export default function SettingsPage() {
               <label className="block text-xs font-bold uppercase tracking-wider text-zinc-300 mb-1">
                 Default Sender Alias
               </label>
+              <input
+                type="text"
+                value={profile.default_sender_alias || ''}
+                onChange={(e) => setProfile({ ...profile, default_sender_alias: e.target.value })}
+                placeholder="e.g. Secret Admirer"
+                className="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-800 rounded-xl text-sm text-white focus:outline-none focus:border-rose-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-zinc-300 mb-1">
+                Default Delivery Prefix
+              </label>
               <div className="flex items-center gap-2">
                 <select
-                  value={profile.default_sender_alias}
-                   onChange={(e) => setProfile({ ...profile!, default_sender_alias: e.target.value })}
+                  value={profile.default_email_prefix || 'roast'}
+                  onChange={(e) => setProfile({ ...profile, default_email_prefix: e.target.value })}
                   className="px-3.5 py-2.5 bg-zinc-950 border border-zinc-800 rounded-xl text-sm text-amber-400 font-mono focus:outline-none focus:border-rose-500"
                 >
                   <option value="cheers">cheers</option>
@@ -212,22 +247,32 @@ export default function SettingsPage() {
                   <option value="forever">forever</option>
                   <option value="truth">truth</option>
                   <option value="secret">secret</option>
+                  <option value="anonymous">anonymous</option>
                 </select>
                 <span className="text-sm text-zinc-400 font-mono">@chitoria.dev</span>
               </div>
             </div>
+          </div>
 
+          <div className="grid grid-cols-1 gap-4">
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-zinc-300 mb-1">
                 Default Timezone
               </label>
               <div className="flex items-center gap-2">
-                <input
-                  type="text"
+                <select
                   value={profile.default_timezone}
-                  onChange={(e) => setProfile({ ...profile!, default_timezone: e.target.value })}
+                  onChange={(e) => setProfile({ ...profile, default_timezone: e.target.value })}
                   className="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-800 rounded-xl text-sm text-white focus:outline-none focus:border-rose-500 font-mono"
-                />
+                >
+                  {typeof Intl !== 'undefined' && Intl.supportedValuesOf ? (
+                    Intl.supportedValuesOf('timeZone').map(tz => (
+                      <option key={tz} value={tz}>{tz}</option>
+                    ))
+                  ) : (
+                    <option value={profile.default_timezone}>{profile.default_timezone}</option>
+                  )}
+                </select>
               </div>
             </div>
           </div>
