@@ -19,6 +19,9 @@ import { Wish, GroupContribution, VIBE_CONFIGS } from '@/types';
 import { getCountdown, getNextBirthdayDate } from '@/lib/utils';
 import ScratchCard from '@/components/ScratchCard';
 import EnvelopeReveal from '@/components/EnvelopeReveal';
+import GlitchReveal from '@/components/GlitchReveal';
+import InstantReveal from '@/components/InstantReveal';
+import BackgroundEffects from '@/components/BackgroundEffects';
 import MasonryGrid from '@/components/MasonryGrid';
 import CountdownTimer from '@/components/CountdownTimer';
 import { soundFX } from '@/lib/audio';
@@ -145,25 +148,31 @@ export default function BirthdayRevealPage() {
           /* State 2 & 3: Unboxing & Revealed Payload */
           <div className="space-y-8 animate-in fade-in duration-500">
             <div className="max-w-2xl mx-auto w-full">
-              {wish?.message_payload.revealType === 'envelope' || wish?.vibe === 'sentimental' ? (
-                <EnvelopeReveal
-                  headline={wish?.message_payload.headline}
-                  body={wish?.message_payload.body || config.sampleMessage}
-                  senderAlias={wish?.sender_alias}
-                  isAnonymous={wish?.is_anonymous}
-                  mediaUrl={wish?.message_payload.mediaUrl}
-                  onRevealed={handleReveal}
-                />
-              ) : (
-                <ScratchCard
-                  headline={wish?.message_payload.headline}
-                  body={wish?.message_payload.body || config.sampleMessage}
-                  senderAlias={wish?.sender_alias}
-                  isAnonymous={wish?.is_anonymous}
-                  mediaUrl={wish?.message_payload.mediaUrl}
-                  onRevealed={handleReveal}
-                />
-              )}
+              {(() => {
+                const revealType = wish?.message_payload?.revealType;
+                const theme = wish?.message_payload?.theme;
+                const elements = wish?.message_payload?.elements || [];
+                const commonProps = {
+                  headline: wish?.message_payload?.headline,
+                  body: wish?.message_payload?.body || config.sampleMessage,
+                  senderAlias: wish?.sender_alias,
+                  isAnonymous: wish?.is_anonymous,
+                  mediaUrl: wish?.message_payload?.mediaUrl,
+                  elements,
+                  onRevealed: handleReveal,
+                };
+                if (revealType === 'envelope' || wish?.vibe === 'sentimental') {
+                  return <EnvelopeReveal {...commonProps} />;
+                }
+                if (revealType === 'glitch') {
+                  return <GlitchReveal {...commonProps} />;
+                }
+                if (revealType === 'instant') {
+                  return <InstantReveal {...commonProps} theme={theme} />;
+                }
+                // Default: scratch
+                return <ScratchCard {...commonProps} accentColor={config.accentColor} />;
+              })()}
             </div>
 
             {/* Share / Save Actions */}
@@ -201,6 +210,12 @@ export default function BirthdayRevealPage() {
             )}
           </div>
         )}
+
+        {/* Background Effects — fired once reveal is complete */}
+        <BackgroundEffects
+          effect={wish?.message_payload?.effects || 'confetti'}
+          trigger={hasUnboxed}
+        />
 
         {/* State 4: Viral Growth Engine Footer */}
         <div className="p-6 sm:p-8 rounded-3xl bg-zinc-950/80 border border-white/10 backdrop-blur-xl shadow-2xl text-center space-y-4 max-w-2xl mx-auto my-8">

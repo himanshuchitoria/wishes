@@ -22,9 +22,9 @@ import {
   X,
   Loader2,
 } from 'lucide-react';
-import { Wish, WishVibe, VIBE_CONFIGS } from '@/types';
+import { Wish, WishVibe, CardTheme, ParticleEffect, CanvasElement, RevealType, VIBE_CONFIGS, CARD_THEME_CONFIGS } from '@/types';
 import PhoneMockup from '@/components/PhoneMockup';
-import VibeSlider from '@/components/VibeSlider';
+import DesignStudio from '@/components/DesignStudio';
 import AIAssistantModal from '@/components/AIAssistantModal';
 import { supabase } from '@/lib/supabase/client';
 import { useToast } from '@/components/Toast';
@@ -58,7 +58,7 @@ export default function WishStudioPage() {
   const [timezone, setTimezone] = useState('Asia/Kolkata');
 
   const [vibe, setVibe] = useState<WishVibe>('roast');
-  const [revealType, setRevealType] = useState<'scratch' | 'envelope' | 'glitch'>('scratch');
+  const [revealType, setRevealType] = useState<RevealType>('scratch');
 
   const [headline, setHeadline] = useState('⚠️ NOTICE OF ACCELERATED AGING');
   const [message, setMessage] = useState(
@@ -88,6 +88,11 @@ export default function WishStudioPage() {
   const [senderPrefix, setSenderPrefix] = useState('roast');
   const [isGroupBoard, setIsGroupBoard] = useState(true);
   const [realName, setRealName] = useState('Himanshu');
+
+  // Design Studio State
+  const [theme, setTheme] = useState<CardTheme>('dark-ember');
+  const [effects, setEffects] = useState<ParticleEffect>('confetti');
+  const [elements, setElements] = useState<CanvasElement[]>([]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -197,8 +202,10 @@ export default function WishStudioPage() {
       message_payload: {
         headline,
         body: message,
-        theme: vibe === 'roast' ? 'dark-ember' : vibe === 'sentimental' ? 'rose-gold' : 'pastel-joy',
+        theme,
         revealType,
+        effects,
+        elements: elements.length > 0 ? elements : undefined,
         aiPromptInputs: aiInputs,
       },
       status: 'scheduled',
@@ -402,68 +409,36 @@ export default function WishStudioPage() {
               </div>
             )}
 
-            {/* Step 2: The Vibe Check */}
+            {/* Step 2: The Design Studio */}
             {currentStep === 2 && (
               <div className="space-y-6 animate-in fade-in duration-300">
                 <div className="space-y-1">
                   <h3 className="text-lg font-bold text-white flex items-center gap-2">
                     <Flame className="w-5 h-5 text-orange-400" />
-                    <span>The Vibe Check</span>
+                    <span>Design Studio</span>
                   </h3>
                   <p className="text-xs text-zinc-400">
-                    Dictates the entire design, AI prompt style, and unboxing interaction.
+                    Pick a vibe, card theme, reveal mechanic, particle effect, and drop stickers.
                   </p>
                 </div>
 
-                <VibeSlider value={vibe} onChange={handleVibeChange} />
-
-                {/* Reveal Mechanism Selector */}
-                <div className="space-y-2 pt-2">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-zinc-300">
-                    Unboxing Interaction
-                  </label>
-                  <div className="grid grid-cols-2 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        soundFX.playPop();
-                        setRevealType('scratch');
-                      }}
-                      className={`p-3 rounded-xl border text-left transition-all ${
-                        revealType === 'scratch'
-                          ? 'bg-zinc-800 border-orange-500 text-white'
-                          : 'bg-zinc-950 border-zinc-800 text-zinc-400'
-                      }`}
-                    >
-                      <span className="text-base">✨ Scratch-Off Card</span>
-                      <p className="text-[11px] text-zinc-400 mt-1">Recipient rubs coin/finger to reveal</p>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        soundFX.playPop();
-                        setRevealType('envelope');
-                      }}
-                      className={`p-3 rounded-xl border text-left transition-all ${
-                        revealType === 'envelope'
-                          ? 'bg-zinc-800 border-rose-500 text-white'
-                          : 'bg-zinc-950 border-zinc-800 text-zinc-400'
-                      }`}
-                    >
-                      <span className="text-base">✉️ Wax Sealed Envelope</span>
-                      <p className="text-[11px] text-zinc-400 mt-1">Breaks seal for animated letter slide-up</p>
-                    </button>
-                  </div>
-                </div>
+                <DesignStudio
+                  vibe={vibe}
+                  theme={theme}
+                  revealType={revealType as RevealType}
+                  effects={effects}
+                  elements={elements}
+                  onVibeChange={handleVibeChange}
+                  onThemeChange={setTheme}
+                  onRevealChange={(r) => setRevealType(r)}
+                  onEffectsChange={setEffects}
+                  onElementsChange={setElements}
+                />
 
                 <div className="pt-4 flex justify-between">
                   <button
                     type="button"
-                    onClick={() => {
-                      soundFX.playPop();
-                      setCurrentStep(1);
-                    }}
+                    onClick={() => { soundFX.playPop(); setCurrentStep(1); }}
                     className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold text-zinc-400 hover:text-white"
                   >
                     <ArrowLeft className="w-4 h-4" />

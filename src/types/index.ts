@@ -4,20 +4,139 @@ export type WishStatus = 'draft' | 'scheduled' | 'delivered' | 'failed' | 'cance
 
 export type DeliveryMethod = 'email' | 'sms' | 'link';
 
+// ─── Phase 1: Wish Engine Rich Schema ────────────────────────────────────────
+
+export type RevealType = 'scratch' | 'envelope' | 'glitch' | 'instant';
+
+export type ParticleEffect = 'confetti' | 'hearts' | 'fireworks' | 'snow' | 'sparkles' | 'none';
+
+export type CardTheme =
+  | 'dark-ember'
+  | 'rose-gold'
+  | 'neon-glitch'
+  | 'pastel-joy'
+  | 'midnight-gold'
+  | 'ocean-breeze'
+  | 'velvet-noir'
+  | 'aurora-borealis'
+  | 'cherry-blossom'
+  | 'cyber-punk';
+
+export interface CanvasElement {
+  id: string;
+  type: 'emoji' | 'text' | 'sticker';
+  content: string;      // emoji char, text string, or sticker key
+  x: number;            // 0–100 (% of canvas width)
+  y: number;            // 0–100 (% of canvas height)
+  rotation: number;     // degrees
+  scale: number;        // 1.0 = default
+  fontSize?: number;
+  color?: string;
+}
+
 export interface WishPayload {
   headline?: string;
   body: string;
-  theme?: 'dark-ember' | 'rose-gold' | 'neon-glitch' | 'pastel-joy' | 'midnight-gold';
+  theme?: CardTheme;
+  revealType?: RevealType;
+  effects?: ParticleEffect;
+  elements?: CanvasElement[];   // sticker / emoji overlay layer
   aiPromptInputs?: {
     fact1: string;
     fact2: string;
     fact3: string;
     insideJoke?: string;
   };
-  revealType?: 'scratch' | 'envelope' | 'glitch' | 'instant';
   mediaUrl?: string;
   musicTrack?: string;
 }
+
+// ─── Theme Configuration Map ─────────────────────────────────────────────────
+export interface CardThemeConfig {
+  id: CardTheme;
+  name: string;
+  emoji: string;
+  bg: string;           // Tailwind gradient classes
+  accentFrom: string;   // hex
+  accentTo: string;     // hex
+  textClass: string;
+  borderClass: string;
+  glowClass: string;
+  fontClass: string;
+}
+
+export const CARD_THEME_CONFIGS: Record<CardTheme, CardThemeConfig> = {
+  'dark-ember': {
+    id: 'dark-ember', name: 'Dark Ember', emoji: '🔥',
+    bg: 'from-orange-950 via-zinc-950 to-red-950',
+    accentFrom: '#f97316', accentTo: '#ef4444',
+    textClass: 'text-orange-400', borderClass: 'border-orange-500/40',
+    glowClass: 'shadow-[0_0_30px_rgba(249,115,22,0.3)]', fontClass: 'font-sans',
+  },
+  'rose-gold': {
+    id: 'rose-gold', name: 'Rose Gold', emoji: '🌹',
+    bg: 'from-rose-950 via-zinc-900 to-pink-950',
+    accentFrom: '#f43f5e', accentTo: '#ec4899',
+    textClass: 'text-rose-300', borderClass: 'border-rose-500/40',
+    glowClass: 'shadow-[0_0_30px_rgba(244,63,94,0.3)]', fontClass: 'font-serif',
+  },
+  'neon-glitch': {
+    id: 'neon-glitch', name: 'Neon Glitch', emoji: '⚡',
+    bg: 'from-violet-950 via-zinc-950 to-cyan-950',
+    accentFrom: '#8b5cf6', accentTo: '#06b6d4',
+    textClass: 'text-violet-300', borderClass: 'border-violet-500/40',
+    glowClass: 'shadow-[0_0_30px_rgba(139,92,246,0.35)]', fontClass: 'font-mono',
+  },
+  'pastel-joy': {
+    id: 'pastel-joy', name: 'Pastel Joy', emoji: '🌸',
+    bg: 'from-pink-950/80 via-purple-950/60 to-sky-950/80',
+    accentFrom: '#e879f9', accentTo: '#7dd3fc',
+    textClass: 'text-pink-300', borderClass: 'border-pink-500/30',
+    glowClass: 'shadow-[0_0_25px_rgba(232,121,249,0.25)]', fontClass: 'font-sans',
+  },
+  'midnight-gold': {
+    id: 'midnight-gold', name: 'Midnight Gold', emoji: '✨',
+    bg: 'from-zinc-950 via-amber-950/40 to-zinc-950',
+    accentFrom: '#f59e0b', accentTo: '#d97706',
+    textClass: 'text-amber-300', borderClass: 'border-amber-500/40',
+    glowClass: 'shadow-[0_0_30px_rgba(245,158,11,0.3)]', fontClass: 'font-serif',
+  },
+  'ocean-breeze': {
+    id: 'ocean-breeze', name: 'Ocean Breeze', emoji: '🌊',
+    bg: 'from-sky-950 via-teal-950 to-emerald-950',
+    accentFrom: '#0ea5e9', accentTo: '#10b981',
+    textClass: 'text-sky-300', borderClass: 'border-sky-500/40',
+    glowClass: 'shadow-[0_0_30px_rgba(14,165,233,0.3)]', fontClass: 'font-sans',
+  },
+  'velvet-noir': {
+    id: 'velvet-noir', name: 'Velvet Noir', emoji: '🖤',
+    bg: 'from-zinc-950 via-purple-950/30 to-zinc-950',
+    accentFrom: '#a855f7', accentTo: '#7c3aed',
+    textClass: 'text-purple-300', borderClass: 'border-purple-500/30',
+    glowClass: 'shadow-[0_0_30px_rgba(168,85,247,0.25)]', fontClass: 'font-mono',
+  },
+  'aurora-borealis': {
+    id: 'aurora-borealis', name: 'Aurora', emoji: '🌌',
+    bg: 'from-emerald-950 via-teal-950 to-violet-950',
+    accentFrom: '#34d399', accentTo: '#a78bfa',
+    textClass: 'text-emerald-300', borderClass: 'border-emerald-500/40',
+    glowClass: 'shadow-[0_0_35px_rgba(52,211,153,0.3)]', fontClass: 'font-sans',
+  },
+  'cherry-blossom': {
+    id: 'cherry-blossom', name: 'Cherry Blossom', emoji: '🌺',
+    bg: 'from-pink-950 via-rose-900/40 to-red-950',
+    accentFrom: '#fb7185', accentTo: '#fda4af',
+    textClass: 'text-pink-200', borderClass: 'border-pink-400/40',
+    glowClass: 'shadow-[0_0_25px_rgba(251,113,133,0.3)]', fontClass: 'font-serif',
+  },
+  'cyber-punk': {
+    id: 'cyber-punk', name: 'Cyber Punk', emoji: '🤖',
+    bg: 'from-yellow-950 via-zinc-950 to-cyan-950',
+    accentFrom: '#facc15', accentTo: '#22d3ee',
+    textClass: 'text-yellow-300', borderClass: 'border-yellow-500/40',
+    glowClass: 'shadow-[0_0_30px_rgba(250,204,21,0.3)]', fontClass: 'font-mono',
+  },
+};
 
 export interface Wish {
   id: string;
