@@ -74,6 +74,8 @@ export default function SettingsPage() {
       if (res.ok) {
         const data = await res.json();
         setProfile(data);
+        // Force Supabase Auth to refresh the JWT so the Navbar gets the new full_name instantly
+        await supabase.auth.refreshSession();
         soundFX.playCelebration();
         toast('Preferences updated successfully!', 'success');
       }

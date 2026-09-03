@@ -32,14 +32,27 @@ def get_profile(user=Depends(get_current_user)):
             supabase_admin.table('profiles').insert([default_profile]).execute()
             return default_profile
         
-        return response.data[0]
+        profile_data = response.data[0]
+        if not profile_data.get('email'):
+            profile_data['email'] = user.email
+            supabase_admin.table('profiles').update({'email': user.email}).eq('id', user.id).execute()
+            
+        return profile_data
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.patch("/")
 def update_profile(profile: ProfileUpdate, user=Depends(get_current_user)):
     try:
+        # Update custom profiles table
         response = supabase_admin.table('profiles').update(profile.model_dump()).eq('id', user.id).execute()
+        
+        # Atomically sync the display_name to the Auth user's metadata so the frontend UI matches
+        supabase_admin.auth.admin.update_user_by_id(
+            user.id,
+            user_metadata={"full_name": profile.display_name}
+        )
+        
         return response.data[0]
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
