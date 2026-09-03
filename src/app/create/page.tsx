@@ -94,9 +94,26 @@ export default function WishStudioPage() {
   useEffect(() => {
     const fetchUser = async () => {
       if (!supabase) return;
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user?.user_metadata?.full_name) {
-        setRealName(session.user.user_metadata.full_name);
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) return;
+        
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"}/settings`, {
+          headers: { 'Authorization': `Bearer ${session.access_token}` }
+        });
+        
+        if (res.ok) {
+          const profile = await res.json();
+          if (profile.display_name) {
+            setRealName(profile.display_name);
+          } else if (session?.user?.user_metadata?.full_name) {
+            setRealName(session.user.user_metadata.full_name);
+          }
+        } else if (session?.user?.user_metadata?.full_name) {
+          setRealName(session.user.user_metadata.full_name);
+        }
+      } catch (e) {
+        console.error(e);
       }
     };
     fetchUser();
