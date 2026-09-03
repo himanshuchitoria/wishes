@@ -15,6 +15,8 @@ export default function Navbar() {
   const [isMuted, setIsMuted] = useState(false);
   const [user, setUser] = useState<SupabaseUser | null>(null);
 
+  if (pathname?.startsWith('/reveal')) return null;
+
   useEffect(() => {
     if (!supabase) return;
     // Get initial session
