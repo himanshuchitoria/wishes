@@ -18,24 +18,25 @@ def get_profile(user=Depends(get_current_user)):
     try:
         response = supabase_admin.table('profiles').select('*').eq('id', user.id).execute()
         if not response.data:
-            # Create a default profile if it doesn't exist
             default_profile = {
                 'id': user.id,
-                'email': user.email,
                 'display_name': user.email.split('@')[0],
                 'default_timezone': 'UTC',
                 'default_sender_alias': 'Anonymous',
-                'default_email_prefix': 'roast',
                 'notify_on_delivery': True,
                 'notify_on_open': True
             }
+            # Note: default_email_prefix is intentionally omitted here to prevent 500s 
+            # if the user hasn't run the SQL migration yet.
+            
             supabase_admin.table('profiles').insert([default_profile]).execute()
+            default_profile['email'] = user.email
+            default_profile['default_email_prefix'] = 'roast'
             return default_profile
         
         profile_data = response.data[0]
-        if not profile_data.get('email'):
-            profile_data['email'] = user.email
-            supabase_admin.table('profiles').update({'email': user.email}).eq('id', user.id).execute()
+        # Inject email dynamically since it's not actually a column in the profiles table
+        profile_data['email'] = user.email
             
         return profile_data
     except Exception as e:
@@ -55,7 +56,13 @@ def update_profile(profile: ProfileUpdate, user=Depends(get_current_user)):
         
         return response.data[0]
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        error_msg = str(e)
+        if "column" in error_msg.lower() and "default_email_prefix" in error_msg.lower() or "Could not find the" in error_msg:
+            raise HTTPException(
+                status_code=400, 
+                detail="DATABASE OUT OF SYNC: You need to run the SQL command from the walkthrough to add the 'default_email_prefix' column before saving."
+            )
+        raise HTTPException(status_code=500, detail=error_msg)
 
 @router.delete("/account")
 def delete_account(user=Depends(get_current_user)):
