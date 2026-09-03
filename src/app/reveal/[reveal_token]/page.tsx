@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import {
   Sparkles,
@@ -24,6 +25,7 @@ import ScratchCard from '@/components/ScratchCard';
 import EnvelopeReveal from '@/components/EnvelopeReveal';
 import GlitchReveal from '@/components/GlitchReveal';
 import InstantReveal from '@/components/InstantReveal';
+import VibeBackground from '@/components/VibeBackground';
 import BackgroundEffects from '@/components/BackgroundEffects';
 import MasonryGrid from '@/components/MasonryGrid';
 import CountdownTimer from '@/components/CountdownTimer';
@@ -69,7 +71,16 @@ export default function BirthdayRevealPage() {
     setHasUnboxed(true);
     // Unmute automatically on interaction to allow audio playback if desired
     setIsMuted(false);
-    soundFX.playCelebration();
+    
+    // Play aesthetic vibe-based sound
+    if (wish?.vibe === 'roast' || wish?.vibe === 'snarky') {
+      soundFX.playAirhorn();
+    } else if (wish?.vibe === 'sweet' || wish?.vibe === 'sentimental') {
+      soundFX.playChime();
+    } else {
+      soundFX.playCelebration();
+    }
+    
     confetti({
       particleCount: 120,
       spread: 90,
@@ -98,19 +109,40 @@ export default function BirthdayRevealPage() {
   const targetDate = wish ? getNextBirthdayDate(wish.birth_date, wish.delivery_time) : new Date();
 
   return (
-    <div className={`min-h-screen w-full bg-gradient-to-b ${config.bgGradient} flex flex-col justify-between py-8 px-4 sm:px-6 lg:px-8`}>
-      {/* Background ambient particles */}
-      <div className="max-w-4xl mx-auto w-full space-y-8 flex-1 flex flex-col justify-center">
-        <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/50 border border-white/10 text-xs font-bold text-zinc-300 shadow-xl backdrop-blur-md">
-            <span>chitoria.dev</span>
-            <span>•</span>
-            <span className="text-rose-400">Special Birthday Delivery</span>
-          </div>
+    <div className="relative min-h-screen w-full overflow-hidden flex flex-col justify-between py-8 px-4 sm:px-6 lg:px-8">
+      {/* Dynamic Vibe Background */}
+      <VibeBackground vibe={wish?.vibe || 'roast'} />
+      
+      {/* Post-reveal particles (confetti, fireworks) */}
+      <BackgroundEffects
+        effect={wish?.message_payload?.effects || 'none'}
+        trigger={hasUnboxed}
+      />
 
-          <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+      {/* White Flash overlay triggered on unbox */}
+      <AnimatePresence>
+        {hasUnboxed && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.5, ease: 'easeOut' }}
+            className="fixed inset-0 z-50 bg-white pointer-events-none"
+          />
+        )}
+      </AnimatePresence>
+
+      <div className="relative z-10 max-w-4xl mx-auto w-full space-y-8 flex-1 flex flex-col justify-center">
+        <div className="text-center space-y-2 pt-12">
+          {/* Headline with aesthetic floating motion */}
+          <motion.h1 
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            className="text-4xl sm:text-6xl md:text-7xl font-black text-white tracking-tighter drop-shadow-2xl"
+            style={{ textShadow: '0 10px 30px rgba(0,0,0,0.5)' }}
+          >
             {error ? 'Surprise Not Found' : `Happy Birthday, ${wish?.recipient_name || '...'}! ${config.emoji}`}
-          </h1>
+          </motion.h1>
         </div>
 
         {error ? (
@@ -211,12 +243,6 @@ export default function BirthdayRevealPage() {
             )}
           </div>
         )}
-
-        {/* Background Effects — fired once reveal is complete */}
-        <BackgroundEffects
-          effect={wish?.message_payload?.effects || 'confetti'}
-          trigger={hasUnboxed}
-        />
 
         {/* State 4: Sleek Viral Footer */}
         {hasUnboxed && (
