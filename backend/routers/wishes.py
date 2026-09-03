@@ -19,38 +19,36 @@ def send_wish_email(wish: dict):
     recipient_name = wish.get('recipient_name', 'there')
     app_url = os.getenv("NEXT_PUBLIC_APP_URL", "https://wishes.chitoria.dev")
     reveal_url = f"{app_url}/reveal/{wish['reveal_token']}?source=email"
-    vibe = wish.get('vibe', 'roast')
+    
+    payload = wish.get('message_payload', {})
+    theme = payload.get('theme', 'dark-ember')
+    reveal_type = payload.get('revealType', 'scratch')
     sender_alias = wish.get('sender_alias') or "Someone Special"
     
-    # Vibe-specific theming
-    vibe_configs = {
-        'roast': {
-            'accent': '#f97316',
-            'accent2': '#ef4444',
-            'emoji': '🔥',
-            'subject': f"🔥 Someone just roasted you for your birthday...",
-            'tagline': "A birthday roast has been prepared in your honor.",
-            'cta': "Reveal the Damage"
-        },
-        'sentimental': {
-            'accent': '#f43f5e',
-            'accent2': '#ec4899',
-            'emoji': '💌',
-            'subject': f"💌 A heartfelt birthday letter is waiting for you",
-            'tagline': "Someone poured their heart out for your birthday.",
-            'cta': "Open Your Letter"
-        },
-        'hype': {
-            'accent': '#a855f7',
-            'accent2': '#6366f1',
-            'emoji': '🎉',
-            'subject': f"🎉 You've got a birthday surprise waiting!",
-            'tagline': "The party starts when you click the button.",
-            'cta': "Unwrap Your Surprise"
-        }
+    # 10 Themes matched exactly to Frontend Design Studio
+    THEMES = {
+        'dark-ember': {'accent1': '#f97316', 'accent2': '#ef4444', 'text': '#fdba74', 'bg': '#050505', 'card': '#0f0f11'},
+        'rose-gold': {'accent1': '#f43f5e', 'accent2': '#ec4899', 'text': '#fda4af', 'bg': '#050505', 'card': '#0f0f11'},
+        'neon-glitch': {'accent1': '#8b5cf6', 'accent2': '#06b6d4', 'text': '#d8b4fe', 'bg': '#050505', 'card': '#0f0f11'},
+        'pastel-joy': {'accent1': '#e879f9', 'accent2': '#7dd3fc', 'text': '#f5d0fe', 'bg': '#050505', 'card': '#0f0f11'},
+        'midnight-gold': {'accent1': '#f59e0b', 'accent2': '#d97706', 'text': '#fde68a', 'bg': '#050505', 'card': '#0f0f11'},
+        'ocean-breeze': {'accent1': '#0ea5e9', 'accent2': '#10b981', 'text': '#bae6fd', 'bg': '#050505', 'card': '#0f0f11'},
+        'velvet-noir': {'accent1': '#a855f7', 'accent2': '#7c3aed', 'text': '#d8b4fe', 'bg': '#050505', 'card': '#0f0f11'},
+        'aurora-borealis': {'accent1': '#34d399', 'accent2': '#a78bfa', 'text': '#a7f3d0', 'bg': '#050505', 'card': '#0f0f11'},
+        'cherry-blossom': {'accent1': '#fb7185', 'accent2': '#fda4af', 'text': '#fecdd3', 'bg': '#050505', 'card': '#0f0f11'},
+        'cyber-punk': {'accent1': '#facc15', 'accent2': '#22d3ee', 'text': '#fef08a', 'bg': '#050505', 'card': '#0f0f11'},
     }
     
-    vc = vibe_configs.get(vibe, vibe_configs['hype'])
+    tc = THEMES.get(theme, THEMES['dark-ember'])
+    
+    # Contextual Messaging based on Reveal Type
+    REVEALS = {
+        'scratch': {'icon': '🪙', 'cta': 'Scratch to Reveal', 'subject': f"🪙 A hidden message for {recipient_name}"},
+        'envelope': {'icon': '✉️', 'cta': 'Break the Wax Seal', 'subject': f"✉️ A sealed letter for {recipient_name}"},
+        'glitch': {'icon': '⚡', 'cta': 'Decrypt Message', 'subject': f"⚡ SYSTEM FAULT: Decrypt {recipient_name}'s birthday data"},
+        'instant': {'icon': '🎉', 'cta': 'Pop the Surprise', 'subject': f"🎉 Incoming surprise for {recipient_name}!"},
+    }
+    rc = REVEALS.get(reveal_type, REVEALS['scratch'])
     
     client = mt.MailtrapClient(token=token)
     
@@ -63,103 +61,98 @@ def send_wish_email(wish: dict):
         <title>Happy Birthday!</title>
         <style>
             @keyframes float {{
-                0% {{ padding-top: 0px; padding-bottom: 10px; }}
-                50% {{ padding-top: 10px; padding-bottom: 0px; }}
-                100% {{ padding-top: 0px; padding-bottom: 10px; }}
+                0% {{ transform: translateY(0px); }}
+                50% {{ transform: translateY(-10px); }}
+                100% {{ transform: translateY(0px); }}
             }}
-            @keyframes pulse-glow {{
-                0% {{ text-shadow: 0 0 10px rgba(244,63,94,0.4); opacity: 0.9; }}
-                50% {{ text-shadow: 0 0 20px rgba(245,158,11,0.7); opacity: 1; }}
-                100% {{ text-shadow: 0 0 10px rgba(244,63,94,0.4); opacity: 0.9; }}
-            }}
-            @keyframes sparkle {{
-                0%, 100% {{ opacity: 0.4; color: #a1a1aa; }}
-                50% {{ opacity: 1; color: #f59e0b; }}
-            }}
-            .animated-sign {{
+            .floating-badge {{
+                display: inline-block;
                 animation: float 4s ease-in-out infinite;
-                margin-bottom: 30px;
-            }}
-            .text-glow {{
-                animation: pulse-glow 3s ease-in-out infinite;
-                background: linear-gradient(135deg, #fff, #f43f5e);
+                background: linear-gradient(135deg, {tc['accent1']}, {tc['accent2']});
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
+                font-weight: 900;
+                font-size: 14px;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+                margin-bottom: 24px;
             }}
-            .star {{ display: inline-block; animation: sparkle 3s infinite; }}
-            .star-1 {{ animation-delay: 0s; }}
-            .star-2 {{ animation-delay: 1s; }}
-            .star-3 {{ animation-delay: 2s; }}
+            .cta-btn {{
+                display: inline-block;
+                padding: 18px 48px;
+                background: linear-gradient(135deg, {tc['accent1']}, {tc['accent2']});
+                color: #ffffff !important;
+                text-decoration: none;
+                border-radius: 16px;
+                font-weight: 800;
+                font-size: 16px;
+                letter-spacing: 0.5px;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+                transition: transform 0.2s;
+            }}
+            .cta-btn:hover {{ transform: scale(1.05); }}
         </style>
     </head>
-    <body style="margin: 0; padding: 0; background-color: #050505; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #050505;">
+    <body style="margin: 0; padding: 0; background-color: {tc['bg']}; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: {tc['bg']};">
             <tr>
                 <td align="center" style="padding: 40px 16px;">
+                    
                     <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%;">
-                        
-                        <!-- Main Card -->
                         <tr>
-                            <td style="background: #0f0f11; border: 1px solid #27272a; border-radius: 28px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);">
+                            <td style="background: {tc['card']}; border: 1px solid #27272a; border-radius: 28px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0, 0.7);">
                                 
-                                <!-- Top accent bar -->
+                                <!-- Top vibrant bar -->
                                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                                     <tr>
-                                        <td style="height: 5px; background: linear-gradient(90deg, {vc['accent']}, {vc['accent2']}, {vc['accent']});"></td>
+                                        <td style="height: 6px; background: linear-gradient(90deg, {tc['accent1']}, {tc['accent2']}, {tc['accent1']});"></td>
                                     </tr>
                                 </table>
 
-                                <!-- Inner content -->
+                                <!-- Content Body -->
                                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                                     <tr>
                                         <td style="padding: 56px 40px 16px 40px; text-align: center;">
-                                            <!-- Beautiful Birthday Sign -->
-                                            <div class="animated-sign">
-                                                <div style="font-size: 24px; letter-spacing: 4px; margin-bottom: 12px; color: #a1a1aa; text-transform: uppercase; font-weight: 600;">
-                                                    <span class="star star-1">✨</span> You've got a surprise <span class="star star-2">✨</span>
-                                                </div>
-                                                <h1 class="text-glow" style="margin: 0; font-size: 42px; font-weight: 900; letter-spacing: -1px; line-height: 1.1; color: #ffffff;">
-                                                    Happy Birthday,<br/>{recipient_name}!
-                                                </h1>
+                                            <div class="floating-badge">
+                                                {rc['icon']} SPECIAL DELIVERY {rc['icon']}
                                             </div>
+                                            <h1 style="margin: 0; font-size: 42px; font-weight: 900; letter-spacing: -1px; line-height: 1.1; color: #ffffff;">
+                                                Happy Birthday,<br/>{recipient_name}!
+                                            </h1>
                                         </td>
                                     </tr>
                                     
                                     <tr>
-                                        <td style="padding: 0 40px; text-align: center;">
-                                            <p style="margin: 0 0 32px 0; font-size: 16px; color: #a1a1aa; line-height: 1.6; font-style: italic;">
-                                                {vc['tagline']} {vc['emoji']}
+                                        <td style="padding: 16px 40px; text-align: center;">
+                                            <p style="margin: 0 0 32px 0; font-size: 18px; color: {tc['text']}; line-height: 1.6;">
+                                                A custom interactive surprise has been prepared just for you.
                                             </p>
                                             
                                             {f'''
-                                            <div style="margin-bottom: 32px; border-radius: 16px; overflow: hidden; border: 1px solid #3f3f46; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
-                                                <img src="{wish['message_payload']['mediaUrl']}" alt="Birthday Photo" style="display: block; width: 100%; max-width: 100%; height: auto;" />
+                                            <div style="margin-bottom: 32px; border-radius: 16px; overflow: hidden; border: 1px solid #3f3f46; max-width: 300px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+                                                <img src="{wish['message_payload']['mediaUrl']}" alt="Birthday Photo" style="display: block; width: 100%; height: auto;" />
                                             </div>
-                                            ''' if wish.get('message_payload', {}).get('mediaUrl') else ''}
+                                            ''' if payload.get('mediaUrl') else ''}
                                         </td>
                                     </tr>
 
-                                    <!-- Decorative divider -->
+                                    <!-- Divider -->
                                     <tr>
                                         <td style="padding: 0 60px 32px 60px;">
-                                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-                                                <tr>
-                                                    <td style="height: 1px; background: linear-gradient(90deg, transparent, #3f3f46, transparent);"></td>
-                                                </tr>
-                                            </table>
+                                            <div style="height: 1px; background: linear-gradient(90deg, transparent, #3f3f46, transparent);"></div>
                                         </td>
                                     </tr>
 
-                                    <!-- From section -->
+                                    <!-- Sender Block -->
                                     <tr>
                                         <td style="padding: 0 40px 32px 40px; text-align: center;">
-                                            <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto;">
+                                            <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto; background: #18181b; border: 1px solid #27272a; border-radius: 16px; padding: 16px 32px;">
                                                 <tr>
-                                                    <td style="background: #1c1c1f; border: 1px solid #27272a; border-radius: 16px; padding: 16px 28px;">
+                                                    <td style="text-align: center;">
                                                         <p style="margin: 0 0 4px 0; font-size: 11px; color: #71717a; text-transform: uppercase; letter-spacing: 2px; font-weight: 700;">
-                                                            Sent with ❤️ by
+                                                            Sent with care by
                                                         </p>
-                                                        <p style="margin: 0; font-size: 18px; font-weight: 700; color: {vc['accent']};">
+                                                        <p style="margin: 0; font-size: 20px; font-weight: 800; color: {tc['text']};">
                                                             {sender_alias}
                                                         </p>
                                                     </td>
@@ -168,23 +161,23 @@ def send_wish_email(wish: dict):
                                         </td>
                                     </tr>
 
-                                    <!-- CTA Button -->
+                                    <!-- The Button -->
                                     <tr>
-                                        <td style="padding: 0 40px 48px 40px; text-align: center;">
-                                            <a href="{reveal_url}" style="display: inline-block; padding: 18px 48px; background: linear-gradient(135deg, {vc['accent']}, {vc['accent2']}); color: #ffffff; text-decoration: none; border-radius: 16px; font-weight: 800; font-size: 16px; letter-spacing: 0.3px; box-shadow: 0 8px 32px rgba(244, 63, 94, 0.3);">
-                                                {vc['cta']} →
+                                        <td style="padding: 0 40px 56px 40px; text-align: center;">
+                                            <a href="{reveal_url}" class="cta-btn">
+                                                {rc['cta']} →
                                             </a>
                                             <p style="margin: 16px 0 0 0; font-size: 12px; color: #52525b;">
-                                                Click the button above to open your surprise
+                                                Tap the button above to begin the {reveal_type} sequence.
                                             </p>
                                         </td>
                                     </tr>
                                 </table>
 
-                                <!-- Bottom accent bar -->
+                                <!-- Bottom vibrant bar -->
                                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                                     <tr>
-                                        <td style="height: 4px; background: linear-gradient(90deg, {vc['accent2']}, {vc['accent']}, {vc['accent2']});"></td>
+                                        <td style="height: 6px; background: linear-gradient(90deg, {tc['accent2']}, {tc['accent1']}, {tc['accent2']});"></td>
                                     </tr>
                                 </table>
                             </td>
@@ -194,17 +187,15 @@ def send_wish_email(wish: dict):
                         <tr>
                             <td style="padding: 32px 16px; text-align: center;">
                                 <p style="margin: 0 0 8px 0; font-size: 13px; color: #52525b;">
-                                    Delivered by <span style="color: #a1a1aa; font-weight: 600;">chitoria.dev</span>
+                                    Designed with ✦ <span style="color: {tc['text']}; font-weight: 600;">chitoria.dev</span>
                                 </p>
                                 <p style="margin: 0 0 16px 0; font-size: 11px; color: #3f3f46;">
-                                    AI-powered birthday wishes · Midnight precision delivery
-                                </p>
-                                <p style="margin: 0; font-size: 20px; letter-spacing: 4px; opacity: 0.3;">
-                                    ✦ ✧ ✦
+                                    Interactive Wish Engine · Midnight Delivery
                                 </p>
                             </td>
                         </tr>
                     </table>
+
                 </td>
             </tr>
         </table>
@@ -215,12 +206,13 @@ def send_wish_email(wish: dict):
     mail = mt.Mail(
         sender=mt.Address(email=sender_email, name=sender_alias),
         to=[mt.Address(email=recipient_email)],
-        subject=vc['subject'],
-        text=f"Hi {recipient_name},\n\nYou have a special birthday surprise waiting for you!\n{vc['tagline']}\n\nReveal it here: {reveal_url}\n\nSent with love by {sender_alias}\n\n— chitoria.dev",
+        subject=rc['subject'],
+        text=f"Hi {recipient_name},\n\nYou have a special birthday surprise waiting for you!\n\nReveal it here: {reveal_url}\n\nSent with love by {sender_alias}\n\n— chitoria.dev",
         html=html_body,
     )
     
     client.send(mail)
+
 
 router = APIRouter(prefix="/api/wishes", tags=["wishes"])
 
