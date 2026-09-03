@@ -14,6 +14,9 @@ import {
   Users,
   CheckCircle2,
   ArrowRight,
+  Volume2,
+  VolumeX,
+  Lock,
 } from 'lucide-react';
 import { Wish, GroupContribution, VIBE_CONFIGS } from '@/types';
 import { getCountdown, getNextBirthdayDate } from '@/lib/utils';
@@ -36,6 +39,7 @@ export default function BirthdayRevealPage() {
   const [contributions, setContributions] = useState<GroupContribution[]>([]);
   const [isEarly, setIsEarly] = useState<boolean>(false);
   const [hasUnboxed, setHasUnboxed] = useState<boolean>(false);
+  const [isMuted, setIsMuted] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -46,17 +50,8 @@ export default function BirthdayRevealPage() {
           const data = await res.json();
           setWish(data.wish);
           setContributions(data.contributions || []);
+          setIsEarly(data.is_early);
           
-          const urlParams = new URLSearchParams(window.location.search);
-          if (urlParams.get('early') === 'true') {
-            setIsEarly(true);
-          }
-          
-          if (urlParams.get('source') === 'email') {
-            // Background call to mark as read
-            fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"}/reveal/${revealToken}/read`, { method: 'POST' })
-              .catch(err => console.error('Failed to mark as read', err));
-          }
         } else if (res.status === 404) {
           setError('This wish has been deleted or no longer exists.');
         } else {
@@ -72,12 +67,18 @@ export default function BirthdayRevealPage() {
 
   const handleReveal = () => {
     setHasUnboxed(true);
+    // Unmute automatically on interaction to allow audio playback if desired
+    setIsMuted(false);
     soundFX.playCelebration();
     confetti({
       particleCount: 120,
       spread: 90,
       origin: { y: 0.6 },
     });
+    
+    // Background call to mark as read exactly upon unboxing
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"}/reveal/${revealToken}/read`, { method: 'POST' })
+      .catch(err => console.error('Failed to mark as read', err));
   };
 
   const handleShare = () => {
@@ -121,28 +122,28 @@ export default function BirthdayRevealPage() {
             <p className="text-sm text-zinc-400">{error}</p>
           </div>
         ) : isEarly ? (
-          <div className="p-8 sm:p-12 rounded-3xl bg-zinc-950/80 border border-zinc-800 backdrop-blur-xl shadow-2xl text-center space-y-6 max-w-xl mx-auto animate-in zoom-in-95 duration-300">
-            <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mx-auto animate-pulse">
-              <Clock className="w-8 h-8" />
+          <div className="p-8 sm:p-12 rounded-3xl bg-zinc-950/40 border border-white/5 backdrop-blur-3xl shadow-[0_0_50px_rgba(255,255,255,0.05)] text-center space-y-8 max-w-xl mx-auto animate-in fade-in zoom-in-95 duration-700">
+            {/* Ambient Pulsing Lock */}
+            <div className="relative w-24 h-24 mx-auto flex items-center justify-center cursor-pointer" onClick={() => soundFX.playPop()}>
+              <div className="absolute inset-0 rounded-full bg-white/5 animate-ping opacity-75" style={{ animationDuration: '3s' }} />
+              <div className="absolute inset-0 rounded-full bg-white/10 blur-xl" />
+              <div className="w-16 h-16 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center text-zinc-300 relative z-10 shadow-2xl">
+                <Lock className="w-6 h-6" />
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <h2 className="text-2xl font-black text-white">
-                Someone Has Secured a Surprise For You!
-              </h2>
-              <p className="text-xs sm:text-sm text-zinc-400">
-                This message is locked until exact midnight on your birthday. Check back when the countdown hits zero!
+            <div className="space-y-4">
+              <p className="text-sm sm:text-base text-zinc-300 font-medium leading-relaxed">
+                Hold on tight, <span className="font-bold text-white">{wish?.recipient_name || 'there'}</span>... Something special was crafted just for you.
+              </p>
+              <p className="text-xs sm:text-sm text-zinc-500 max-w-sm mx-auto">
+                This vault unlocks automatically on your birthday.
               </p>
             </div>
 
-            <CountdownTimer targetDate={targetDate} onExpire={() => setIsEarly(false)} />
-
-            <button
-              onClick={() => setIsEarly(false)}
-              className="text-xs text-zinc-500 hover:text-zinc-300 underline"
-            >
-              (Demo: Click to bypass early lock)
-            </button>
+            <div className="pt-4">
+              <CountdownTimer targetDate={targetDate} onExpire={() => window.location.reload()} />
+            </div>
           </div>
         ) : (
           /* State 2 & 3: Unboxing & Revealed Payload */
@@ -217,33 +218,41 @@ export default function BirthdayRevealPage() {
           trigger={hasUnboxed}
         />
 
-        {/* State 4: Viral Growth Engine Footer */}
-        <div className="p-6 sm:p-8 rounded-3xl bg-zinc-950/80 border border-white/10 backdrop-blur-xl shadow-2xl text-center space-y-4 max-w-2xl mx-auto my-8">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 text-xs font-bold">
-            <Gift className="w-3.5 h-3.5" /> Pay It Forward
+        {/* State 4: Sleek Viral Footer */}
+        {hasUnboxed && (
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+            <div className="flex items-center gap-3 px-4 py-2.5 rounded-full bg-zinc-950/80 border border-white/10 backdrop-blur-xl shadow-2xl animate-in slide-in-from-bottom-8 duration-700">
+              <span className="text-[11px] text-zinc-400 whitespace-nowrap">
+                ✨ Made especially for {wish?.recipient_name} via <span className="text-zinc-200 font-semibold">chitoria.dev</span>
+              </span>
+              <div className="w-px h-3 bg-white/10" />
+              <Link
+                href="/create"
+                target="_blank"
+                onClick={() => soundFX.playPop()}
+                className="text-[11px] font-bold text-white hover:text-rose-400 transition-colors flex items-center gap-1 whitespace-nowrap"
+              >
+                Create a reveal <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
           </div>
-
-          <h3 className="text-xl sm:text-2xl font-black text-white">
-            Want to roast or surprise someone on their next birthday?
-          </h3>
-
-          <p className="text-xs sm:text-sm text-zinc-400 max-w-md mx-auto">
-            Schedule hyper-personalized AI roasts or tearjerkers for your friends in under 2 minutes. 100% free serverless delivery.
-          </p>
-
-          <div className="pt-2">
-            <Link
-              href="/create"
-              onClick={() => soundFX.playPop()}
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl text-sm font-bold text-white bg-gradient-to-r from-rose-500 via-orange-500 to-amber-500 hover:from-rose-600 hover:to-orange-600 shadow-xl shadow-rose-500/25 hover:scale-[1.02] transition-all"
-            >
-              <Sparkles className="w-4 h-4" />
-              <span>Schedule a Wish for a Friend</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-        </div>
+        )}
       </div>
+
+      {/* Floating Audio Toggle */}
+      {hasUnboxed && (
+        <button
+          onClick={() => setIsMuted(!isMuted)}
+          className="fixed top-6 right-6 z-50 w-10 h-10 rounded-full bg-black/40 border border-white/10 backdrop-blur-md flex items-center justify-center text-white/70 hover:text-white hover:bg-black/60 transition-all shadow-xl"
+        >
+          {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+        </button>
+      )}
+      
+      {/* Ambient Audio (Optional loops could go here. For now, it represents the aesthetic audio requirement) */}
+      {!isMuted && hasUnboxed && (
+         <audio src="/sounds/ambient-pad.mp3" autoPlay loop muted={isMuted} className="hidden" />
+      )}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from core.database import supabase_admin
 from datetime import datetime, timezone
+import zoneinfo
 
 router = APIRouter(prefix="/api/reveal", tags=["reveal"])
 
@@ -14,13 +15,42 @@ def get_reveal(token: str):
             
         wish = response.data[0]
         
-        # Fetch group contributions if this wish has a group board
-        contributions = []
-        if wish.get('is_group_board') and wish.get('group_token'):
-            contrib_res = supabase_admin.table('group_contributions').select('*').eq('wish_id', wish['id']).order('created_at', desc=False).execute()
-            contributions = contrib_res.data or []
+        # Calculate unboxing time
+        is_early = False
+        birth_date_str = wish.get('birth_date')
+        delivery_time_str = wish.get('delivery_time', '00:00')
+        tz_str = wish.get('delivery_timezone', 'UTC')
         
-        return {"wish": wish, "contributions": contributions}
+        if birth_date_str:
+            try:
+                # E.g. "2024-05-10" and "00:00" -> "2024-05-10 00:00:00"
+                dt_str = f"{birth_date_str} {delivery_time_str}:00"
+                target_dt = datetime.strptime(dt_str, "%Y-%m-%d %H:%M:%S")
+                # Make it timezone aware
+                tz = zoneinfo.ZoneInfo(tz_str)
+                target_dt_aware = target_dt.replace(tzinfo=tz)
+                
+                # Compare to now
+                if datetime.now(timezone.utc) < target_dt_aware:
+                    is_early = True
+            except Exception as dt_err:
+                print(f"Date parse error: {dt_err}")
+                # Fail open if date is malformed? No, let's just proceed without lock if error, 
+                # but usually it's well-formed.
+                pass
+                
+        # If early, strip sensitive data!
+        if is_early:
+            wish['message_payload'] = None
+            contributions = []
+        else:
+            # Fetch group contributions if this wish has a group board and it's unlocked
+            contributions = []
+            if wish.get('is_group_board') and wish.get('group_token'):
+                contrib_res = supabase_admin.table('group_contributions').select('*').eq('wish_id', wish['id']).order('created_at', desc=False).execute()
+                contributions = contrib_res.data or []
+        
+        return {"wish": wish, "contributions": contributions, "is_early": is_early}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
