@@ -52,6 +52,7 @@ export default function ImmersiveWishStudio() {
   const router = useRouter();
   const { toast } = useToast();
 
+  const [currentStep, setCurrentStep] = useState(1);
   const [isAiModalOpen, setIsAiModalOpen] = useState<boolean>(false);
 
   // Form State
@@ -155,6 +156,24 @@ export default function ImmersiveWishStudio() {
     toast('AI Draft inserted into your wish!', 'success');
   };
 
+  const handleNext = (targetStep: number) => {
+    // Validation
+    if (targetStep === 3 && currentStep < 3) {
+      if (!name || !email || !birthDate) {
+         toast('Please fill out all Target Details.', 'error');
+         return;
+      }
+    }
+    if (targetStep === 4 && currentStep < 4) {
+      if (!headline || !message) {
+         toast('Please fill out the Message.', 'error');
+         return;
+      }
+    }
+    soundFX.playPop();
+    setCurrentStep(targetStep);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     soundFX.playPop();
@@ -253,6 +272,7 @@ export default function ImmersiveWishStudio() {
           card: 'bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rounded-none',
           input: 'bg-white border-4 border-black text-black placeholder-black/50 focus:border-red-500 font-bold uppercase rounded-none',
           btn: 'bg-[#2196F3] text-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase font-black rounded-none hover:translate-y-1 hover:shadow-none',
+          btnSecondary: 'bg-white text-black border-4 border-black uppercase font-black rounded-none hover:bg-zinc-100',
         };
       case 'snarky':
         return {
@@ -263,6 +283,7 @@ export default function ImmersiveWishStudio() {
           card: 'bg-black/60 border border-cyan-500/30 backdrop-blur-md shadow-[0_0_15px_rgba(6,182,212,0.15)] rounded-lg',
           input: 'bg-black/80 border border-zinc-800 text-zinc-200 focus:border-cyan-500 placeholder-zinc-700 font-mono rounded-md',
           btn: 'bg-cyan-500 text-black font-bold font-mono rounded-md hover:bg-cyan-400',
+          btnSecondary: 'bg-black text-cyan-500 border border-cyan-500/50 font-mono rounded-md hover:bg-cyan-500/10',
         };
       case 'sentimental':
         return {
@@ -273,6 +294,7 @@ export default function ImmersiveWishStudio() {
           card: 'bg-white/80 border border-[#e6dfd3] shadow-sm backdrop-blur-md rounded-2xl',
           input: 'bg-transparent border-b border-[#d3cabc] text-[#4a4036] focus:border-[#8b7d6b] placeholder-[#a89f91] rounded-none px-0 font-[family-name:var(--font-playfair)]',
           btn: 'bg-[#4a4036] text-[#fdfbf7] font-light rounded-full hover:bg-[#2d261e]',
+          btnSecondary: 'bg-transparent text-[#4a4036] border border-[#d3cabc] font-light rounded-full hover:bg-[#f1ebe1]',
         };
       case 'custom':
         return {
@@ -283,6 +305,7 @@ export default function ImmersiveWishStudio() {
           card: 'bg-zinc-900/50 border border-[#d4af37]/20 backdrop-blur-md rounded-none',
           input: 'bg-black border border-[#d4af37]/20 text-[#d4af37] focus:border-[#d4af37] placeholder-[#d4af37]/30 rounded-none',
           btn: 'bg-[#d4af37] text-black font-semibold tracking-widest uppercase rounded-none hover:bg-white',
+          btnSecondary: 'bg-transparent text-[#d4af37] border border-[#d4af37]/50 font-semibold tracking-widest uppercase rounded-none hover:bg-[#d4af37]/10',
         };
       case 'sweet':
       default:
@@ -294,6 +317,7 @@ export default function ImmersiveWishStudio() {
           card: 'bg-white/10 border border-white/20 backdrop-blur-lg shadow-xl rounded-3xl',
           input: 'bg-white/5 border border-white/20 text-white focus:border-yellow-400 placeholder-white/40 rounded-xl',
           btn: 'bg-gradient-to-r from-pink-500 to-yellow-500 text-white font-bold rounded-xl shadow-lg',
+          btnSecondary: 'bg-white/10 text-white font-bold rounded-xl hover:bg-white/20',
         };
     }
   };
@@ -315,8 +339,8 @@ export default function ImmersiveWishStudio() {
     sender_alias: senderAlias,
     sender_email_prefix: senderPrefix,
     message_payload: {
-      headline,
-      body: message,
+      headline: headline || 'Happy Birthday!',
+      body: message || 'Have a great day!',
       mediaUrl: mediaPreview || undefined,
     },
     status: 'scheduled',
@@ -335,95 +359,145 @@ export default function ImmersiveWishStudio() {
         
         {/* Left Column: Form Controls */}
         <div className={`w-full lg:w-5/12 flex flex-col gap-6 transition-all duration-700 ${styles.text}`}>
-          <div className="mb-2">
-             <h1 className={`text-4xl ${styles.heading}`}>Design Studio</h1>
-             <p className="opacity-70 mt-1 text-sm">Create a hyper-personalized immersive experience.</p>
+          <div className="mb-2 flex items-center justify-between">
+             <div>
+               <h1 className={`text-4xl ${styles.heading}`}>Design Studio</h1>
+               <p className="opacity-70 mt-1 text-sm">Create a hyper-personalized immersive experience.</p>
+             </div>
+             
+             {/* Step Indicator */}
+             <div className="flex gap-2">
+               {[1, 2, 3, 4].map(step => (
+                 <button 
+                   key={step} 
+                   onClick={() => handleNext(step)}
+                   className={`w-3 h-3 rounded-full transition-all ${currentStep === step ? 'bg-current scale-125 shadow-md shadow-current' : 'bg-current opacity-30 hover:opacity-60'}`} 
+                 />
+               ))}
+             </div>
           </div>
           
           <form onSubmit={handleSubmit} className="space-y-6 pb-20">
              
-             {/* 1. Aesthetic / Vibe */}
-             <div className={`p-6 transition-all duration-500 ${styles.card}`}>
-                <h3 className={`text-xl mb-4 ${styles.heading}`}>1. Choose Aesthetic</h3>
-                <VibeSlider value={vibe} onChange={handleVibeChange} />
-             </div>
+             {/* STEP 1: Aesthetic / Vibe */}
+             {currentStep === 1 && (
+               <div className={`p-6 transition-all duration-500 ${styles.card} animate-in fade-in slide-in-from-right-4`}>
+                  <h3 className={`text-xl mb-4 ${styles.heading}`}>1. Choose Aesthetic</h3>
+                  <VibeSlider value={vibe} onChange={handleVibeChange} />
+                  
+                  <div className="mt-8 flex justify-end">
+                    <button type="button" onClick={() => handleNext(2)} className={`px-6 py-3 flex items-center gap-2 ${styles.btn}`}>
+                      Next: The Target <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
+               </div>
+             )}
              
-             {/* 2. Target Info */}
-             <div className={`p-6 transition-all duration-500 ${styles.card} space-y-4`}>
-                <h3 className={`text-xl mb-4 ${styles.heading}`}>2. The Target</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider mb-1 opacity-70">Full Name</label>
-                    <input type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder="Alex Rivera" className={`w-full px-3.5 py-2.5 outline-none transition-all ${styles.input}`} />
+             {/* STEP 2: Target Info */}
+             {currentStep === 2 && (
+               <div className={`p-6 transition-all duration-500 ${styles.card} space-y-4 animate-in fade-in slide-in-from-right-4`}>
+                  <h3 className={`text-xl mb-4 ${styles.heading}`}>2. The Target</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider mb-1 opacity-70">Full Name</label>
+                      <input type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder="Alex Rivera" className={`w-full px-3.5 py-2.5 outline-none transition-all ${styles.input}`} />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider mb-1 opacity-70">Email</label>
+                      <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="alex@example.com" className={`w-full px-3.5 py-2.5 outline-none transition-all ${styles.input}`} />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider mb-1 opacity-70">Email</label>
-                    <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="alex@example.com" className={`w-full px-3.5 py-2.5 outline-none transition-all ${styles.input}`} />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider mb-1 opacity-70">Birthdate</label>
+                      <input type="date" required value={birthDate} onChange={(e) => setBirthDate(e.target.value)} className={`w-full px-3.5 py-2.5 outline-none transition-all ${styles.input}`} />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider mb-1 opacity-70">Timezone</label>
+                      <select value={timezone} onChange={(e) => setTimezone(e.target.value)} className={`w-full px-3.5 py-2.5 outline-none transition-all ${styles.input} [&>option]:bg-zinc-900 [&>option]:text-white`}>
+                        {TIMEZONES.map((tz) => <option key={tz.value} value={tz.value}>{tz.label}</option>)}
+                      </select>
+                    </div>
                   </div>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider mb-1 opacity-70">Birthdate</label>
-                    <input type="date" required value={birthDate} onChange={(e) => setBirthDate(e.target.value)} className={`w-full px-3.5 py-2.5 outline-none transition-all ${styles.input}`} />
+                  
+                  <div className="mt-8 flex justify-between">
+                    <button type="button" onClick={() => handleNext(1)} className={`px-4 py-3 flex items-center gap-2 ${styles.btnSecondary}`}>
+                      <ArrowLeft className="w-4 h-4" /> Back
+                    </button>
+                    <button type="button" onClick={() => handleNext(3)} className={`px-6 py-3 flex items-center gap-2 ${styles.btn}`}>
+                      Next: The Message <ArrowRight className="w-4 h-4" />
+                    </button>
                   </div>
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider mb-1 opacity-70">Timezone</label>
-                    <select value={timezone} onChange={(e) => setTimezone(e.target.value)} className={`w-full px-3.5 py-2.5 outline-none transition-all ${styles.input} [&>option]:bg-zinc-900 [&>option]:text-white`}>
-                      {TIMEZONES.map((tz) => <option key={tz.value} value={tz.value}>{tz.label}</option>)}
-                    </select>
-                  </div>
-                </div>
-             </div>
+               </div>
+             )}
              
-             {/* 3. Message */}
-             <div className={`p-6 transition-all duration-500 ${styles.card} space-y-4`}>
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className={`text-xl ${styles.heading}`}>3. The Message</h3>
-                  <button type="button" onClick={() => setIsAiModalOpen(true)} className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/20 text-amber-500 rounded text-xs font-bold hover:bg-amber-500/30">
-                    <Wand2 className="w-3.5 h-3.5" /> AI Writer
-                  </button>
-                </div>
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider mb-1 opacity-70">Headline</label>
-                  <input type="text" required value={headline} onChange={(e) => setHeadline(e.target.value)} className={`w-full px-3.5 py-2.5 outline-none transition-all ${styles.input}`} />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider mb-1 opacity-70">Body</label>
-                  <textarea rows={5} required value={message} onChange={(e) => setMessage(e.target.value)} className={`w-full px-3.5 py-2.5 outline-none transition-all ${styles.input} resize-none`} />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider mb-1 opacity-70">Photo (Optional)</label>
-                  <input type="file" accept="image/png, image/jpeg, image/webp" onChange={handleFileSelect} className={`w-full px-3.5 py-2.5 outline-none transition-all file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-zinc-800 file:text-white hover:file:bg-zinc-700 ${styles.input}`} />
-                </div>
-             </div>
-             
-             {/* 4. Delivery Options */}
-             <div className={`p-6 transition-all duration-500 ${styles.card} space-y-4`}>
-                <h3 className={`text-xl mb-4 ${styles.heading}`}>4. Delivery</h3>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="text-sm font-bold opacity-90">Send Anonymously</h4>
-                    <p className="text-xs opacity-60">Hide your real identity</p>
+             {/* STEP 3: Message */}
+             {currentStep === 3 && (
+               <div className={`p-6 transition-all duration-500 ${styles.card} space-y-4 animate-in fade-in slide-in-from-right-4`}>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className={`text-xl ${styles.heading}`}>3. The Message</h3>
+                    <button type="button" onClick={() => setIsAiModalOpen(true)} className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/20 text-amber-500 rounded text-xs font-bold hover:bg-amber-500/30">
+                      <Wand2 className="w-3.5 h-3.5" /> AI Writer
+                    </button>
                   </div>
-                  <input type="checkbox" checked={isAnonymous} onChange={(e) => setIsAnonymous(e.target.checked)} className="w-5 h-5 cursor-pointer accent-current" />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider mb-1 opacity-70">Sender Alias</label>
-                  <input type="text" value={senderAlias} onChange={(e) => setSenderAlias(e.target.value)} className={`w-full px-3.5 py-2.5 outline-none transition-all ${styles.input}`} />
-                </div>
-                <div className="flex items-center justify-between pt-2">
                   <div>
-                    <h4 className="text-sm font-bold opacity-90">Enable Group Board</h4>
-                    <p className="text-xs opacity-60">Let friends add notes</p>
+                    <label className="block text-xs font-bold uppercase tracking-wider mb-1 opacity-70">Headline</label>
+                    <input type="text" required value={headline} onChange={(e) => setHeadline(e.target.value)} className={`w-full px-3.5 py-2.5 outline-none transition-all ${styles.input}`} />
                   </div>
-                  <input type="checkbox" checked={isGroupBoard} onChange={(e) => setIsGroupBoard(e.target.checked)} className="w-5 h-5 cursor-pointer accent-current" />
-                </div>
-             </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider mb-1 opacity-70">Body</label>
+                    <textarea rows={5} required value={message} onChange={(e) => setMessage(e.target.value)} className={`w-full px-3.5 py-2.5 outline-none transition-all ${styles.input} resize-none`} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider mb-1 opacity-70">Photo (Optional)</label>
+                    <input type="file" accept="image/png, image/jpeg, image/webp" onChange={handleFileSelect} className={`w-full px-3.5 py-2.5 outline-none transition-all file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-zinc-800 file:text-white hover:file:bg-zinc-700 ${styles.input}`} />
+                  </div>
+                  
+                  <div className="mt-8 flex justify-between">
+                    <button type="button" onClick={() => handleNext(2)} className={`px-4 py-3 flex items-center gap-2 ${styles.btnSecondary}`}>
+                      <ArrowLeft className="w-4 h-4" /> Back
+                    </button>
+                    <button type="button" onClick={() => handleNext(4)} className={`px-6 py-3 flex items-center gap-2 ${styles.btn}`}>
+                      Next: Delivery <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
+               </div>
+             )}
              
-             <button type="submit" disabled={isSubmitting} className={`w-full py-4 px-6 flex items-center justify-center gap-2 transition-all ${styles.btn}`}>
-                {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <CheckCircle2 className="w-5 h-5" />}
-                <span>{isSubmitting ? (isUploading ? 'Uploading...' : 'Locking in...') : 'Schedule Delivery'}</span>
-             </button>
+             {/* STEP 4: Delivery Options */}
+             {currentStep === 4 && (
+               <div className={`p-6 transition-all duration-500 ${styles.card} space-y-4 animate-in fade-in slide-in-from-right-4`}>
+                  <h3 className={`text-xl mb-4 ${styles.heading}`}>4. Delivery Options</h3>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="text-sm font-bold opacity-90">Send Anonymously</h4>
+                      <p className="text-xs opacity-60">Hide your real identity</p>
+                    </div>
+                    <input type="checkbox" checked={isAnonymous} onChange={(e) => setIsAnonymous(e.target.checked)} className="w-5 h-5 cursor-pointer accent-current" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider mb-1 opacity-70">Sender Alias</label>
+                    <input type="text" value={senderAlias} onChange={(e) => setSenderAlias(e.target.value)} className={`w-full px-3.5 py-2.5 outline-none transition-all ${styles.input}`} />
+                  </div>
+                  <div className="flex items-center justify-between pt-2">
+                    <div>
+                      <h4 className="text-sm font-bold opacity-90">Enable Group Board</h4>
+                      <p className="text-xs opacity-60">Let friends add notes</p>
+                    </div>
+                    <input type="checkbox" checked={isGroupBoard} onChange={(e) => setIsGroupBoard(e.target.checked)} className="w-5 h-5 cursor-pointer accent-current" />
+                  </div>
+                  
+                  <div className="mt-8 flex justify-between gap-4">
+                    <button type="button" onClick={() => handleNext(3)} className={`px-4 py-3 flex items-center gap-2 ${styles.btnSecondary}`}>
+                      <ArrowLeft className="w-4 h-4" /> Back
+                    </button>
+                    <button type="submit" disabled={isSubmitting} className={`flex-1 py-3 px-6 flex items-center justify-center gap-2 transition-all ${styles.btn}`}>
+                       {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <CheckCircle2 className="w-5 h-5" />}
+                       <span>{isSubmitting ? (isUploading ? 'Uploading...' : 'Locking in...') : 'Schedule Delivery'}</span>
+                    </button>
+                  </div>
+               </div>
+             )}
           </form>
         </div>
         
