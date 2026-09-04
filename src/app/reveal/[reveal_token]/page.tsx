@@ -184,7 +184,6 @@ export default function BirthdayRevealPage() {
             </div>
           </div>
         )}
-      </div>
 
       {/* Floating Audio Toggle */}
       {hasUnboxed && (
@@ -200,6 +199,6 @@ export default function BirthdayRevealPage() {
       {!isMuted && hasUnboxed && (
          <audio src="/sounds/ambient-pad.mp3" autoPlay loop muted={isMuted} className="hidden" />
       )}
-    </div>
+    </>
   );
 }
