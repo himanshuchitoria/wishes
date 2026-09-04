@@ -5,16 +5,16 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatDate(dateString: string): string {
+export function formatDate(input: string | Date): string {
   try {
-    const d = new Date(dateString);
+    const d = typeof input === 'string' ? new Date(input) : input;
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
     }).format(d);
   } catch {
-    return dateString;
+    return String(input);
   }
 }
 
