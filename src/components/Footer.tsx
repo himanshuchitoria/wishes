@@ -10,8 +10,10 @@ export default function Footer() {
   const pathname = usePathname();
   if (pathname?.startsWith('/reveal')) return null;
 
+  const isDashboard = pathname === '/dashboard';
+
   return (
-    <footer className="relative mt-32 overflow-hidden border-t border-white/5 bg-zinc-950 pt-20 pb-10">
+    <footer className={`relative overflow-hidden border-t border-white/5 bg-zinc-950 pt-20 pb-10 ${isDashboard ? 'mt-0' : 'mt-32'}`}>
       
       {/* Massive Background Typography Effect */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full text-center pointer-events-none select-none overflow-hidden h-full flex items-center justify-center">

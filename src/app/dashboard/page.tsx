@@ -10,7 +10,9 @@ import {
   ArrowRight,
   Flame,
   CheckCircle2,
-  Sparkles
+  Sparkles,
+  Calendar,
+  Settings
 } from 'lucide-react';
 import { Wish } from '@/types';
 import { supabase } from '@/lib/supabase/client';
@@ -98,11 +100,11 @@ export default function DashboardPage() {
   });
 
   return (
-    <div className="min-h-screen bg-[#FFeb3b] text-black w-full relative overflow-hidden font-sans pt-12 pb-24">
+    <div className="min-h-screen bg-[#FFeb3b] text-black w-full relative overflow-hidden font-sans pt-32 pb-24 -mt-24">
       
       {/* MASSIVE BACKGROUND TYPOGRAPHY */}
       <div className="absolute top-0 left-0 w-full flex justify-center pointer-events-none select-none z-0 overflow-visible mt-20">
-        <h1 className="text-[22vw] font-black leading-none tracking-tighter text-black uppercase whitespace-nowrap opacity-90 scale-110">
+        <h1 className="text-[22vw] font-black leading-none tracking-tighter text-black uppercase whitespace-nowrap opacity-[0.03] scale-110">
           BIRTHDAYS
         </h1>
       </div>
@@ -126,14 +128,18 @@ export default function DashboardPage() {
       </div>
 
       {/* TOP BRACKET NAVIGATION */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 flex flex-wrap items-center justify-between gap-4 font-mono text-xs font-bold uppercase tracking-widest mb-48">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 flex flex-wrap items-center justify-between gap-4 font-mono text-xs font-bold uppercase tracking-widest mb-32">
         <div className="flex gap-4">
-          <span className="hover:text-rose-600 cursor-default">[ OVERVIEW ]</span>
-          <span className="opacity-50">[ CALENDAR ]</span>
-          <span className="opacity-50">[ SETTINGS ]</span>
+          <span className="text-black bg-white px-2 border-2 border-black shadow-[2px_2px_0_0_#000] cursor-default">[ OVERVIEW ]</span>
+          <button onClick={() => toast('Calendar view is coming soon!', 'info')} className="hover:text-rose-600 transition-colors opacity-60 hover:opacity-100 flex items-center gap-1">
+            <Calendar className="w-3 h-3" /> [ CALENDAR ]
+          </button>
+          <Link href="/settings" className="hover:text-rose-600 transition-colors opacity-60 hover:opacity-100 flex items-center gap-1">
+            <Settings className="w-3 h-3" /> [ SETTINGS ]
+          </Link>
         </div>
         <div className="flex gap-4">
-          <span className="bg-black text-yellow-400 px-3 py-1">[ SYSTEM ONLINE ]</span>
+          <span className="bg-black text-yellow-400 px-3 py-1 animate-pulse">[ SYSTEM ONLINE ]</span>
         </div>
       </div>
 
