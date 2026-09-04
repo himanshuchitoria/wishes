@@ -17,7 +17,7 @@ export default function Footer() {
       
       {/* Massive Background Typography Effect */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full text-center pointer-events-none select-none overflow-hidden h-full flex items-center justify-center">
-        <h2 className="text-[15vw] font-black leading-none tracking-tighter bg-gradient-to-b from-white/[0.03] to-transparent bg-clip-text text-transparent transform -translate-y-1/4">
+        <h2 className="text-[15vw] font-black leading-none tracking-tighter bg-gradient-to-b from-white/[0.08] to-transparent bg-clip-text text-transparent transform -translate-y-1/4">
           CHITORIA
         </h2>
       </div>
