@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Sparkles, Calendar, PlusCircle, Volume2, VolumeX, Menu, X, Flame, ShieldAlert, LogOut, User } from 'lucide-react';
+import { Sparkles, Calendar, Flame, ShieldAlert, User, Menu, X, LogOut, Code2 } from 'lucide-react';
 import { soundFX } from '@/lib/audio';
 import { supabase } from '@/lib/supabase/client';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
@@ -12,16 +12,13 @@ export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
   const [user, setUser] = useState<SupabaseUser | null>(null);
 
   if (pathname?.startsWith('/reveal')) return null;
 
   useEffect(() => {
     if (!supabase) return;
-    // Get initial session
     supabase.auth.getUser().then(({ data }) => setUser(data.user));
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
@@ -37,183 +34,142 @@ export default function Navbar() {
     router.push('/');
   };
 
-  const toggleAudio = () => {
-    const muted = soundFX.toggleMute();
-    setIsMuted(muted);
-    if (!muted) soundFX.playPop();
-  };
-
   const navLinks = [
     { name: 'Dashboard', href: '/dashboard', icon: Calendar },
-    { name: 'Wish Studio', href: '/create', icon: Sparkles },
-    { name: 'Scheduled Queue', href: '/wishes', icon: Flame },
+    { name: 'Studio', href: '/create', icon: Sparkles },
+    { name: 'Queue', href: '/wishes', icon: Flame },
     { name: 'Settings', href: '/settings', icon: ShieldAlert },
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-zinc-800/80 bg-zinc-950/75 backdrop-blur-xl transition-all">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Brand Logo */}
-        <Link
-          href="/"
-          onClick={() => soundFX.playPop()}
-          className="flex items-center gap-2.5 group"
-        >
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-500 via-orange-500 to-amber-400 p-[1px] shadow-lg shadow-rose-500/20 group-hover:scale-105 transition-transform">
-            <div className="w-full h-full bg-zinc-950 rounded-[11px] flex items-center justify-center">
-              <span className="text-lg font-black bg-gradient-to-r from-rose-400 to-orange-400 bg-clip-text text-transparent">
-                C
-              </span>
-            </div>
-          </div>
-          <div className="flex flex-col">
-            <div className="flex items-center gap-1.5">
-              <span className="text-lg font-extrabold tracking-tight text-white group-hover:text-rose-400 transition-colors">
-                chitoria<span className="text-rose-500">.dev</span>
-              </span>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20">
-                AI Birthday
-              </span>
-            </div>
-          </div>
-        </Link>
+    <>
+      <header className="sticky top-4 z-50 w-full px-4 sm:px-6 pointer-events-none transition-all duration-500">
+        <div className="mx-auto max-w-5xl pointer-events-auto">
+          <div className="h-14 rounded-full border border-white/10 bg-zinc-950/60 backdrop-blur-2xl shadow-[0_8px_30px_rgb(0,0,0,0.4)] flex items-center justify-between px-2 pr-4 relative overflow-hidden">
+            
+            {/* Ambient inner glow */}
+            <div className="absolute inset-0 bg-gradient-to-r from-rose-500/5 via-transparent to-orange-500/5 pointer-events-none" />
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-1.5">
-          {navLinks.map((link) => {
-            const Icon = link.icon;
-            const isActive = pathname === link.href;
-            return (
-              <Link
-                key={link.name}
-                href={link.href}
-                onClick={() => soundFX.playPop()}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all ${
-                  isActive
-                    ? 'bg-zinc-800/80 text-rose-400 shadow-sm border border-zinc-700/50'
-                    : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900/60'
-                }`}
-              >
-                <Icon className={`w-4 h-4 ${isActive ? 'text-rose-400' : 'text-zinc-400'}`} />
-                {link.name}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Right Action CTAs */}
-        <div className="hidden md:flex items-center gap-3">
-          {/* Sound Toggle */}
-          <button
-            onClick={toggleAudio}
-            title={isMuted ? 'Unmute sound effects' : 'Mute sound effects'}
-            className="p-2 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/60 border border-zinc-800 transition-all"
-          >
-            {isMuted ? <VolumeX className="w-4 h-4 text-zinc-500" /> : <Volume2 className="w-4 h-4 text-amber-400" />}
-          </button>
-
-          {/* Create CTA */}
-          <Link
-            href="/create"
-            onClick={() => soundFX.playPop()}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 shadow-lg shadow-rose-500/25 hover:shadow-rose-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
-          >
-            <PlusCircle className="w-4 h-4" />
-            <span>Schedule a Wish</span>
-          </Link>
-
-          {/* User Auth Button */}
-          {user ? (
-            <div className="flex items-center gap-2">
-              <Link
-                href="/settings"
-                onClick={() => soundFX.playPop()}
-                title={user.email}
-                className="flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-500 to-orange-500 text-white font-bold text-xs shadow-lg shadow-rose-500/20 hover:scale-105 transition-transform"
-              >
-                {(user.user_metadata?.full_name || user.email || 'U').charAt(0).toUpperCase()}
-              </Link>
-              <button
-                onClick={handleSignOut}
-                title="Sign Out"
-                className="flex items-center justify-center w-9 h-9 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-rose-400 hover:border-rose-500/50 transition-all"
-              >
-                <LogOut className="w-4 h-4" />
-              </button>
-            </div>
-          ) : (
+            {/* Brand Logo */}
             <Link
-              href="/auth"
+              href="/"
               onClick={() => soundFX.playPop()}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-zinc-300 bg-zinc-900 border border-zinc-800 hover:text-white hover:border-zinc-700 transition-all"
+              className="flex items-center gap-2 group z-10 pl-2"
             >
-              <User className="w-4 h-4" />
-              Sign In
+              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-rose-500 via-orange-500 to-amber-400 p-[1px] shadow-lg shadow-rose-500/20 group-hover:scale-110 transition-transform duration-300">
+                <div className="w-full h-full bg-zinc-950 rounded-full flex items-center justify-center">
+                  <Code2 className="w-4 h-4 text-white group-hover:text-amber-300 transition-colors" />
+                </div>
+              </div>
+              <div className="flex items-center gap-1.5 hidden sm:flex">
+                <span className="text-sm font-extrabold tracking-tight text-white group-hover:text-rose-400 transition-colors">
+                  chitoria<span className="text-rose-500">.dev</span>
+                </span>
+              </div>
             </Link>
-          )}
-        </div>
 
-        {/* Mobile menu trigger */}
-        <div className="flex md:hidden items-center gap-2">
-          <button
-            onClick={toggleAudio}
-            className="p-2 rounded-lg text-zinc-400 hover:bg-zinc-800 border border-zinc-800"
-          >
-            {isMuted ? <VolumeX className="w-4 h-4 text-zinc-500" /> : <Volume2 className="w-4 h-4 text-amber-400" />}
-          </button>
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white border border-zinc-800"
-          >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
-      </div>
+            {/* Desktop Navigation Links */}
+            <nav className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2 z-10">
+              {navLinks.map((link) => {
+                const Icon = link.icon;
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => soundFX.playPop()}
+                    className="relative group px-4 py-1.5 rounded-full text-[13px] font-semibold transition-all duration-300"
+                  >
+                    {isActive && (
+                      <div className="absolute inset-0 bg-white/10 rounded-full" />
+                    )}
+                    <span className={`relative flex items-center gap-1.5 ${isActive ? 'text-white' : 'text-zinc-400 group-hover:text-white'}`}>
+                      <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-rose-400' : 'text-zinc-500 group-hover:text-zinc-300'} transition-colors`} />
+                      {link.name}
+                    </span>
+                    {isActive && (
+                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,1)]" />
+                    )}
+                  </Link>
+                );
+              })}
+            </nav>
 
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-b border-zinc-800 bg-zinc-950/95 backdrop-blur-xl px-4 py-4 space-y-2">
-          {navLinks.map((link) => {
-            const Icon = link.icon;
-            const isActive = pathname === link.href;
-            return (
-              <Link
-                key={link.name}
-                href={link.href}
-                onClick={() => {
-                  soundFX.playPop();
-                  setMobileMenuOpen(false);
-                }}
-                className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                  isActive
-                    ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
-                    : 'text-zinc-300 hover:bg-zinc-900'
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-                {link.name}
-              </Link>
-            );
-          })}
-          <div className="pt-2 border-t border-zinc-800 flex flex-col gap-2">
-            <Link
-              href="/create"
+            {/* Desktop Right Side Auth */}
+            <div className="hidden md:flex items-center gap-3 z-10">
+              {user ? (
+                <button
+                  onClick={handleSignOut}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  Logout
+                </button>
+              ) : (
+                <Link
+                  href="/auth"
+                  onClick={() => soundFX.playPop()}
+                  className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold text-zinc-950 bg-white hover:scale-105 hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all"
+                >
+                  <User className="w-3.5 h-3.5" />
+                  Sign In
+                </Link>
+              )}
+            </div>
+
+            {/* Mobile Menu Toggle */}
+            <button
               onClick={() => {
                 soundFX.playPop();
-                setMobileMenuOpen(false);
+                setMobileMenuOpen(!mobileMenuOpen);
               }}
-              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-rose-500 to-orange-500"
+              className="md:hidden p-2 -mr-1 rounded-full text-zinc-400 hover:text-white hover:bg-white/10 transition-colors z-10"
             >
-              <PlusCircle className="w-4 h-4" />
-              <span>Schedule a Wish</span>
-            </Link>
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Menu Dropdown */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-40 bg-zinc-950/80 backdrop-blur-md md:hidden pt-24 px-4 flex flex-col">
+          <nav className="flex flex-col gap-2">
+            {navLinks.map((link) => {
+              const Icon = link.icon;
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => {
+                    soundFX.playPop();
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`flex items-center gap-3 p-4 rounded-2xl text-lg font-bold transition-all ${
+                    isActive
+                      ? 'bg-gradient-to-r from-rose-500/20 to-transparent text-white border border-rose-500/30'
+                      : 'text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent'
+                  }`}
+                >
+                  <Icon className={`w-5 h-5 ${isActive ? 'text-rose-400' : 'text-zinc-500'}`} />
+                  {link.name}
+                </Link>
+              );
+            })}
+          </nav>
+          
+          <div className="mt-8 pt-8 border-t border-white/10">
             {user ? (
               <button
-                onClick={() => { handleSignOut(); setMobileMenuOpen(false); }}
-                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-medium text-rose-400 bg-zinc-900 border border-rose-500/30"
+                onClick={() => {
+                  handleSignOut();
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full flex items-center justify-center gap-2 p-4 rounded-2xl text-lg font-bold text-rose-400 bg-rose-500/10 border border-rose-500/20"
               >
-                <LogOut className="w-4 h-4" />
-                Sign Out ({(user.user_metadata?.full_name || user.email || '').split('@')[0]})
+                <LogOut className="w-5 h-5" />
+                Sign Out
               </button>
             ) : (
               <Link
@@ -222,15 +178,15 @@ export default function Navbar() {
                   soundFX.playPop();
                   setMobileMenuOpen(false);
                 }}
-                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-medium text-zinc-300 bg-zinc-900 border border-zinc-800"
+                className="w-full flex items-center justify-center gap-2 p-4 rounded-2xl text-lg font-bold text-zinc-950 bg-white"
               >
-                <User className="w-4 h-4" />
-                Sign In / Account
+                <User className="w-5 h-5" />
+                Sign In
               </Link>
             )}
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 }
