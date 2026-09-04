@@ -43,12 +43,12 @@ export default function VibeSlider({ value, onChange }: VibeSliderProps) {
               onClick={() => handleSelectVibe(vibeKey)}
               className={`flex flex-col items-center justify-center p-3 rounded-xl border text-center transition-all ${
                 isSelected
-                  ? `bg-zinc-800/90 ${config.borderGlow} border-opacity-100 scale-[1.03]`
-                  : 'bg-zinc-900/50 border-zinc-800/80 hover:bg-zinc-800/50 hover:border-zinc-700 text-zinc-400'
+                  ? `bg-black/20 ${config.borderGlow} border-opacity-100 scale-[1.03] backdrop-blur-md shadow-lg shadow-black/20`
+                  : 'bg-black/5 border-transparent hover:bg-black/10 hover:border-white/10 opacity-60 hover:opacity-100'
               }`}
             >
               <span className="text-2xl mb-1">{config.emoji}</span>
-              <span className={`text-xs font-bold ${isSelected ? 'text-white' : 'text-zinc-300'}`}>
+              <span className={`text-xs font-bold ${isSelected ? 'opacity-100' : 'opacity-70'}`}>
                 {config.name}
               </span>
             </button>
@@ -65,9 +65,9 @@ export default function VibeSlider({ value, onChange }: VibeSliderProps) {
           step="1"
           value={currentIndex >= 0 ? currentIndex : 0}
           onChange={handleSliderChange}
-          className="w-full h-2.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-rose-500 transition-all focus:outline-none"
+          className="w-full h-2.5 bg-black/20 rounded-lg appearance-none cursor-pointer accent-current transition-all focus:outline-none"
         />
-        <div className="flex justify-between text-[11px] font-semibold text-zinc-400 mt-1.5 px-0.5">
+        <div className="flex justify-between text-[11px] font-semibold opacity-70 mt-1.5 px-0.5">
           <span>🔥 Roast</span>
           <span>😏 Snark</span>
           <span>✨ Sweet</span>
@@ -78,17 +78,17 @@ export default function VibeSlider({ value, onChange }: VibeSliderProps) {
 
       {/* Active Mood Preview Banner */}
       <div
-        className={`p-3.5 rounded-xl border transition-all duration-300 bg-gradient-to-r ${currentConfig.bgGradient} ${currentConfig.borderGlow}`}
+        className={`p-3.5 rounded-xl border transition-all duration-300 bg-gradient-to-r ${currentConfig.bgGradient} ${currentConfig.borderGlow} shadow-md`}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-xl">{currentConfig.emoji}</span>
             <div>
               <h4 className="text-sm font-bold text-white">{currentConfig.name}</h4>
-              <p className="text-xs text-zinc-300">{currentConfig.tagline}</p>
+              <p className="text-xs text-white/70">{currentConfig.tagline}</p>
             </div>
           </div>
-          <span className="text-[11px] px-2 py-0.5 rounded-full bg-black/40 text-zinc-300 border border-white/10 font-mono">
+          <span className="text-[11px] px-2 py-0.5 rounded-full bg-black/40 text-white/80 border border-white/10 font-mono">
             @{currentConfig.defaultPrefix}.chitoria.dev
           </span>
         </div>

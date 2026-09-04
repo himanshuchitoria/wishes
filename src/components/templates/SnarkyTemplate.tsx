@@ -16,7 +16,7 @@ export default function SnarkyTemplate({ wish, hasUnboxed, onUnbox }: TemplatePr
 
   if (!hasUnboxed) {
     return (
-      <div className="fixed inset-0 bg-black flex flex-col items-center justify-center p-6 cursor-pointer" onClick={onUnbox}>
+      <div className="absolute inset-0 bg-black flex flex-col items-center justify-center p-6 cursor-pointer" onClick={onUnbox}>
         <motion.div 
           animate={{ opacity: [1, 0, 1, 1, 0.5, 1] }} 
           transition={{ duration: 0.2, repeat: Infinity, repeatType: "mirror", repeatDelay: 2 }}
@@ -33,7 +33,7 @@ export default function SnarkyTemplate({ wish, hasUnboxed, onUnbox }: TemplatePr
   }
 
   return (
-    <div className="fixed inset-0 bg-zinc-950 overflow-hidden flex flex-col items-center justify-center p-4 sm:p-6 font-mono selection:bg-cyan-500 selection:text-black">
+    <div className="absolute inset-0 bg-zinc-950 overflow-hidden flex flex-col items-center justify-center p-4 sm:p-6 font-mono selection:bg-cyan-500 selection:text-black">
       {/* Cyber Grid Background */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:2rem_2rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_70%,transparent_100%)] opacity-30" />
       

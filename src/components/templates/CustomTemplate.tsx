@@ -16,7 +16,7 @@ export default function CustomTemplate({ wish, hasUnboxed, onUnbox }: TemplatePr
 
   if (!hasUnboxed) {
     return (
-      <div className="fixed inset-0 bg-[#0a0a0a] flex flex-col items-center justify-center p-6 cursor-pointer" onClick={onUnbox}>
+      <div className="absolute inset-0 bg-[#0a0a0a] flex flex-col items-center justify-center p-6 cursor-pointer" onClick={onUnbox}>
         <motion.div 
           animate={{ opacity: [0.5, 1, 0.5] }} 
           transition={{ duration: 4, repeat: Infinity }}
@@ -31,7 +31,7 @@ export default function CustomTemplate({ wish, hasUnboxed, onUnbox }: TemplatePr
   }
 
   return (
-    <div className="fixed inset-0 bg-[#050505] overflow-hidden flex flex-col items-center justify-center p-6 sm:p-12 selection:bg-[#d4af37] selection:text-black">
+    <div className="absolute inset-0 bg-[#050505] overflow-hidden flex flex-col items-center justify-center p-6 sm:p-12 selection:bg-[#d4af37] selection:text-black">
       {/* Golden Glow */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#d4af37]/10 via-transparent to-transparent pointer-events-none" />
 

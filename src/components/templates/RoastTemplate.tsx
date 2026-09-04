@@ -16,7 +16,7 @@ export default function RoastTemplate({ wish, hasUnboxed, onUnbox }: TemplatePro
 
   if (!hasUnboxed) {
     return (
-      <div className="fixed inset-0 bg-[#FFeb3b] flex flex-col items-center justify-center p-6 cursor-pointer" onClick={onUnbox}>
+      <div className="absolute inset-0 bg-[#FFeb3b] flex flex-col items-center justify-center p-6 cursor-pointer" onClick={onUnbox}>
         <motion.div 
           animate={{ rotate: [-2, 2, -2], scale: [1, 1.1, 1] }} 
           transition={{ duration: 0.5, repeat: Infinity }}
@@ -31,7 +31,7 @@ export default function RoastTemplate({ wish, hasUnboxed, onUnbox }: TemplatePro
   }
 
   return (
-    <div className="fixed inset-0 bg-[#FFeb3b] overflow-hidden flex flex-col items-center justify-center p-6 selection:bg-black selection:text-white">
+    <div className="absolute inset-0 bg-[#FFeb3b] overflow-hidden flex flex-col items-center justify-center p-6 selection:bg-black selection:text-white">
       {/* Halftone / Polka dot background effect */}
       <div 
         className="absolute inset-0 opacity-20 pointer-events-none" 

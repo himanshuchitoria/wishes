@@ -20,7 +20,7 @@ export default function SweetTemplate({ wish, hasUnboxed, onUnbox }: TemplatePro
   // Pre-unbox state (The envelope/locked state)
   if (!hasUnboxed) {
     return (
-      <div className="fixed inset-0 bg-violet-950 flex flex-col items-center justify-center p-6 cursor-pointer" onClick={onUnbox}>
+      <div className="absolute inset-0 bg-violet-950 flex flex-col items-center justify-center p-6 cursor-pointer" onClick={onUnbox}>
         <motion.div 
           animate={{ scale: [1, 1.02, 1], y: [0, -10, 0] }} 
           transition={{ duration: 4, repeat: Infinity }}
@@ -41,7 +41,7 @@ export default function SweetTemplate({ wish, hasUnboxed, onUnbox }: TemplatePro
 
   // Revealed State (Exact Figma Match)
   return (
-    <div className="fixed inset-0 bg-[#4c1d95] overflow-hidden flex flex-col items-center justify-center text-white font-[family-name:var(--font-inter)] selection:bg-yellow-400 selection:text-black">
+    <div className="absolute inset-0 bg-[#4c1d95] overflow-hidden flex flex-col items-center justify-center text-white font-[family-name:var(--font-inter)] selection:bg-yellow-400 selection:text-black">
       
       {/* Dashed Corners */}
       <DashedCorner className="bottom-0 left-0" position="bottom-left" />

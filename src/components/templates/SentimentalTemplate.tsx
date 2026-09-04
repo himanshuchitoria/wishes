@@ -16,7 +16,7 @@ export default function SentimentalTemplate({ wish, hasUnboxed, onUnbox }: Templ
 
   if (!hasUnboxed) {
     return (
-      <div className="fixed inset-0 bg-[#f8f5f2] flex flex-col items-center justify-center p-6 cursor-pointer" onClick={onUnbox}>
+      <div className="absolute inset-0 bg-[#f8f5f2] flex flex-col items-center justify-center p-6 cursor-pointer" onClick={onUnbox}>
         <motion.div 
           animate={{ opacity: [0.7, 1, 0.7] }} 
           transition={{ duration: 3, repeat: Infinity }}
@@ -33,7 +33,7 @@ export default function SentimentalTemplate({ wish, hasUnboxed, onUnbox }: Templ
   }
 
   return (
-    <div className="fixed inset-0 bg-[#fdfbf7] overflow-hidden flex flex-col items-center justify-center p-6 sm:p-12 text-[#4a4036] selection:bg-[#e6dfd3] selection:text-[#4a4036]">
+    <div className="absolute inset-0 bg-[#fdfbf7] overflow-hidden flex flex-col items-center justify-center p-6 sm:p-12 text-[#4a4036] selection:bg-[#e6dfd3] selection:text-[#4a4036]">
       {/* Soft gradient blur */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#f1ebe1] via-transparent to-transparent opacity-60 pointer-events-none" />
 
