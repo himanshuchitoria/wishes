@@ -21,16 +21,15 @@ import {
 } from 'lucide-react';
 import { Wish, GroupContribution, VIBE_CONFIGS } from '@/types';
 import { getCountdown, getNextBirthdayDate } from '@/lib/utils';
-import ScratchCard from '@/components/ScratchCard';
-import EnvelopeReveal from '@/components/EnvelopeReveal';
-import GlitchReveal from '@/components/GlitchReveal';
-import InstantReveal from '@/components/InstantReveal';
-import VibeBackground from '@/components/VibeBackground';
-import BackgroundEffects from '@/components/BackgroundEffects';
-import MasonryGrid from '@/components/MasonryGrid';
 import CountdownTimer from '@/components/CountdownTimer';
 import { soundFX } from '@/lib/audio';
 import { useToast } from '@/components/Toast';
+
+import SweetTemplate from '@/components/templates/SweetTemplate';
+import SentimentalTemplate from '@/components/templates/SentimentalTemplate';
+import RoastTemplate from '@/components/templates/RoastTemplate';
+import SnarkyTemplate from '@/components/templates/SnarkyTemplate';
+import CustomTemplate from '@/components/templates/CustomTemplate';
 
 export default function BirthdayRevealPage() {
   const params = useParams();
@@ -105,146 +104,68 @@ export default function BirthdayRevealPage() {
     }
   };
 
-  const config = wish ? VIBE_CONFIGS[wish.vibe] : VIBE_CONFIGS.roast;
   const targetDate = wish ? getNextBirthdayDate(wish.birth_date, wish.delivery_time) : new Date();
 
-  return (
-    <div className="relative min-h-screen w-full overflow-hidden flex flex-col justify-between py-8 px-4 sm:px-6 lg:px-8">
-      {/* Dynamic Vibe Background */}
-      <VibeBackground vibe={wish?.vibe || 'roast'} />
-      
-      {/* Post-reveal particles (confetti, fireworks) */}
-      <BackgroundEffects
-        effect={wish?.message_payload?.effects || 'none'}
-        trigger={hasUnboxed}
-      />
-
-      {/* White Flash overlay triggered on unbox */}
-      <AnimatePresence>
-        {hasUnboxed && (
-          <motion.div
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.5, ease: 'easeOut' }}
-            className="fixed inset-0 z-50 bg-white pointer-events-none"
-          />
-        )}
-      </AnimatePresence>
-
-      <div className="relative z-10 max-w-4xl mx-auto w-full space-y-8 flex-1 flex flex-col justify-center">
-        <div className="text-center space-y-2 pt-12">
-          {/* Headline with aesthetic floating motion */}
-          <motion.h1 
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="text-4xl sm:text-6xl md:text-7xl font-black text-white tracking-tighter drop-shadow-2xl"
-            style={{ textShadow: '0 10px 30px rgba(0,0,0,0.5)' }}
-          >
-            {error ? 'Surprise Not Found' : `Happy Birthday, ${wish?.recipient_name || '...'}! ${config.emoji}`}
-          </motion.h1>
+  if (error) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center p-6">
+        <div className="p-8 sm:p-12 rounded-3xl bg-zinc-900 border border-rose-500/30 shadow-2xl text-center space-y-4 max-w-md w-full">
+          <div className="w-16 h-16 rounded-2xl bg-rose-500/10 flex items-center justify-center text-rose-400 mx-auto">
+            <Flame className="w-8 h-8" />
+          </div>
+          <h2 className="text-xl font-bold text-white">Poof! It's gone.</h2>
+          <p className="text-sm text-zinc-400">{error}</p>
         </div>
+      </div>
+    );
+  }
 
-        {error ? (
-          <div className="p-8 sm:p-12 rounded-3xl bg-zinc-950/80 border border-rose-500/30 backdrop-blur-xl shadow-2xl text-center space-y-4 max-w-md mx-auto">
-            <div className="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 mx-auto">
-              <Flame className="w-8 h-8" />
-            </div>
-            <h2 className="text-xl font-bold text-white">Poof! It's gone.</h2>
-            <p className="text-sm text-zinc-400">{error}</p>
-          </div>
-        ) : isEarly ? (
-          <div className="p-8 sm:p-12 rounded-3xl bg-zinc-950/40 border border-white/5 backdrop-blur-3xl shadow-[0_0_50px_rgba(255,255,255,0.05)] text-center space-y-8 max-w-xl mx-auto animate-in fade-in zoom-in-95 duration-700">
-            {/* Ambient Pulsing Lock */}
-            <div className="relative w-24 h-24 mx-auto flex items-center justify-center cursor-pointer" onClick={() => soundFX.playPop()}>
-              <div className="absolute inset-0 rounded-full bg-white/5 animate-ping opacity-75" style={{ animationDuration: '3s' }} />
-              <div className="absolute inset-0 rounded-full bg-white/10 blur-xl" />
-              <div className="w-16 h-16 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center text-zinc-300 relative z-10 shadow-2xl">
-                <Lock className="w-6 h-6" />
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <p className="text-sm sm:text-base text-zinc-300 font-medium leading-relaxed">
-                Hold on tight, <span className="font-bold text-white">{wish?.recipient_name || 'there'}</span>... Something special was crafted just for you.
-              </p>
-              <p className="text-xs sm:text-sm text-zinc-500 max-w-sm mx-auto">
-                This vault unlocks automatically on your birthday.
-              </p>
-            </div>
-
-            <div className="pt-4">
-              <CountdownTimer targetDate={targetDate} onExpire={() => window.location.reload()} />
+  if (isEarly) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center p-6">
+        <div className="p-8 sm:p-12 rounded-3xl bg-zinc-950/40 border border-white/5 backdrop-blur-3xl shadow-[0_0_50px_rgba(255,255,255,0.05)] text-center space-y-8 max-w-xl mx-auto animate-in fade-in zoom-in-95 duration-700">
+          <div className="relative w-24 h-24 mx-auto flex items-center justify-center cursor-pointer" onClick={() => soundFX.playPop()}>
+            <div className="absolute inset-0 rounded-full bg-white/5 animate-ping opacity-75" style={{ animationDuration: '3s' }} />
+            <div className="absolute inset-0 rounded-full bg-white/10 blur-xl" />
+            <div className="w-16 h-16 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center text-zinc-300 relative z-10 shadow-2xl">
+              <Lock className="w-6 h-6" />
             </div>
           </div>
-        ) : (
-          /* State 2 & 3: Unboxing & Revealed Payload */
-          <div className="space-y-8 animate-in fade-in duration-500">
-            <div className="max-w-2xl mx-auto w-full">
-              {(() => {
-                const revealType = wish?.message_payload?.revealType;
-                const theme = wish?.message_payload?.theme;
-                const elements = wish?.message_payload?.elements || [];
-                const commonProps = {
-                  headline: wish?.message_payload?.headline,
-                  body: wish?.message_payload?.body || config.sampleMessage,
-                  senderAlias: wish?.sender_alias,
-                  isAnonymous: wish?.is_anonymous,
-                  mediaUrl: wish?.message_payload?.mediaUrl,
-                  elements,
-                  onRevealed: handleReveal,
-                };
-                if (revealType === 'envelope' || wish?.vibe === 'sentimental') {
-                  return <EnvelopeReveal {...commonProps} />;
-                }
-                if (revealType === 'glitch') {
-                  return <GlitchReveal {...commonProps} />;
-                }
-                if (revealType === 'instant') {
-                  return <InstantReveal {...commonProps} theme={theme} />;
-                }
-                // Default: scratch
-                return <ScratchCard {...commonProps} accentColor={config.accentColor} />;
-              })()}
-            </div>
-
-            {/* Share / Save Actions */}
-            <div className="flex items-center justify-center gap-3">
-              <button
-                onClick={handleShare}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-700 text-xs font-bold text-zinc-200 transition-all shadow-md"
-              >
-                <Share2 className="w-4 h-4" />
-                <span>Share Reveal Link</span>
-              </button>
-            </div>
-
-            {/* Group Board Feed if enabled */}
-            {wish?.is_group_board && (
-              <div className="space-y-6 pt-8 border-t border-white/10">
-                <div className="text-center space-y-1">
-                  <h3 className="text-2xl font-black text-white flex items-center justify-center gap-2">
-                    <Users className="w-6 h-6 text-purple-400" />
-                    <span>Your Birthday Vault</span>
-                  </h3>
-                  <p className="text-xs text-zinc-300">
-                    Notes, memories, and photos collected from your friends
-                  </p>
-                </div>
-
-                {contributions.length > 0 ? (
-                  <MasonryGrid contributions={contributions} />
-                ) : (
-                  <div className="text-center py-8 px-4 rounded-2xl bg-zinc-950/60 border border-zinc-800">
-                    <p className="text-zinc-400 text-sm">No notes from friends yet — they might still be writing!</p>
-                  </div>
-                )}
-              </div>
-            )}
+          <div className="space-y-4">
+            <p className="text-sm sm:text-base text-zinc-300 font-medium leading-relaxed">
+              Hold on tight, <span className="font-bold text-white">{wish?.recipient_name || 'there'}</span>... Something special was crafted just for you.
+            </p>
+            <p className="text-xs sm:text-sm text-zinc-500 max-w-sm mx-auto">
+              This vault unlocks automatically on your birthday.
+            </p>
           </div>
-        )}
+          <div className="pt-4">
+            <CountdownTimer targetDate={targetDate} onExpire={() => window.location.reload()} />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-        {/* State 4: Sleek Viral Footer */}
+  if (!wish) return null;
+
+  const renderTemplate = () => {
+    const props = { wish, hasUnboxed, onUnbox: handleReveal };
+    switch (wish.vibe) {
+      case 'sweet': return <SweetTemplate {...props} />;
+      case 'sentimental': return <SentimentalTemplate {...props} />;
+      case 'roast': return <RoastTemplate {...props} />;
+      case 'snarky': return <SnarkyTemplate {...props} />;
+      case 'custom': return <CustomTemplate {...props} />;
+      default: return <SweetTemplate {...props} />;
+    }
+  };
+
+  return (
+    <>
+      {renderTemplate()}
+
+      {/* State 4: Sleek Viral Footer */}
         {hasUnboxed && (
           <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
             <div className="flex items-center gap-3 px-4 py-2.5 rounded-full bg-zinc-950/80 border border-white/10 backdrop-blur-xl shadow-2xl animate-in slide-in-from-bottom-8 duration-700">
