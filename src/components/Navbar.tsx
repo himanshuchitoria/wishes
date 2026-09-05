@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Sparkles, Calendar, Flame, ShieldAlert, User, Menu, X, LogOut, Code2 } from 'lucide-react';
+import { Sparkles, Calendar, Flame, ShieldAlert, User, Menu, X, LogOut } from 'lucide-react';
+import WcLogo from '@/components/WcLogo';
 import { soundFX } from '@/lib/audio';
 import { supabase } from '@/lib/supabase/client';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
@@ -43,7 +44,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full px-0 sm:px-4 pt-0 sm:pt-4 pointer-events-none transition-all duration-500">
+      <header className="sticky top-0 z-50 w-full px-0 sm:px-4 pt-0 pointer-events-none transition-all duration-500">
         <div className="mx-auto max-w-5xl pointer-events-auto">
           <div className="h-14 sm:h-16 bg-white border-[4px] border-black shadow-[8px_8px_0_0_#000] flex items-center justify-between px-2 pr-4 transform -rotate-1 hover:rotate-0 transition-transform">
             
@@ -53,7 +54,7 @@ export default function Navbar() {
               onClick={() => soundFX.playPop()}
               className="flex items-center gap-2 group z-10 pl-2 bg-yellow-400 border-[2px] border-black px-2 py-1 shadow-[2px_2px_0_0_#000] hover:bg-rose-500 hover:text-white transition-colors"
             >
-              <Code2 className="w-5 h-5 text-black group-hover:text-white transition-colors" />
+              <WcLogo size={28} color="#000" className="group-hover:invert transition-all" />
               <div className="flex items-center gap-1.5 hidden sm:flex">
                 <span className="text-sm font-black uppercase tracking-widest text-black group-hover:text-white transition-colors">
                   chitoria.dev

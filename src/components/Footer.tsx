@@ -3,7 +3,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Heart, Sparkles, Shield, Mail, ArrowRight, Code2 } from 'lucide-react';
+import { Heart, Sparkles, Shield, Mail, ArrowRight } from 'lucide-react';
+import WcLogo from '@/components/WcLogo';
 import { soundFX } from '@/lib/audio';
 
 export default function Footer() {
@@ -38,7 +39,7 @@ export default function Footer() {
               onClick={() => soundFX.playPop()}
               className="inline-flex items-center gap-2.5 group bg-white border-[4px] border-black px-4 py-2 shadow-[8px_8px_0_0_#000] transform -rotate-1 hover:rotate-0 hover:bg-yellow-400 transition-all"
             >
-              <Code2 className="w-8 h-8 text-black" />
+              <WcLogo size={36} color="#000" />
               <div className="flex flex-col">
                 <span className="text-xl sm:text-2xl font-black uppercase tracking-widest text-black">
                   chitoria.dev
