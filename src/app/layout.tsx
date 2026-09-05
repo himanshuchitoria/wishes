@@ -3,6 +3,7 @@ import { Inter, Playfair_Display, Great_Vibes } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import SplashScreen from '@/components/SplashScreen';
 import { ToastProvider } from '@/components/Toast';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
@@ -40,6 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`h-full ${inter.variable} ${playfair.variable} ${greatVibes.variable}`}>
       <body className="min-h-full flex flex-col bg-white text-black antialiased selection:bg-rose-500 selection:text-white font-sans">
+        <SplashScreen />
         <ToastProvider>
           <Navbar />
           <main className="flex-1 flex flex-col">{children}</main>
