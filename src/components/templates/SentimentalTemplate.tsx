@@ -45,18 +45,18 @@ export default function SentimentalTemplate({ wish, hasUnboxed, onUnbox }: Templ
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 max-w-2xl w-full flex flex-col items-center text-center space-y-12"
+        className="relative z-10 max-w-2xl w-full flex flex-col items-center text-center space-y-8 sm:space-y-12"
       >
         <div className="space-y-4">
-          <p className="text-[#a89f91] tracking-[0.2em] text-sm uppercase">Happy Birthday</p>
-          <h1 className="text-5xl sm:text-7xl font-medium tracking-tight text-[#2d261e]" style={{ fontFamily: 'var(--font-playfair)' }}>
+          <p className="text-[#a89f91] tracking-[0.2em] text-xs sm:text-sm uppercase">Happy Birthday</p>
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-medium tracking-tight text-[#2d261e] break-words px-4" style={{ fontFamily: 'var(--font-playfair)' }}>
             {name}
           </h1>
         </div>
 
         <div className="w-px h-16 bg-[#e6dfd3]" />
 
-        <p className="text-lg sm:text-xl font-light leading-relaxed text-[#5c5346] max-w-lg" style={{ fontFamily: 'var(--font-playfair)' }}>
+        <p className="text-base sm:text-lg md:text-xl font-light leading-relaxed text-[#5c5346] max-w-lg px-4" style={{ fontFamily: 'var(--font-playfair)' }}>
           "{message}"
         </p>
         

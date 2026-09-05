@@ -55,19 +55,19 @@ export default function CustomTemplate({ wish, hasUnboxed, onUnbox }: TemplatePr
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.5, ease: 'easeOut' }}
-        className="relative z-10 w-full max-w-3xl flex flex-col items-center text-center space-y-10"
+        className="relative z-10 w-full max-w-3xl flex flex-col items-center text-center space-y-6 sm:space-y-10"
       >
-        <div className="space-y-4">
-          <p className="text-[#8b7322] tracking-[0.3em] text-xs uppercase">Celebrating</p>
-          <h1 className="text-4xl sm:text-6xl font-light tracking-widest text-[#d4af37]" style={{ fontFamily: 'var(--font-playfair)' }}>
+        <div className="space-y-2 sm:space-y-4 px-2">
+          <p className="text-[#8b7322] tracking-[0.3em] text-[10px] sm:text-xs uppercase">Celebrating</p>
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-light tracking-widest text-[#d4af37] break-words" style={{ fontFamily: 'var(--font-playfair)' }}>
             {name}
           </h1>
         </div>
 
         <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#d4af37] to-transparent opacity-50" />
 
-        <div className="px-4 py-8 border-y border-[#d4af37]/10">
-          <p className="text-lg sm:text-xl font-light leading-relaxed text-zinc-300 max-w-xl mx-auto">
+        <div className="px-4 py-6 sm:py-8 border-y border-[#d4af37]/10 w-full">
+          <p className="text-base sm:text-lg md:text-xl font-light leading-relaxed text-zinc-300 max-w-xl mx-auto break-words">
             {message}
           </p>
         </div>

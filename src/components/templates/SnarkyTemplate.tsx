@@ -61,15 +61,15 @@ export default function SnarkyTemplate({ wish, hasUnboxed, onUnbox }: TemplatePr
             <motion.h1 
               initial={{ x: -10 }}
               animate={{ x: 0 }}
-              className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 uppercase tracking-tight"
+              className="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 uppercase tracking-tight break-words"
             >
               SUBJECT: {name}
             </motion.h1>
-            <p className="text-fuchsia-400 text-sm mt-1">STATUS: SURVIVED ANOTHER SOLAR ORBIT.</p>
+            <p className="text-fuchsia-400 text-xs sm:text-sm mt-1">STATUS: SURVIVED ANOTHER SOLAR ORBIT.</p>
           </div>
 
           <div className="border-l-2 border-cyan-500 pl-4 py-2">
-            <p className="text-zinc-300 text-sm leading-relaxed whitespace-pre-wrap">
+            <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed whitespace-pre-wrap break-words">
               {message}
             </p>
           </div>

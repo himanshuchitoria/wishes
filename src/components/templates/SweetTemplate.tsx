@@ -70,9 +70,9 @@ export default function SweetTemplate({ wish, hasUnboxed, onUnbox }: TemplatePro
       >
         
         {/* Top Typography */}
-        <div className="text-center relative -mb-10 z-20">
-          <h3 className="text-sm md:text-base font-bold tracking-[0.2em] uppercase mb-[-10px]">Happy</h3>
-          <h1 className="text-7xl md:text-8xl text-white transform -rotate-3 drop-shadow-md" style={{ fontFamily: 'var(--font-great-vibes)' }}>
+        <div className="text-center relative -mb-8 md:-mb-10 z-20">
+          <h3 className="text-xs md:text-base font-bold tracking-[0.2em] uppercase mb-[-5px] md:mb-[-10px]">Happy</h3>
+          <h1 className="text-6xl md:text-8xl text-white transform -rotate-3 drop-shadow-md" style={{ fontFamily: 'var(--font-great-vibes)' }}>
             Birthday
           </h1>
         </div>
@@ -81,7 +81,7 @@ export default function SweetTemplate({ wish, hasUnboxed, onUnbox }: TemplatePro
         <motion.div 
           animate={{ rotate: [-2, 2, -2] }}
           transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-          className="bg-white p-4 pb-16 md:p-5 md:pb-20 shadow-2xl relative w-full aspect-[4/5] transform -rotate-2"
+          className="bg-white p-3 pb-12 md:p-5 md:pb-20 shadow-2xl relative w-full max-w-[280px] sm:max-w-xs md:max-w-sm aspect-[4/5] transform -rotate-2 mx-auto"
         >
           {/* Inner Image */}
           <div className="w-full h-full bg-zinc-200 overflow-hidden relative">
@@ -93,20 +93,24 @@ export default function SweetTemplate({ wish, hasUnboxed, onUnbox }: TemplatePro
           </div>
           
           {/* Polaroid Name Text */}
-          <div className="absolute bottom-4 md:bottom-5 left-0 w-full text-center">
-            <span className="text-3xl md:text-4xl font-bold text-zinc-700" style={{ fontFamily: 'var(--font-playfair)' }}>
+          <div className="absolute bottom-3 md:bottom-5 left-0 w-full text-center px-2">
+            <span className="text-2xl md:text-4xl font-bold text-zinc-700 truncate block" style={{ fontFamily: 'var(--font-playfair)' }}>
               {name}
             </span>
           </div>
         </motion.div>
 
-        {/* Bottom Message Text */}
-        <div className="mt-12 text-center relative z-20">
-          <p className="text-base md:text-lg font-medium text-white/90 leading-relaxed max-w-[280px] md:max-w-[320px] mx-auto drop-shadow-md">
-            {message}
+        {/* Message Below */}
+        <div className="mt-8 md:mt-12 text-center max-w-sm mx-auto bg-white/10 backdrop-blur-md p-4 md:p-6 rounded-2xl border border-white/20">
+          <p className="text-sm md:text-lg font-medium leading-relaxed drop-shadow-sm text-white break-words">
+            "{message}"
           </p>
+          {wish.sender_alias && (
+            <p className="mt-3 md:mt-4 text-xs md:text-sm text-violet-200 font-bold uppercase tracking-widest break-words">
+              With love, {wish.sender_alias}
+            </p>
+          )}
         </div>
-
       </motion.div>
     </div>
   );
