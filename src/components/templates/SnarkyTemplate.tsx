@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Wish } from '@/types';
+import StickerOverlay from '../StickerOverlay';
 
 interface TemplateProps {
   wish: Wish;
@@ -81,6 +82,9 @@ export default function SnarkyTemplate({ wish, hasUnboxed, onUnbox }: TemplatePr
               </p>
             </div>
           )}
+
+          {/* Sticker Overlay */}
+          <StickerOverlay elements={wish.message_payload?.elements || []} />
         </div>
       </motion.div>
     </div>

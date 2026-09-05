@@ -4,6 +4,8 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import confetti from 'canvas-confetti';
 import { soundFX } from '@/lib/audio';
 import { Sparkles } from 'lucide-react';
+import { CanvasElement } from '@/types';
+import StickerOverlay from './StickerOverlay';
 import ImageModal from './ImageModal';
 
 interface ScratchCardProps {
@@ -12,6 +14,7 @@ interface ScratchCardProps {
   senderAlias?: string;
   isAnonymous?: boolean;
   mediaUrl?: string;
+  elements?: CanvasElement[];
   onRevealed?: () => void;
   accentColor?: string;
 }
@@ -22,6 +25,7 @@ export default function ScratchCard({
   senderAlias,
   isAnonymous,
   mediaUrl,
+  elements = [],
   onRevealed,
   accentColor = '#f97316',
 }: ScratchCardProps) {
@@ -208,6 +212,9 @@ export default function ScratchCard({
               {senderAlias || 'A Secret Admirer'}
             </span>
           </div>
+
+          {/* Sticker Overlay */}
+          {elements.length > 0 && <StickerOverlay elements={elements} />}
         </div>
 
         {/* Scratch Canvas Overlay */}

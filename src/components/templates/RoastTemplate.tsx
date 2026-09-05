@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Wish } from '@/types';
+import StickerOverlay from '../StickerOverlay';
 
 interface TemplateProps {
   wish: Wish;
@@ -67,6 +68,9 @@ export default function RoastTemplate({ wish, hasUnboxed, onUnbox }: TemplatePro
               — {wish.sender_alias}
             </p>
           )}
+
+          {/* Sticker Overlay */}
+          <StickerOverlay elements={wish.message_payload?.elements || []} />
         </div>
       </motion.div>
     </div>

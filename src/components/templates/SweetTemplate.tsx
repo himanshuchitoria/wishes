@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Wish } from '@/types';
 import { Sparkle, DashedCorner } from './CelebrationAssets';
 import { soundFX } from '@/lib/audio';
+import StickerOverlay from '../StickerOverlay';
 
 interface TemplateProps {
   wish: Wish;
@@ -111,6 +112,9 @@ export default function SweetTemplate({ wish, hasUnboxed, onUnbox }: TemplatePro
             </p>
           )}
         </div>
+
+        {/* Sticker Overlay */}
+        <StickerOverlay elements={wish.message_payload?.elements || []} />
       </motion.div>
     </div>
   );

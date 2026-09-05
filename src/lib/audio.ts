@@ -176,6 +176,169 @@ class SoundFX {
     osc.start();
     osc.stop(ctx.currentTime + 1.2);
   }
+
+  // Active music loop intervals
+  private musicInterval: any = null;
+  private currentTrack: string | null = null;
+
+  public isTrackPlaying(trackId?: string): boolean {
+    if (!this.currentTrack) return false;
+    if (trackId) return this.currentTrack === trackId;
+    return true;
+  }
+
+  public stopTrack() {
+    if (this.musicInterval) {
+      clearInterval(this.musicInterval);
+      this.musicInterval = null;
+    }
+    this.currentTrack = null;
+  }
+
+  public playTrack(trackId: string) {
+    if (this.currentTrack === trackId) {
+      this.stopTrack();
+      return;
+    }
+    this.stopTrack();
+    if (trackId === 'none') return;
+    this.currentTrack = trackId;
+
+    const ctx = this.getContext();
+    if (!ctx) return;
+
+    if (trackId === '8bit') {
+      // 8-bit chiptune birthday melody (C4, C4, D4, C4, F4, E4...)
+      const notes = [261.63, 261.63, 293.66, 261.63, 349.23, 329.63, 261.63, 261.63, 293.66, 261.63, 392.00, 349.23];
+      let step = 0;
+      const playStep = () => {
+        if (!this.currentTrack || this.isMuted) return;
+        const c = this.getContext();
+        if (!c) return;
+        const osc = c.createOscillator();
+        const gain = c.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(notes[step % notes.length], c.currentTime);
+        gain.gain.setValueAtTime(0.06, c.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.22);
+        osc.connect(gain);
+        gain.connect(c.destination);
+        osc.start();
+        osc.stop(c.currentTime + 0.24);
+        step++;
+      };
+      playStep();
+      this.musicInterval = setInterval(playStep, 250);
+    } else if (trackId === 'lofi') {
+      // Warm lofi chords (Cmaj7, Am7, Dm7, G7)
+      const chordFreqs = [
+        [261.63, 329.63, 392.00, 493.88], // Cmaj7
+        [220.00, 261.63, 329.63, 392.00], // Am7
+        [293.66, 349.23, 440.00, 523.25], // Dm7
+        [196.00, 246.94, 293.66, 349.23], // G7
+      ];
+      let step = 0;
+      const playStep = () => {
+        if (!this.currentTrack || this.isMuted) return;
+        const c = this.getContext();
+        if (!c) return;
+        const chord = chordFreqs[step % chordFreqs.length];
+        chord.forEach((freq) => {
+          const osc = c.createOscillator();
+          const filter = c.createBiquadFilter();
+          const gain = c.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, c.currentTime);
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(800, c.currentTime);
+          gain.gain.setValueAtTime(0.04, c.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 1.2);
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(c.destination);
+          osc.start();
+          osc.stop(c.currentTime + 1.3);
+        });
+        step++;
+      };
+      playStep();
+      this.musicInterval = setInterval(playStep, 1400);
+    } else if (trackId === 'synthwave') {
+      // Pumping synthwave bassline
+      const bassNotes = [110, 110, 130.81, 146.83, 110, 110, 164.81, 146.83];
+      let step = 0;
+      const playStep = () => {
+        if (!this.currentTrack || this.isMuted) return;
+        const c = this.getContext();
+        if (!c) return;
+        const osc = c.createOscillator();
+        const gain = c.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(bassNotes[step % bassNotes.length], c.currentTime);
+        gain.gain.setValueAtTime(0.08, c.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.005, c.currentTime + 0.18);
+        osc.connect(gain);
+        gain.connect(c.destination);
+        osc.start();
+        osc.stop(c.currentTime + 0.2);
+        step++;
+      };
+      playStep();
+      this.musicInterval = setInterval(playStep, 200);
+    } else if (trackId === 'acoustic') {
+      // Gentle fingerpicked acoustic guitar arpeggios
+      const notes = [261.63, 329.63, 392.00, 523.25, 392.00, 329.63];
+      let step = 0;
+      const playStep = () => {
+        if (!this.currentTrack || this.isMuted) return;
+        const c = this.getContext();
+        if (!c) return;
+        const osc = c.createOscillator();
+        const gain = c.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(notes[step % notes.length], c.currentTime);
+        gain.gain.setValueAtTime(0.08, c.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.4);
+        osc.connect(gain);
+        gain.connect(c.destination);
+        osc.start();
+        osc.stop(c.currentTime + 0.45);
+        step++;
+      };
+      playStep();
+      this.musicInterval = setInterval(playStep, 260);
+    } else if (trackId === 'fanfare') {
+      // Triumphant brass fanfare
+      const fanfareChords = [
+        [392.00, 523.25, 659.25],
+        [440.00, 554.37, 659.25],
+        [523.25, 659.25, 783.99],
+        [523.25, 659.25, 1046.50],
+      ];
+      let step = 0;
+      const playStep = () => {
+        if (!this.currentTrack || this.isMuted) return;
+        const c = this.getContext();
+        if (!c) return;
+        const chord = fanfareChords[step % fanfareChords.length];
+        chord.forEach((freq) => {
+          const osc = c.createOscillator();
+          const gain = c.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, c.currentTime);
+          gain.gain.setValueAtTime(0.07, c.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.5);
+          osc.connect(gain);
+          gain.connect(c.destination);
+          osc.start();
+          osc.stop(c.currentTime + 0.55);
+        });
+        step++;
+      };
+      playStep();
+      this.musicInterval = setInterval(playStep, 500);
+    }
+  }
 }
 
 export const soundFX = new SoundFX();
