@@ -31,18 +31,18 @@ export default function CountdownTimer({
 
   if (timeLeft.isExpired) {
     return (
-      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold animate-pulse">
-        <span>🎉 IT’S BIRTHDAY TIME! UNLOCKED</span>
+      <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-400 border-2 border-black text-black text-xs font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] uppercase animate-pulse">
+        <span>🎉 IT'S BIRTHDAY TIME! UNLOCKED</span>
       </div>
     );
   }
 
   if (variant === 'compact') {
     return (
-      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-300 text-xs font-mono">
-        <Clock className="w-3 h-3 text-rose-400" />
+      <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-yellow-300 border-2 border-black text-black text-xs font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] uppercase">
+        <Clock className="w-3.5 h-3.5 text-black" />
         <span>
-          {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s
+          {timeLeft.days}D {timeLeft.hours}H {timeLeft.minutes}M {timeLeft.seconds}S
         </span>
       </div>
     );
@@ -58,12 +58,12 @@ export default function CountdownTimer({
       ].map((item) => (
         <div
           key={item.label}
-          className="flex flex-col items-center justify-center p-2.5 sm:p-3.5 rounded-2xl bg-zinc-900/90 border border-zinc-700/80 shadow-lg min-w-[62px] sm:min-w-[74px]"
+          className="flex flex-col items-center justify-center p-2.5 sm:p-3.5 bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] min-w-[62px] sm:min-w-[74px]"
         >
-          <span className="text-xl sm:text-2xl font-black font-mono text-white tracking-tight">
+          <span className="text-xl sm:text-2xl font-black font-mono text-black tracking-tight">
             {String(item.value).padStart(2, '0')}
           </span>
-          <span className="text-[9px] sm:text-[10px] font-bold text-zinc-400 uppercase tracking-wider mt-0.5">
+          <span className="text-[9px] sm:text-[10px] font-black text-black uppercase tracking-wider mt-0.5">
             {item.label}
           </span>
         </div>

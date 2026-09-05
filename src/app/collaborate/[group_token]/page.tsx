@@ -140,29 +140,29 @@ export default function GroupContributionPage() {
   return (
     <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12 sm:pt-28 sm:pb-16 space-y-8">
       {error ? (
-        <div className="p-8 sm:p-12 rounded-3xl bg-zinc-950/80 border border-rose-500/30 backdrop-blur-xl shadow-2xl text-center space-y-4 max-w-md mx-auto mt-20">
-          <div className="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 mx-auto">
+        <div className="p-8 sm:p-12 bg-red-400 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] text-center space-y-4 max-w-md mx-auto mt-20">
+          <div className="w-16 h-16 bg-white border-4 border-black flex items-center justify-center text-black mx-auto shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
             <Flame className="w-8 h-8" />
           </div>
-          <h2 className="text-xl font-bold text-white">Board Unavailable</h2>
-          <p className="text-sm text-zinc-400">{error}</p>
+          <h2 className="text-xl font-black text-black uppercase">Board Unavailable</h2>
+          <p className="text-sm text-black font-bold">{error}</p>
         </div>
       ) : (
         <>
           {/* Sticky Countdown Urgency Header */}
-          <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-950/80 via-zinc-900 to-zinc-950 border border-purple-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+          <div className="p-4 bg-cyan-300 border-4 border-black flex flex-col sm:flex-row items-center justify-between gap-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
+              <div className="w-10 h-10 bg-white border-2 border-black flex items-center justify-center text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                 <Clock className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
+            <h3 className="text-sm font-black text-black uppercase flex items-center gap-2">
               <span>Collaborative Birthday Board</span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-mono">
+              <span className="text-[10px] px-2 py-0.5 bg-yellow-300 border border-black text-black font-black">
                 TOKEN-GATED
               </span>
             </h3>
-            <p className="text-xs text-zinc-400">
+            <p className="text-xs text-black font-bold">
               Board seals and delivers to {wish?.recipient_name || 'Alex'} on midnight!
             </p>
           </div>
@@ -173,29 +173,29 @@ export default function GroupContributionPage() {
 
       {/* Hero Header for this board */}
       <div className="text-center space-y-3">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-xs font-bold text-rose-400">
-          <span>{currentVibeConfig.emoji}</span>
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-xs font-black text-black uppercase">
+          <span className="text-base">{currentVibeConfig.emoji}</span>
           <span>{currentVibeConfig.name} Board for {wish?.recipient_name || 'Alex'}</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-          Drop a Note or Roast for {wish?.recipient_name || 'Alex'}
+        <h1 className="text-4xl sm:text-6xl font-black text-yellow-300 tracking-tight uppercase" style={{ WebkitTextStroke: '2px black', textShadow: '4px 4px 0px #000' }}>
+          Drop a Note for {wish?.recipient_name || 'Alex'}
         </h1>
-        <p className="text-xs sm:text-sm text-zinc-400 max-w-xl mx-auto">
+        <p className="text-sm sm:text-base text-white font-bold max-w-xl mx-auto bg-black/50 p-2 rounded-lg">
           No sign-up required. Your note will be compiled into a digital time capsule delivered on their birthday.
         </p>
       </div>
 
       {/* Contribution Form (Above the fold) */}
       {!isLocked ? (
-        <div className="max-w-2xl mx-auto p-6 sm:p-8 rounded-3xl bg-zinc-900/80 border border-zinc-800 shadow-2xl space-y-4">
-          <h3 className="text-base font-bold text-white flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-amber-400" />
-            <span>Add Your Message to the Vault</span>
+        <div className="max-w-2xl mx-auto p-6 sm:p-8 bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] space-y-4">
+          <h3 className="text-lg font-black text-black uppercase flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-black fill-yellow-400" />
+            <span>Add Your Message</span>
           </h3>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-zinc-300 mb-1">
+              <label className="block text-xs font-black uppercase tracking-wider text-black mb-1">
                 Your Name / Alias
               </label>
               <input
@@ -204,12 +204,12 @@ export default function GroupContributionPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Maya & Sam, The College Crew, Mystery Friend"
-                className="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-800 rounded-xl text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500"
+                className="w-full px-4 py-3 bg-white border-2 border-black text-sm text-black placeholder-zinc-400 font-bold focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:-translate-y-0.5 transition-all"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-zinc-300 mb-1">
+              <label className="block text-xs font-black uppercase tracking-wider text-black mb-1">
                 Your Message / Memory / Roast
               </label>
               <textarea
@@ -222,34 +222,34 @@ export default function GroupContributionPage() {
                     ? 'Remember that time you tripped over your own luggage? Never forget. Happy Birthday!'
                     : 'Sarah, thank you for being the most supportive friend anyone could ask for! 💖'
                 }
-                className="w-full px-3.5 py-2.5 bg-zinc-950 border border-zinc-800 rounded-xl text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500 leading-relaxed"
+                className="w-full px-4 py-3 bg-white border-2 border-black text-sm text-black placeholder-zinc-400 font-bold focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:-translate-y-0.5 transition-all leading-relaxed"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-zinc-300 mb-2">
+              <label className="block text-xs font-black uppercase tracking-wider text-black mb-2">
                 Attach a Photo (Optional)
               </label>
               {!mediaPreview ? (
-                <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-zinc-800 rounded-xl bg-zinc-950/50 hover:bg-zinc-900/50 hover:border-zinc-700 transition-all cursor-pointer">
+                <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-black border-dashed bg-yellow-100 hover:bg-yellow-200 transition-all cursor-pointer">
                   <div className="flex flex-col items-center justify-center pt-3 pb-3">
-                    <ImagePlus className="w-5 h-5 text-zinc-500 mb-1" />
-                    <p className="text-xs text-zinc-400 font-medium">Add an image</p>
+                    <ImagePlus className="w-6 h-6 text-black mb-1" />
+                    <p className="text-xs text-black font-bold uppercase">Add an image</p>
                   </div>
                   <input type="file" className="hidden" accept="image/png, image/jpeg, image/webp" onChange={handleFileSelect} />
                 </label>
               ) : (
                 <div className="relative inline-block">
-                  <img src={mediaPreview} alt="Preview" className="h-24 rounded-xl object-cover border border-zinc-800" />
+                  <img src={mediaPreview} alt="Preview" className="h-24 object-cover border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" />
                   <button
                     type="button"
                     onClick={() => {
                       setMediaFile(null);
                       setMediaPreview(null);
                     }}
-                    className="absolute -top-2 -right-2 p-1 bg-zinc-800 text-zinc-300 hover:text-white rounded-full shadow-lg"
+                    className="absolute -top-3 -right-3 w-8 h-8 flex items-center justify-center bg-red-400 border-2 border-black text-black font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
                   >
-                    <X className="w-4 h-4" />
+                    <X className="w-5 h-5" />
                   </button>
                 </div>
               )}
@@ -258,11 +258,11 @@ export default function GroupContributionPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-purple-600 via-rose-500 to-amber-500 hover:from-purple-700 hover:to-amber-600 shadow-lg shadow-purple-500/20 transition-all"
+              className="w-full flex items-center justify-center gap-2 py-4 text-sm font-black text-black uppercase bg-magenta-400 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {submitting ? (isUploading ? <><Loader2 className="w-4 h-4 animate-spin" /> Uploading...</> : <><Loader2 className="w-4 h-4 animate-spin" /> Posting...</>) : (
+              {submitting ? (isUploading ? <><Loader2 className="w-5 h-5 animate-spin" /> Uploading...</> : <><Loader2 className="w-5 h-5 animate-spin" /> Posting...</>) : (
                 <>
-                  <Send className="w-4 h-4" />
+                  <Send className="w-5 h-5" />
                   <span>Post to Group Board</span>
                 </>
               )}
@@ -270,42 +270,42 @@ export default function GroupContributionPage() {
           </form>
         </div>
       ) : (
-        <div className="p-8 rounded-3xl bg-zinc-900 border border-zinc-800 text-center space-y-3 max-w-md mx-auto">
-          <Lock className="w-10 h-10 text-amber-400 mx-auto" />
-          <h3 className="text-base font-bold text-white">This board is sealed!</h3>
-          <p className="text-xs text-zinc-400">
+        <div className="p-8 bg-zinc-200 border-4 border-black text-center space-y-3 max-w-md mx-auto shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <Lock className="w-12 h-12 text-black mx-auto" />
+          <h3 className="text-xl font-black text-black uppercase">This board is sealed!</h3>
+          <p className="text-sm text-black font-bold">
             Delivery is in progress and new notes can no longer be accepted.
           </p>
         </div>
       )}
 
       {/* The Live Board Feed (Masonry Layout) */}
-      <div className="space-y-4 pt-4">
-        <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
-          <h3 className="text-lg font-bold text-white flex items-center gap-2">
-            <Users className="w-5 h-5 text-purple-400" />
+      <div className="space-y-6 pt-8">
+        <div className="flex items-center justify-between border-b-4 border-black pb-4">
+          <h3 className="text-2xl font-black text-white flex items-center gap-3 uppercase" style={{ WebkitTextStroke: '1px black', textShadow: '2px 2px 0px #000' }}>
+            <Users className="w-6 h-6 text-cyan-300" />
             <span>Friend Messages ({contributions.length})</span>
           </h3>
-          <span className="text-xs text-zinc-400">Live Real-Time Feed</span>
+          <span className="text-xs text-white font-bold px-3 py-1 bg-black rounded-full">Live Real-Time Feed</span>
         </div>
 
         <MasonryGrid contributions={contributions} />
       </div>
 
       {/* Viral Upsell Loop */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-rose-950/40 via-zinc-900 to-purple-950/40 border border-rose-500/30 text-center space-y-4">
-        <h4 className="text-lg sm:text-xl font-black text-white">
+      <div className="p-8 bg-yellow-400 border-4 border-black text-center space-y-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+        <h4 className="text-2xl sm:text-3xl font-black text-black uppercase">
           Want to create a free automated board for your best friend?
         </h4>
-        <p className="text-xs sm:text-sm text-zinc-400 max-w-md mx-auto">
+        <p className="text-sm sm:text-base text-black font-bold max-w-xl mx-auto">
           Schedule midnight delivery, AI generated roasts, and invite your group chats for free on chitoria.dev.
         </p>
         <Link
           href="/create"
           onClick={() => soundFX.playPop()}
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-rose-500 to-orange-500 hover:scale-[1.02] transition-all"
+          className="inline-flex items-center gap-2 px-8 py-4 text-sm font-black text-black uppercase bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
         >
-          <Sparkles className="w-4 h-4" />
+          <Sparkles className="w-5 h-5 text-black fill-yellow-400" />
           <span>Create Free Board for a Friend</span>
         </Link>
       </div>

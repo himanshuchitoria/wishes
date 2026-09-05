@@ -22,6 +22,7 @@ import {
 import { Wish, GroupContribution, VIBE_CONFIGS } from '@/types';
 import { getCountdown, getNextBirthdayDate } from '@/lib/utils';
 import CountdownTimer from '@/components/CountdownTimer';
+import MasonryGrid from '@/components/MasonryGrid';
 import { soundFX } from '@/lib/audio';
 import { useToast } from '@/components/Toast';
 
@@ -162,8 +163,29 @@ export default function BirthdayRevealPage() {
   };
 
   return (
-    <>
-      {renderTemplate()}
+    <div className="flex flex-col min-h-screen bg-zinc-950 overflow-x-hidden">
+      <div className="relative w-full min-h-[100dvh]">
+        {renderTemplate()}
+      </div>
+
+      {hasUnboxed && contributions.length > 0 && (
+        <div className="relative z-10 w-full bg-cyan-300 py-16 border-t-8 border-black">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <div className="text-center space-y-4">
+              <h2 className="text-4xl sm:text-6xl font-black text-yellow-300 uppercase tracking-tight" style={{ WebkitTextStroke: '2px black', textShadow: '4px 4px 0px #000' }}>
+                Group Board Messages
+              </h2>
+              <p className="text-black font-black text-lg sm:text-xl max-w-2xl mx-auto bg-white inline-block px-4 py-2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                Your friends also dropped some notes for you!
+              </p>
+            </div>
+            
+            <div className="bg-white p-6 sm:p-8 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+              <MasonryGrid contributions={contributions} />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* State 4: Sleek Viral Footer */}
         {hasUnboxed && (
@@ -199,6 +221,6 @@ export default function BirthdayRevealPage() {
       {!isMuted && hasUnboxed && (
          <audio src="/sounds/ambient-pad.mp3" autoPlay loop muted={isMuted} className="hidden" />
       )}
-    </>
+    </div>
   );
 }
