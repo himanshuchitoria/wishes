@@ -17,7 +17,7 @@ export default function Footer() {
       
       {/* Massive Background Typography Effect */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full text-center pointer-events-none select-none overflow-hidden h-full flex items-center justify-center">
-        <h2 className="text-[15vw] font-black leading-none tracking-tighter bg-gradient-to-b from-white/[0.08] to-transparent bg-clip-text text-transparent transform -translate-y-1/4">
+        <h2 className="text-[11vw] sm:text-[13vw] lg:text-[15vw] font-black leading-none tracking-tighter bg-gradient-to-b from-white/[0.08] to-transparent bg-clip-text text-transparent transform -translate-y-1/4">
           CHITORIA
         </h2>
       </div>
@@ -26,7 +26,7 @@ export default function Footer() {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-rose-500/5 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-8 mb-12 sm:mb-16">
           
           {/* Brand & Mission (Takes up 5 columns) */}
           <div className="md:col-span-12 lg:col-span-5 space-y-6">
@@ -119,13 +119,13 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs font-medium text-zinc-500">
+        <div className="pt-6 sm:pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+          <p className="text-[10px] sm:text-xs font-medium text-zinc-500">
             © {new Date().getFullYear()} chitoria.dev. All rights reserved.
           </p>
-          <div className="flex items-center gap-1.5 text-xs font-medium text-zinc-500 bg-black/20 px-4 py-2 rounded-full border border-white/5">
+          <div className="flex items-center gap-1.5 text-[10px] sm:text-xs font-medium text-zinc-500 bg-black/20 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-white/5 whitespace-nowrap">
             <span>Crafted with</span>
-            <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 animate-pulse" />
+            <Heart className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-rose-500 fill-rose-500 animate-pulse" />
             <span>for unforgettable celebrations</span>
           </div>
         </div>
