@@ -2,10 +2,10 @@
 
 @layer base {
   :root {
-    --background: #09090b;
-    --foreground: #f4f4f5;
-    --card: #18181b;
-    --card-foreground: #fafafa;
+    --background: #ffffff;
+    --foreground: #000000;
+    --card: #ffffff;
+    --card-foreground: #000000;
     --primary: #f43f5e;
     --primary-foreground: #ffffff;
     --accent-roast: #f97316;
@@ -13,7 +13,7 @@
     --accent-sweet: #38bdf8;
     --accent-snarky: #a855f7;
     --accent-custom: #10b981;
-    --border: #27272a;
+    --border: #000000;
     --ring: #f43f5e;
   }
 }
