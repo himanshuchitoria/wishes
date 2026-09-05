@@ -87,7 +87,9 @@ function AuthContent() {
           setLoading(false);
           return;
         } else if (mode === 'forgot') {
-          const { error } = await supabase.auth.resetPasswordForEmail(email);
+          const { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: `${window.location.origin}/auth/callback?next=/auth/update-password`,
+          });
           if (error) throw error;
           toast('Password reset link sent to your email.', 'info');
           setMode('signin');
