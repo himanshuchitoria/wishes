@@ -5,32 +5,26 @@ import Link from 'next/link';
 import {
   Flame,
   Search,
-  Filter,
-  Eye,
-  ExternalLink,
-  Send,
+  CheckCircle2,
+  Clock,
   Trash2,
   Copy,
-  Clock,
-  CheckCircle2,
-  X,
   Sparkles,
-  Calendar,
-  Users,
+  ArrowRight,
+  Zap,
+  Users
 } from 'lucide-react';
 import { Wish, VIBE_CONFIGS } from '@/types';
 import { supabase } from '@/lib/supabase/client';
 import { formatDate, getNextBirthdayDate } from '@/lib/utils';
 import { useToast } from '@/components/Toast';
 import { soundFX } from '@/lib/audio';
-import PhoneMockup from '@/components/PhoneMockup';
 
 export default function WishQueuePage() {
   const { toast } = useToast();
   const [wishes, setWishes] = useState<Wish[]>([]);
   const [activeTab, setActiveTab] = useState<'all' | 'scheduled' | 'delivered'>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [previewWish, setPreviewWish] = useState<Wish | null>(null);
 
   useEffect(() => {
     const fetchWishes = async () => {
@@ -101,7 +95,6 @@ export default function WishQueuePage() {
       });
       if (res.ok) {
         setWishes((prev) => prev.filter((w) => w.id !== id));
-        if (previewWish?.id === id) setPreviewWish(null);
         toast(`Wish for ${name} cancelled.`, 'info');
       }
     } catch (e) {
@@ -110,18 +103,11 @@ export default function WishQueuePage() {
     }
   };
 
-  const handleCopyLink = (token: string) => {
+  const handleCopyLink = (token: string, type: 'reveal' | 'group') => {
     soundFX.playPop();
-    const url = `${window.location.origin}/reveal/${token}`;
+    const url = `${window.location.origin}/${type === 'reveal' ? 'reveal' : 'collaborate'}/${token}`;
     navigator.clipboard.writeText(url);
-    toast('Reveal link copied to clipboard!', 'success');
-  };
-
-  const handleCopyGroupLink = (groupToken: string) => {
-    soundFX.playPop();
-    const url = `${window.location.origin}/collaborate/${groupToken}`;
-    navigator.clipboard.writeText(url);
-    toast('Group board link copied! Share with friends so they can add notes.', 'success');
+    toast(`Copied ${type === 'reveal' ? 'Reveal' : 'Group Board'} link!`, 'success');
   };
 
   const filtered = wishes.filter((w) => {
@@ -133,255 +119,190 @@ export default function WishQueuePage() {
   });
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800 pb-6">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold uppercase tracking-widest text-amber-400">
-              Audit & Queue
-            </span>
-            <span className="text-zinc-600">•</span>
-            <span className="text-xs text-zinc-400">QStash Sync Engine</span>
-          </div>
-          <h1 className="text-3xl font-black text-white tracking-tight">
-            Scheduled Queue & History
-          </h1>
-        </div>
+    <div className="min-h-screen bg-rose-500 text-black w-full relative overflow-hidden font-sans pt-8 sm:pt-12 pb-24">
+      
+      {/* Global Halftone Pattern Background */}
+      <div 
+        className="absolute inset-0 pointer-events-none opacity-[0.2] z-0" 
+        style={{ backgroundImage: 'radial-gradient(circle, #000 2px, transparent 2.5px)', backgroundSize: '16px 16px' }}
+      />
 
-        <Link
-          href="/create"
-          onClick={() => soundFX.playPop()}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 shadow-lg shadow-rose-500/20 transition-all"
-        >
-          <Sparkles className="w-4 h-4" />
-          <span>New Scheduled Wish</span>
-        </Link>
+      {/* Massive Background Typography */}
+      <div className="absolute top-0 left-0 w-full flex justify-center pointer-events-none select-none z-0 overflow-visible mt-20">
+        <h1 className="text-[25vw] font-black leading-none tracking-tighter text-black uppercase whitespace-nowrap opacity-[0.05] scale-110 transform -rotate-2">
+          QUEUE
+        </h1>
       </div>
 
-      {/* Filter Tabs & Search */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-        {/* Tabs */}
-        <div className="flex items-center p-1 bg-zinc-900 border border-zinc-800 rounded-xl w-full sm:w-auto">
-          {[
-            { key: 'all', label: 'All Wishes' },
-            { key: 'scheduled', label: 'Queued (Pending)' },
-            { key: 'delivered', label: 'Delivered / Unlocked' },
-          ].map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => {
-                soundFX.playPop();
-                setActiveTab(tab.key as typeof activeTab);
-              }}
-              className={`flex-1 sm:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-                activeTab === tab.key
-                  ? 'bg-zinc-800 text-white shadow-sm'
-                  : 'text-zinc-400 hover:text-zinc-200'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Search */}
-        <div className="relative w-full sm:w-80">
-          <Search className="absolute left-3.5 top-2.5 w-4 h-4 text-zinc-500" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search queue by name/email..."
-            className="w-full pl-10 pr-4 py-2 bg-zinc-950 border border-zinc-800 rounded-xl text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-rose-500"
-          />
-        </div>
-      </div>
-
-      {/* Main Table Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Data Grid */}
-        <div className={`space-y-3 ${previewWish ? 'lg:col-span-7' : 'lg:col-span-12'}`}>
-          <div className="rounded-3xl bg-zinc-900/60 border border-zinc-800 overflow-hidden shadow-2xl">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-zinc-950/80 text-zinc-400 uppercase text-[10px] font-bold tracking-wider border-b border-zinc-800">
-                  <tr>
-                    <th className="p-4">Recipient</th>
-                    <th className="p-4">Scheduled For</th>
-                    <th className="p-4">Vibe & Channel</th>
-                    <th className="p-4">Status</th>
-                    <th className="p-4 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-zinc-800/60">
-                  {filtered.length === 0 ? (
-                    <tr>
-                      <td colSpan={5} className="p-8 text-center text-zinc-500">
-                        No records match your filter.
-                      </td>
-                    </tr>
-                  ) : (
-                    filtered.map((wish) => {
-                      const config = VIBE_CONFIGS[wish.vibe];
-                      const nextBday = getNextBirthdayDate(wish.birth_date, wish.delivery_time);
-
-                      return (
-                        <tr
-                          key={wish.id}
-                          onClick={() => {
-                            soundFX.playPop();
-                            setPreviewWish(wish);
-                          }}
-                          className={`cursor-pointer hover:bg-zinc-800/40 transition-colors ${
-                            previewWish?.id === wish.id ? 'bg-zinc-800/60' : ''
-                          }`}
-                        >
-                          <td className="p-4">
-                            <div className="font-bold text-white text-sm">
-                              {wish.recipient_name}
-                            </div>
-                            <div className="text-zinc-400 text-[11px]">
-                              {wish.recipient_email}
-                            </div>
-                          </td>
-
-                          <td className="p-4">
-                            <div className="text-zinc-200 font-semibold">
-                              {formatDate(nextBday.toISOString())}
-                            </div>
-                            <div className="text-zinc-500 text-[10px] font-mono">
-                              00:00 ({wish.delivery_timezone})
-                            </div>
-                          </td>
-
-                          <td className="p-4">
-                            <div className="flex items-center gap-1.5 mb-1">
-                              <span className="text-xs">{config.emoji}</span>
-                              <span className="font-semibold text-zinc-200">{config.name}</span>
-                            </div>
-                            <div className="text-zinc-500 font-mono text-[10px]">
-                              @{wish.sender_email_prefix}.chitoria.dev
-                            </div>
-                          </td>
-
-                          <td className="p-4">
-                            {wish.status === 'scheduled' ? (
-                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20 text-[11px] font-bold">
-                                <Clock className="w-3 h-3" /> Queued
-                              </span>
-                            ) : wish.opened_at ? (
-                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 text-[11px] font-bold">
-                                <CheckCircle2 className="w-3 h-3" /> Sent & Read
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 text-[11px] font-bold">
-                                <CheckCircle2 className="w-3 h-3" /> Sent
-                              </span>
-                            )}
-                          </td>
-
-                          <td className="p-4 text-right">
-                            <div
-                              className="flex items-center justify-end gap-1.5"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              {wish.status === 'scheduled' && (
-                                <button
-                                  onClick={() => handleSendNow(wish)}
-                                  title="Send Now (Override Schedule)"
-                                  className="p-1.5 rounded-lg text-amber-400 hover:bg-amber-500/10 border border-amber-500/30 text-[11px] font-bold"
-                                >
-                                  Send Now ⚡
-                                </button>
-                              )}
-
-                              <button
-                                onClick={() => handleCopyLink(wish.reveal_token)}
-                                title="Copy Reveal Link"
-                                className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800"
-                              >
-                                <Copy className="w-4 h-4" />
-                              </button>
-
-                              {wish.is_group_board && (
-                                <button
-                                  onClick={() => handleCopyGroupLink(wish.group_token)}
-                                  title="Copy Group Board Link"
-                                  className="p-1.5 rounded-lg text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 border border-purple-500/30"
-                                >
-                                  <Users className="w-4 h-4" />
-                                </button>
-                              )}
-
-                              <button
-                                onClick={() => handleCancel(wish.id, wish.recipient_name)}
-                                title="Cancel Wish"
-                                className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-400 hover:bg-rose-500/10"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })
-                  )}
-                </tbody>
-              </table>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+        
+        {/* Header section */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12 border-b-[8px] border-black pb-8">
+          <div>
+            <div className="inline-block bg-white border-[4px] border-black px-3 py-1 shadow-[4px_4px_0_0_#000] transform -rotate-2 mb-4">
+              <span className="text-xs sm:text-sm font-black uppercase tracking-widest text-black flex items-center gap-2">
+                <Flame className="w-4 h-4 fill-current" />
+                Delivery Queue
+              </span>
             </div>
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-none">
+              The Arsenal
+            </h1>
           </div>
+          
+          <Link
+            href="/create"
+            onClick={() => soundFX.playPop()}
+            className="group w-full md:w-auto flex items-center justify-center gap-3 bg-yellow-400 text-black px-6 py-4 md:px-8 md:py-5 text-lg font-black uppercase tracking-widest border-[4px] sm:border-[6px] border-black hover:bg-white shadow-[8px_8px_0_0_#000] hover:shadow-[12px_12px_0_0_#000] transition-all transform rotate-1 hover:rotate-0"
+          >
+            <Sparkles className="w-5 h-5 fill-current" />
+            <span>Load New Wish</span>
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+          </Link>
         </div>
 
-        {/* Side Panel Slideout Preview */}
-        {previewWish && (
-          <div className="lg:col-span-5 p-6 rounded-3xl bg-zinc-900/90 border border-zinc-800 shadow-2xl space-y-4 animate-in slide-in-from-right-4 duration-300">
-            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
-              <div>
-                <h3 className="text-sm font-bold text-white">
-                  Inspect Wish Payload
-                </h3>
-                <p className="text-[11px] text-zinc-400">
-                  ID: {previewWish.id}
-                </p>
-              </div>
+        {/* Filters and Search - Brutalist Style */}
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6 mb-12">
+          
+          {/* Tabs */}
+          <div className="flex flex-wrap items-center gap-2 sm:gap-4 w-full lg:w-auto">
+            {[
+              { key: 'all', label: 'All Targets' },
+              { key: 'scheduled', label: 'Pending' },
+              { key: 'delivered', label: 'Delivered' },
+            ].map((tab) => (
               <button
-                onClick={() => setPreviewWish(null)}
-                className="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800"
+                key={tab.key}
+                onClick={() => {
+                  soundFX.playPop();
+                  setActiveTab(tab.key as typeof activeTab);
+                }}
+                className={`flex-1 sm:flex-initial px-4 py-3 border-[4px] border-black text-sm sm:text-base font-black uppercase tracking-widest transition-all ${
+                  activeTab === tab.key
+                    ? 'bg-cyan-400 shadow-[6px_6px_0_0_#000] translate-y-0 transform -rotate-1'
+                    : 'bg-white hover:bg-yellow-200 hover:shadow-[6px_6px_0_0_#000] hover:-translate-y-1'
+                }`}
               >
-                <X className="w-4 h-4" />
+                {tab.label}
               </button>
-            </div>
+            ))}
+          </div>
 
-            <PhoneMockup
-              recipientName={previewWish.recipient_name}
-              vibe={previewWish.vibe}
-              headline={previewWish.message_payload.headline}
-              body={previewWish.message_payload.body}
-              senderAlias={previewWish.sender_alias}
-              isAnonymous={previewWish.is_anonymous}
-              revealType={previewWish.message_payload.revealType}
+          {/* Search Box */}
+          <div className="relative w-full lg:w-96">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="SEARCH TARGETS..."
+              className="w-full bg-white border-[4px] sm:border-[6px] border-black px-4 py-3 sm:py-4 pl-12 font-black uppercase tracking-wider text-black placeholder-black/30 focus:outline-none focus:bg-yellow-100 shadow-[8px_8px_0_0_#000] transition-colors"
             />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 text-black" />
+          </div>
+        </div>
 
-            <div className="pt-2 flex justify-between items-center text-xs">
-              <Link
-                href={`/reveal/${previewWish.reveal_token}`}
-                target="_blank"
-                className="flex items-center gap-1.5 text-rose-400 hover:underline font-bold"
-              >
-                <ExternalLink className="w-3.5 h-3.5" />
-                <span>Open Full Reveal Window</span>
-              </Link>
-              {previewWish.is_group_board && (
-                <button
-                  onClick={() => handleCopyGroupLink(previewWish.group_token)}
-                  className="flex items-center gap-1.5 text-purple-400 hover:underline font-bold"
+        {/* Comic Card Grid */}
+        {filtered.length === 0 ? (
+          <div className="bg-white border-[8px] border-black border-dashed p-12 sm:p-24 text-center shadow-[16px_16px_0_0_#000] transform rotate-1">
+            <h3 className="text-3xl sm:text-5xl font-black uppercase tracking-tighter mb-4">No Targets Found</h3>
+            <p className="font-mono text-sm sm:text-base font-bold uppercase">The queue is currently empty.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {filtered.map((wish) => {
+              const config = VIBE_CONFIGS[wish.vibe];
+              const nextBday = getNextBirthdayDate(wish.birth_date, wish.delivery_time);
+              const isScheduled = wish.status === 'scheduled';
+
+              return (
+                <div 
+                  key={wish.id}
+                  className="bg-white border-[6px] sm:border-[8px] border-black p-5 sm:p-6 shadow-[12px_12px_0_0_#000] hover:-translate-y-2 hover:shadow-[16px_16px_0_0_#000] transition-all flex flex-col justify-between relative overflow-hidden group"
                 >
-                  <Users className="w-3.5 h-3.5" />
-                  <span>Copy Group Link</span>
-                </button>
-              )}
-            </div>
+                  {/* Absolute Background Vibe Watermark */}
+                  <div className="absolute -bottom-8 -right-8 text-8xl font-black uppercase text-black opacity-[0.03] pointer-events-none transform -rotate-12 group-hover:rotate-0 group-hover:scale-110 transition-transform duration-500">
+                    {wish.vibe}
+                  </div>
+
+                  <div className="relative z-10">
+                    {/* Status & Vibe Tags */}
+                    <div className="flex flex-wrap items-start justify-between gap-2 mb-6">
+                      <span className={`px-2 py-1 border-[4px] border-black text-xs font-black uppercase shadow-[4px_4px_0_0_#000] transform -rotate-2 ${isScheduled ? 'bg-cyan-400' : 'bg-emerald-400'}`}>
+                        {isScheduled ? (
+                          <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> Queued</span>
+                        ) : (
+                          <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3" /> Sent</span>
+                        )}
+                      </span>
+                      <span className="px-2 py-1 bg-yellow-400 border-[4px] border-black text-xs font-black uppercase shadow-[4px_4px_0_0_#000] transform rotate-2">
+                        {config.emoji} {config.name}
+                      </span>
+                    </div>
+
+                    {/* Recipient Details */}
+                    <div className="mb-6">
+                      <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-tighter leading-none mb-2 break-words">
+                        {wish.recipient_name}
+                      </h3>
+                      <p className="font-mono text-xs sm:text-sm font-bold opacity-60 break-all">
+                        {wish.recipient_email}
+                      </p>
+                    </div>
+
+                    {/* Delivery Date Info */}
+                    <div className="mb-8 border-l-[4px] border-black pl-4 py-1">
+                      <div className="text-xl sm:text-2xl font-black uppercase tracking-tighter">
+                        {formatDate(nextBday.toISOString())}
+                      </div>
+                      <div className="font-mono text-[10px] sm:text-xs font-bold uppercase mt-1">
+                        Time: 00:00 ({wish.delivery_timezone})
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Actions Bar */}
+                  <div className="flex flex-wrap gap-3 mt-auto relative z-10 pt-4 border-t-[4px] border-black border-dashed">
+                    {isScheduled && (
+                      <button
+                        onClick={() => handleSendNow(wish)}
+                        title="Send Now (Override Schedule)"
+                        className="flex-1 min-w-full sm:min-w-0 bg-yellow-400 border-[4px] border-black p-2 flex items-center justify-center gap-2 hover:bg-black hover:text-yellow-400 transition-colors font-black uppercase text-xs"
+                      >
+                        <Zap className="w-4 h-4 fill-current" /> OVERRIDE
+                      </button>
+                    )}
+                    
+                    <div className="flex flex-1 w-full sm:w-auto gap-3">
+                      <button
+                        onClick={() => handleCopyLink(wish.reveal_token, 'reveal')}
+                        title="Copy Reveal Link"
+                        className="flex-1 bg-white border-[4px] border-black p-2 flex items-center justify-center hover:bg-cyan-400 transition-colors font-black uppercase"
+                      >
+                        <Copy className="w-4 h-4" />
+                      </button>
+                      
+                      {wish.is_group_board && (
+                        <button
+                          onClick={() => handleCopyLink(wish.group_token, 'group')}
+                          title="Copy Group Link"
+                          className="flex-1 bg-white border-[4px] border-black p-2 flex items-center justify-center hover:bg-cyan-400 transition-colors font-black uppercase"
+                        >
+                          <Users className="w-4 h-4" />
+                        </button>
+                      )}
+                      
+                      <button
+                        onClick={() => handleCancel(wish.id, wish.recipient_name)}
+                        title="Delete Wish"
+                        className="flex-1 bg-rose-500 border-[4px] border-black p-2 flex items-center justify-center text-white hover:bg-red-600 transition-colors font-black uppercase"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
