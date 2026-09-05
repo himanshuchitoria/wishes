@@ -34,18 +34,23 @@ export default function PhoneMockup({
   // Create a mock wish to pass to the templates
   const mockWish: Wish = {
     id: 'mock',
+    user_id: 'mock',
     group_token: 'mock',
     reveal_token: 'mock',
-    recipient_name: recipientName,
+    recipient_name: recipientName || 'Alex',
+    recipient_email: 'test@example.com',
     sender_alias: senderAlias,
     birth_date: new Date().toISOString(),
     delivery_time: '00:00:00',
+    delivery_timezone: 'UTC',
     vibe: vibe,
-    reveal_method: 'scratch',
+    is_anonymous: isAnonymous || false,
+    sender_email_prefix: config.defaultPrefix,
     message_payload: { body: body },
-    payment_status: 'paid',
-    is_early: false,
-    created_at: new Date().toISOString()
+    status: 'delivered',
+    is_group_board: false,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
   };
 
   const renderTemplate = () => {
