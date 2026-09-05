@@ -355,7 +355,7 @@ export default function ImmersiveWishStudio() {
     <div className={`min-h-screen w-full relative transition-colors duration-700 ${styles.bg}`}>
       <div className={`absolute inset-0 pointer-events-none transition-opacity duration-700 ${styles.bgEffect}`} />
       
-      <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-16 pb-8 h-full min-h-[calc(100vh-80px)] flex flex-col lg:flex-row gap-12 lg:gap-8 items-start relative z-10">
+      <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-8 h-full min-h-[calc(100vh-80px)] flex flex-col lg:flex-row gap-12 lg:gap-8 items-start relative z-10">
         
         {/* Left Column: Form Controls */}
         <div className={`w-full lg:w-5/12 flex flex-col gap-6 transition-all duration-700 ${styles.text}`}>

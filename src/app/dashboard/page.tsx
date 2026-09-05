@@ -125,7 +125,7 @@ export default function DashboardPage() {
   });
 
   return (
-    <div className="min-h-screen bg-[#FFeb3b] text-black w-full relative overflow-hidden font-sans pt-12 pb-24">
+    <div className="min-h-screen bg-[#FFeb3b] text-black w-full relative overflow-hidden font-sans pb-24">
       
       {/* Global Halftone Pattern Background */}
       <div 
@@ -158,7 +158,7 @@ export default function DashboardPage() {
       </div>
 
       {/* TOP BRACKET NAVIGATION */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 flex flex-wrap items-center justify-between gap-4 font-mono text-xs font-bold uppercase tracking-widest mb-16 md:mb-32">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 flex flex-wrap items-center justify-between gap-4 font-mono text-xs font-bold uppercase tracking-widest mb-16 md:mb-32 pt-16 sm:pt-20">
         <div className="flex flex-wrap gap-2 md:gap-4">
           <button 
             onClick={() => { soundFX.playPop(); setViewMode('overview'); }} 

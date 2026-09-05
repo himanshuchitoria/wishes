@@ -8,31 +8,44 @@ interface WcLogoProps {
   size?: number;
 }
 
-// Stylistic "wc" logo SVG - handcrafted brushstroke style
+// "wc" logo — half-cut W (left stroke is straight vertical) + open C arc
+// The W has: vertical down | then V-shape \/ then diagonal up /
+// This creates the distinctive "half-W" look shown in the reference image
 export default function WcLogo({ className = '', color = '#000000', size = 32 }: WcLogoProps) {
+  const h = Math.round(size * 54 / 82);
   return (
     <svg
-      viewBox="0 0 80 52"
+      viewBox="0 0 82 54"
       width={size}
-      height={Math.round(size * 52 / 80)}
+      height={h}
       className={className}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
+      aria-label="wc logo"
     >
-      {/* "w" letter - stylistic with angled strokes */}
+      {/* 
+        Half-cut "W": 
+          - Left leg: straight VERTICAL down (the "half cut" — no diagonal)  
+          - Then V-shape going down-right then up-right
+          - Then diagonal down-right then up-right to end
+        Result looks like: |\/\/ which reads as a W whose left side is vertical
+      */}
       <path
-        d="M4 6 L13 42 L22 18 L31 42 L40 6"
+        d="M4 4 L4 42 L18 20 L32 42 L44 4"
         stroke={color}
-        strokeWidth="5"
+        strokeWidth="5.5"
         strokeLinecap="round"
         strokeLinejoin="round"
         fill="none"
       />
-      {/* "c" letter - open arc shape */}
+      {/* 
+        Open "C":
+          Starts top-right, curves around to form an open arc 
+      */}
       <path
-        d="M76 16 C68 8, 52 8, 46 22 C40 36, 48 48, 62 48 C70 48, 76 44, 78 38"
+        d="M78 14 C70 5, 54 5, 48 22 C42 38, 51 50, 66 50 C73 50, 78 46, 80 40"
         stroke={color}
-        strokeWidth="5"
+        strokeWidth="5.5"
         strokeLinecap="round"
         strokeLinejoin="round"
         fill="none"

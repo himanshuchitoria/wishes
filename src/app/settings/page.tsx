@@ -162,7 +162,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-yellow-400 text-black w-full relative overflow-hidden font-sans pt-8 sm:pt-12 pb-24">
+    <div className="min-h-screen bg-yellow-400 text-black w-full relative overflow-hidden font-sans pb-24">
       
       {/* Global Halftone Pattern Background */}
       <div 
@@ -177,7 +177,7 @@ export default function SettingsPage() {
         </h1>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 space-y-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 space-y-12 pt-16 sm:pt-20">
         
         {/* Header */}
         <div className="border-b-[8px] border-black pb-8">

@@ -44,25 +44,23 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full px-0 sm:px-4 pt-0 pointer-events-none transition-all duration-500">
-        <div className="mx-auto max-w-5xl pointer-events-auto">
-          <div className="h-14 sm:h-16 bg-white border-[4px] border-black shadow-[8px_8px_0_0_#000] flex items-center justify-between px-2 pr-4 transform -rotate-1 hover:rotate-0 transition-transform">
+      <header className="sticky top-0 z-50 w-full pointer-events-none transition-all duration-500">
+        <div className="pointer-events-auto">
+          <div className="h-12 sm:h-14 bg-white border-b-[4px] border-black shadow-[0_8px_0_0_#000] flex items-center justify-between px-4 sm:px-6 lg:px-8">
             
             {/* Brand Logo */}
             <Link
               href="/"
               onClick={() => soundFX.playPop()}
-              className="flex items-center gap-2 group z-10 pl-2 bg-yellow-400 border-[2px] border-black px-2 py-1 shadow-[2px_2px_0_0_#000] hover:bg-rose-500 hover:text-white transition-colors"
+              className="flex items-center gap-2 group z-10 bg-yellow-400 border-[2px] border-black px-2 sm:px-3 py-1 shadow-[2px_2px_0_0_#000] hover:bg-rose-500 hover:text-white transition-colors"
             >
-              <WcLogo size={28} color="#000" className="group-hover:invert transition-all" />
-              <div className="flex items-center gap-1.5 hidden sm:flex">
-                <span className="text-sm font-black uppercase tracking-widest text-black group-hover:text-white transition-colors">
-                  chitoria.dev
-                </span>
-              </div>
+              <WcLogo size={24} color="#000" className="group-hover:invert transition-all shrink-0" />
+              <span className="text-xs sm:text-sm font-black uppercase tracking-widest text-black group-hover:text-white transition-colors hidden sm:inline">
+                chitoria.dev
+              </span>
             </Link>
 
-            {/* Desktop Navigation Links */}
+            {/* Desktop Navigation Links - centered */}
             <nav className="hidden md:flex items-center gap-2 absolute left-1/2 -translate-x-1/2 z-10">
               {navLinks.map((link) => {
                 const Icon = link.icon;
@@ -123,7 +121,7 @@ export default function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-white md:hidden pt-20 sm:pt-24 px-4 sm:px-6 flex flex-col font-sans">
+        <div className="fixed inset-0 z-40 bg-white md:hidden pt-14 sm:pt-16 px-4 flex flex-col font-sans">
           <div 
             className="absolute inset-0 pointer-events-none opacity-[0.1] z-0" 
             style={{ backgroundImage: 'radial-gradient(circle, #000 2px, transparent 2.5px)', backgroundSize: '16px 16px' }}
