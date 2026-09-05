@@ -112,8 +112,8 @@ export default function HomePage() {
           </div>
 
           {/* Floating Action Text */}
-          <div className="absolute -bottom-10 -right-10 bg-rose-500 text-white border-[4px] border-black px-6 py-4 transform -rotate-12 shadow-[8px_8px_0_0_#000] z-30">
-            <span className="font-black text-3xl uppercase tracking-tighter">*SCRATCH ME!*</span>
+          <div className="absolute -bottom-10 -right-10 bg-rose-500 text-white border-[4px] border-black px-6 py-4 transform -rotate-12 shadow-[8px_8px_0_0_#000] z-30 pointer-events-none">
+            <span className="font-black text-3xl uppercase tracking-tighter animate-pulse">*UNBOX ME!*</span>
           </div>
         </div>
       </section>

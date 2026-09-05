@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { WishVibe, VIBE_CONFIGS, Wish } from '@/types';
 import { Sparkles, Wifi, Battery, Signal, Flame, Heart } from 'lucide-react';
 
@@ -30,6 +30,12 @@ export default function PhoneMockup({
   revealType,
 }: PhoneMockupProps) {
   const config = VIBE_CONFIGS[vibe];
+  const [hasUnboxed, setHasUnboxed] = useState(false);
+  
+  // Reset unboxed state when switching vibes so they can experience the unboxing again
+  useEffect(() => {
+    setHasUnboxed(false);
+  }, [vibe]);
   
   // Create a mock wish to pass to the templates
   const mockWish: Wish = {
@@ -54,8 +60,7 @@ export default function PhoneMockup({
   };
 
   const renderTemplate = () => {
-    // We always show the unboxed state for the mockup to show off the design
-    const props = { wish: mockWish, hasUnboxed: true, onUnbox: () => {} };
+    const props = { wish: mockWish, hasUnboxed, onUnbox: () => setHasUnboxed(true) };
     switch (mockWish.vibe) {
       case 'sweet': return <SweetTemplate {...props} />;
       case 'sentimental': return <SentimentalTemplate {...props} />;
