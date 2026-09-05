@@ -55,15 +55,15 @@ export default function Navbar() {
     <>
       <header className="fixed top-0 left-0 right-0 z-50 w-full px-2 sm:px-4 pt-2 sm:pt-3 pointer-events-none transition-all duration-500">
         <div className="mx-auto max-w-5xl pointer-events-auto">
-          <div className="h-12 sm:h-14 bg-white border-[4px] border-black shadow-[8px_8px_0_0_#000] flex items-center justify-between px-2 pr-4 transform -rotate-1 hover:rotate-0 transition-transform">
+          <div className="h-10 sm:h-14 bg-white border-[3px] sm:border-[4px] border-black shadow-[4px_4px_0_0_#000] sm:shadow-[8px_8px_0_0_#000] flex items-center justify-between px-2 pr-2.5 sm:px-3 sm:pr-4 transform -rotate-0.5 sm:-rotate-1 hover:rotate-0 transition-transform">
             
             {/* Brand Logo */}
             <Link
               href="/"
               onClick={() => soundFX.playPop()}
-              className="flex items-center gap-2 group z-10 bg-yellow-400 border-[2px] border-black px-2 sm:px-3 py-1 shadow-[2px_2px_0_0_#000] hover:bg-rose-500 hover:text-white transition-colors"
+              className="flex items-center gap-1.5 sm:gap-2 group z-10 bg-yellow-400 border-[2px] border-black px-1.5 sm:px-3 py-0.5 sm:py-1 shadow-[2px_2px_0_0_#000] hover:bg-rose-500 hover:text-white transition-colors"
             >
-              <WcLogo size={24} color="#000" className="group-hover:invert transition-all shrink-0" />
+              <WcLogo size={20} color="#000" className="group-hover:invert transition-all shrink-0 sm:w-6 sm:h-auto" />
               <span className="text-xs sm:text-sm font-black uppercase tracking-widest text-black group-hover:text-white transition-colors hidden sm:inline">
                 chitoria.dev
               </span>
@@ -120,9 +120,9 @@ export default function Navbar() {
                 soundFX.playPop();
                 setMobileMenuOpen(!mobileMenuOpen);
               }}
-              className="md:hidden p-2 rounded-none bg-yellow-400 border-[2px] border-black text-black shadow-[4px_4px_0_0_#000] active:translate-y-1 active:shadow-[0_0_0_0_#000] transition-all z-10"
+              className="md:hidden p-1.5 sm:p-2 rounded-none bg-yellow-400 border-[2px] border-black text-black shadow-[2px_2px_0_0_#000] sm:shadow-[4px_4px_0_0_#000] active:translate-y-0.5 active:shadow-[0_0_0_0_#000] transition-all z-10"
             >
-              {mobileMenuOpen ? <NavCloseIcon size={20} className="w-5 h-5" /> : <NavMenuIcon size={20} className="w-5 h-5" />}
+              {mobileMenuOpen ? <NavCloseIcon size={18} className="w-4 h-4 sm:w-5 sm:h-5" /> : <NavMenuIcon size={18} className="w-4 h-4 sm:w-5 sm:h-5" />}
             </button>
           </div>
         </div>
@@ -130,62 +130,68 @@ export default function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-white md:hidden pt-14 sm:pt-16 px-4 flex flex-col font-sans">
+        <div className="fixed inset-0 z-40 bg-white md:hidden pt-20 sm:pt-24 px-4 pb-12 overflow-y-auto flex flex-col font-sans">
           <div 
             className="absolute inset-0 pointer-events-none opacity-[0.1] z-0" 
             style={{ backgroundImage: 'radial-gradient(circle, #000 2px, transparent 2.5px)', backgroundSize: '16px 16px' }}
           />
-          <nav className="flex flex-col gap-3 relative z-10">
-            {navLinks.map((link) => {
-              const Icon = link.icon;
-              const isActive = pathname === link.href;
-              return (
+          <div className="relative z-10 max-w-sm mx-auto w-full flex flex-col mt-2">
+            <div className="flex items-center justify-between mb-3 border-b-[2px] border-black pb-1.5 font-mono text-[10px] font-black uppercase tracking-wider text-zinc-500">
+              <span>[ NAVIGATION ]</span>
+              <span className="bg-yellow-400 text-black px-1.5 py-0.5 border border-black shadow-[1px_1px_0_0_#000]">CHITORIA.DEV</span>
+            </div>
+            <nav className="flex flex-col gap-2.5">
+              {navLinks.map((link) => {
+                const Icon = link.icon;
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => {
+                      soundFX.playPop();
+                      setMobileMenuOpen(false);
+                    }}
+                    className={`flex items-center gap-3 p-2.5 text-base sm:text-xl font-black uppercase tracking-widest border-[3px] sm:border-[4px] border-black transition-all ${
+                      isActive
+                        ? 'bg-cyan-400 shadow-[4px_4px_0_0_#000] sm:shadow-[6px_6px_0_0_#000] text-black transform rotate-0.5'
+                        : 'bg-white text-black hover:bg-yellow-400 hover:shadow-[4px_4px_0_0_#000]'
+                    }`}
+                  >
+                    <Icon size={20} className="w-5 h-5 shrink-0" />
+                    {link.name}
+                  </Link>
+                );
+              })}
+              
+              <div className="h-1.5 bg-black w-full my-2" />
+
+              {user ? (
+                <button
+                  onClick={() => {
+                    handleSignOut();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="flex items-center gap-3 p-2.5 text-base sm:text-xl font-black uppercase tracking-widest bg-rose-500 text-white border-[3px] sm:border-[4px] border-black shadow-[4px_4px_0_0_#000] sm:shadow-[6px_6px_0_0_#000] transform -rotate-0.5 active:translate-y-1 active:shadow-none transition-all"
+                >
+                  <NavLogoutIcon size={20} className="w-5 h-5 shrink-0" />
+                  Sign Out
+                </button>
+              ) : (
                 <Link
-                  key={link.name}
-                  href={link.href}
+                  href="/auth"
                   onClick={() => {
                     soundFX.playPop();
                     setMobileMenuOpen(false);
                   }}
-                  className={`flex items-center gap-3 p-3 text-base sm:text-xl font-black uppercase tracking-widest border-[4px] border-black transition-all ${
-                    isActive
-                      ? 'bg-cyan-400 shadow-[6px_6px_0_0_#000] text-black transform rotate-1'
-                      : 'bg-white text-black hover:bg-yellow-400 hover:shadow-[6px_6px_0_0_#000]'
-                  }`}
+                  className="flex items-center gap-3 p-2.5 text-base sm:text-xl font-black uppercase tracking-widest bg-black text-white border-[3px] sm:border-[4px] border-black shadow-[4px_4px_0_0_rgba(6,182,212,1)] sm:shadow-[6px_6px_0_0_rgba(6,182,212,1)] transform rotate-0.5 active:translate-y-1 active:shadow-none transition-all"
                 >
-                  <Icon size={22} className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
-                  {link.name}
+                  <NavUserIcon size={20} className="w-5 h-5 shrink-0" />
+                  Sign In
                 </Link>
-              );
-            })}
-            
-            <div className="h-2 bg-black w-full my-4" />
-
-            {user ? (
-              <button
-                onClick={() => {
-                  handleSignOut();
-                  setMobileMenuOpen(false);
-                }}
-                className="flex items-center gap-3 p-3 text-base sm:text-xl font-black uppercase tracking-widest bg-rose-500 text-white border-[4px] border-black shadow-[6px_6px_0_0_#000] transform -rotate-1 active:translate-y-2 active:shadow-[0_0_0_0_#000] transition-all"
-              >
-                <NavLogoutIcon size={22} className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
-                Sign Out
-              </button>
-            ) : (
-              <Link
-                href="/auth"
-                onClick={() => {
-                  soundFX.playPop();
-                  setMobileMenuOpen(false);
-                }}
-                className="flex items-center gap-3 p-3 text-base sm:text-xl font-black uppercase tracking-widest bg-black text-white border-[4px] border-black shadow-[6px_6px_0_0_rgba(6,182,212,1)] transform rotate-1 active:translate-y-2 active:shadow-[0_0_0_0_rgba(6,182,212,1)] transition-all"
-              >
-                <NavUserIcon size={22} className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
-                Sign In
-              </Link>
-            )}
-          </nav>
+              )}
+            </nav>
+          </div>
         </div>
       )}
     </>
