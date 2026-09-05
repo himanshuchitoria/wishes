@@ -73,11 +73,12 @@ export default function Navbar() {
             <nav className="hidden md:flex items-center gap-2 absolute left-1/2 -translate-x-1/2 z-10">
               {navLinks.map((link) => {
                 const Icon = link.icon;
+                const targetHref = user ? link.href : '/auth';
                 const isActive = pathname === link.href;
                 return (
                   <Link
                     key={link.name}
-                    href={link.href}
+                    href={targetHref}
                     onClick={() => soundFX.playPop()}
                     className={`relative group px-3 py-1 border-[2px] border-transparent hover:border-black text-[13px] font-black uppercase tracking-widest transition-all ${
                       isActive ? 'bg-cyan-400 border-black shadow-[4px_4px_0_0_#000] text-black transform rotate-2' : 'text-black hover:bg-yellow-400 hover:shadow-[4px_4px_0_0_#000] hover:-rotate-2'
@@ -143,11 +144,12 @@ export default function Navbar() {
             <nav className="flex flex-col gap-2.5">
               {navLinks.map((link) => {
                 const Icon = link.icon;
+                const targetHref = user ? link.href : '/auth';
                 const isActive = pathname === link.href;
                 return (
                   <Link
                     key={link.name}
-                    href={link.href}
+                    href={targetHref}
                     onClick={() => {
                       soundFX.playPop();
                       setMobileMenuOpen(false);

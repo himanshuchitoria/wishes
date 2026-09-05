@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Sparkles,
@@ -18,6 +18,8 @@ import { WishVibe, VIBE_CONFIGS } from '@/types';
 import PhoneMockup from '@/components/PhoneMockup';
 import VibeSlider from '@/components/VibeSlider';
 import { soundFX } from '@/lib/audio';
+import { supabase } from '@/lib/supabase/client';
+import type { User } from '@supabase/supabase-js';
 
 // Custom Comic SVGs
 const ComicBurst = ({ className }: { className?: string }) => (
@@ -45,7 +47,17 @@ const SpeechBubble = ({ text, className, color = "bg-white" }: { text: string, c
 
 export default function HomePage() {
   const [selectedVibe, setSelectedVibe] = useState<WishVibe>('roast');
+  const [user, setUser] = useState<User | null>(null);
   const currentConfig = VIBE_CONFIGS[selectedVibe];
+
+  useEffect(() => {
+    if (!supabase) return;
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   return (
     <div className="flex flex-col items-center w-full overflow-hidden bg-white text-black font-sans relative selection:bg-rose-500 selection:text-white">
@@ -60,9 +72,9 @@ export default function HomePage() {
       <section className="relative w-full pt-24 pb-16 sm:pt-28 lg:pt-36 lg:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16 z-10 border-b-[8px] border-black">
         
         {/* Massive Background Text behind everything */}
-        <div className="absolute top-10 left-0 w-full overflow-hidden z-[-1] flex flex-col pointer-events-none select-none opacity-20 transform -rotate-3">
-          <h1 className="text-[20vw] font-black uppercase leading-[0.8] text-transparent" style={{ WebkitTextStroke: '4px black' }}>BAM!</h1>
-          <h1 className="text-[20vw] font-black uppercase leading-[0.8] text-transparent" style={{ WebkitTextStroke: '4px black', marginLeft: '10vw' }}>POW!</h1>
+        <div className="absolute top-20 md:top-10 left-0 w-full overflow-hidden z-[-1] flex flex-col pointer-events-none select-none opacity-20 transform -rotate-3">
+          <h1 className="text-[35vw] md:text-[20vw] font-black uppercase leading-[0.8] text-transparent" style={{ WebkitTextStroke: '4px black' }}>BAM!</h1>
+          <h1 className="text-[35vw] md:text-[20vw] font-black uppercase leading-[0.8] text-transparent ml-[15vw] md:ml-[10vw]" style={{ WebkitTextStroke: '4px black' }}>POW!</h1>
         </div>
 
         {/* Left Panel */}
@@ -84,7 +96,7 @@ export default function HomePage() {
 
           <div className="flex flex-col sm:flex-row items-center justify-start gap-6 pt-8">
             <Link
-              href="/create"
+              href={user ? "/create" : "/auth"}
               onClick={() => soundFX.playPop()}
               className="w-full sm:w-auto flex items-center justify-center gap-3 px-6 py-4 sm:px-8 sm:py-5 text-lg sm:text-xl font-black text-black bg-cyan-400 border-[6px] border-black hover:bg-yellow-400 shadow-[8px_8px_0_0_#000] hover:shadow-[12px_12px_0_0_#000] hover:-translate-y-1 active:translate-y-2 active:shadow-[0_0_0_0_#000] transition-all transform -rotate-2"
             >
@@ -256,7 +268,7 @@ export default function HomePage() {
           </p>
           <div className="pt-8 flex justify-center">
             <Link
-              href="/create"
+              href={user ? "/create" : "/auth"}
               onClick={() => soundFX.playPop()}
               className="group inline-flex items-center justify-center gap-4 px-12 py-6 text-3xl font-black uppercase text-white bg-rose-500 border-[8px] border-black hover:bg-black hover:text-rose-500 shadow-[16px_16px_0_0_#000] hover:shadow-[24px_24px_0_0_#000] hover:-translate-y-2 active:translate-y-4 active:shadow-[0_0_0_0_#000] transition-all transform rotate-2"
             >
