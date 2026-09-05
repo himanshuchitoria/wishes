@@ -38,8 +38,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`dark h-full ${inter.variable} ${playfair.variable} ${greatVibes.variable}`}>
-      <body className="min-h-full flex flex-col bg-zinc-950 text-zinc-100 antialiased selection:bg-rose-500 selection:text-white font-sans">
+    <html lang="en" className={`h-full ${inter.variable} ${playfair.variable} ${greatVibes.variable}`}>
+      <body className="min-h-full flex flex-col bg-white text-black antialiased selection:bg-rose-500 selection:text-white font-sans">
         <ToastProvider>
           <Navbar />
           <main className="flex-1 flex flex-col">{children}</main>

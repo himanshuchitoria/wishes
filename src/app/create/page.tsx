@@ -355,11 +355,11 @@ export default function ImmersiveWishStudio() {
     <div className={`min-h-screen w-full relative transition-colors duration-700 ${styles.bg}`}>
       <div className={`absolute inset-0 pointer-events-none transition-opacity duration-700 ${styles.bgEffect}`} />
       
-      <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 h-full min-h-[calc(100vh-80px)] flex flex-col lg:flex-row gap-8 items-start relative z-10">
+      <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 h-full min-h-[calc(100vh-80px)] flex flex-col lg:flex-row gap-12 lg:gap-8 items-start relative z-10">
         
         {/* Left Column: Form Controls */}
         <div className={`w-full lg:w-5/12 flex flex-col gap-6 transition-all duration-700 ${styles.text}`}>
-          <div className="mb-2 flex items-center justify-between">
+          <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
              <div>
                <h1 className={`text-4xl ${styles.heading}`}>Design Studio</h1>
                <p className="opacity-70 mt-1 text-sm">Create a hyper-personalized immersive experience.</p>
@@ -502,7 +502,7 @@ export default function ImmersiveWishStudio() {
         </div>
         
         {/* Right Column: Live Preview Container */}
-        <div className="w-full lg:w-7/12 lg:sticky lg:top-24 h-[700px] lg:h-[calc(100vh-140px)] flex flex-col relative z-20 perspective-[1000px]">
+        <div className="w-full lg:w-7/12 lg:sticky lg:top-24 h-[600px] lg:h-[calc(100vh-140px)] flex flex-col relative z-20 perspective-[1000px] pb-12 lg:pb-0">
            <div className="mb-2 flex items-center justify-between px-2">
              <span className={`text-xs font-bold uppercase tracking-wider ${styles.text} opacity-60`}>Live Reveal Preview</span>
              <span className={`text-[10px] uppercase tracking-widest ${styles.text} opacity-40`}>Updates instantly</span>

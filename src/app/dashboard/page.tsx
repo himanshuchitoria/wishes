@@ -125,11 +125,16 @@ export default function DashboardPage() {
   });
 
   return (
-    <div className="min-h-screen bg-[#FFeb3b] text-black w-full relative overflow-hidden font-sans pt-48 pb-24 -mt-24">
+    <div className="min-h-screen bg-[#FFeb3b] text-black w-full relative overflow-hidden font-sans pt-12 pb-24">
       
+      {/* Global Halftone Pattern Background */}
+      <div 
+        className="absolute inset-0 pointer-events-none opacity-[0.2] z-0" 
+        style={{ backgroundImage: 'radial-gradient(circle, #000 2px, transparent 2.5px)', backgroundSize: '16px 16px' }}
+      />
       {/* MASSIVE BACKGROUND TYPOGRAPHY */}
-      <div className="absolute top-0 left-0 w-full flex justify-center pointer-events-none select-none z-0 overflow-visible mt-28">
-        <h1 className="text-[25vw] md:text-[22vw] font-black leading-none tracking-tighter text-black uppercase whitespace-nowrap opacity-[0.03] scale-110">
+      <div className="absolute top-0 left-0 w-full flex justify-center pointer-events-none select-none z-0 overflow-visible mt-16">
+        <h1 className="text-[25vw] md:text-[22vw] font-black leading-none tracking-tighter text-black uppercase whitespace-nowrap opacity-[0.05] scale-110">
           BIRTHDAYS
         </h1>
       </div>

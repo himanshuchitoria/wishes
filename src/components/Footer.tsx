@@ -13,7 +13,7 @@ export default function Footer() {
   const isDashboard = pathname === '/dashboard';
 
   return (
-    <footer className={`relative overflow-hidden border-t-[8px] border-black bg-cyan-400 pt-20 pb-10 ${isDashboard ? 'mt-0' : 'mt-32'}`}>
+    <footer className={`relative overflow-hidden border-t-[8px] border-black bg-cyan-400 pt-20 pb-10 mt-0`}>
       
       {/* Global Halftone Pattern Background */}
       <div 
