@@ -40,7 +40,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`h-full ${inter.variable} ${playfair.variable} ${greatVibes.variable}`}>
-      <body className="min-h-full flex flex-col bg-white text-black antialiased selection:bg-rose-500 selection:text-white font-sans">
+      <body className="min-h-full flex flex-col text-black antialiased selection:bg-rose-500 selection:text-white font-sans">
         <SplashScreen />
         <ToastProvider>
           <Navbar />

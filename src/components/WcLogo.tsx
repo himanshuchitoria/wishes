@@ -8,47 +8,38 @@ interface WcLogoProps {
   size?: number;
 }
 
-// "wc" logo — half-cut W (left stroke is straight vertical) + open C arc
-// The W has: vertical down | then V-shape \/ then diagonal up /
-// This creates the distinctive "half-W" look shown in the reference image
+// "vc" logo (often interpreted as a half-cut W + C)
+// The left shape is a solid, stylized "v" with a vertical inner right cut.
+// The right shape is a geometric "c" with strictly vertical cut terminals.
 export default function WcLogo({ className = '', color = '#000000', size = 32 }: WcLogoProps) {
-  const h = Math.round(size * 54 / 82);
+  // Adjusted aspect ratio to perfectly fit the geometric bounding box (185 x 120)
+  const h = Math.round(size * 120 / 185);
+
   return (
     <svg
-      viewBox="0 0 82 54"
+      viewBox="0 0 185 120"
       width={size}
       height={h}
       className={className}
       xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      aria-label="wc logo"
+      aria-label="vc logo"
     >
-      {/* 
-        Half-cut "W": 
-          - Left leg: straight VERTICAL down (the "half cut" — no diagonal)  
-          - Then V-shape going down-right then up-right
-          - Then diagonal down-right then up-right to end
-        Result looks like: |\/\/ which reads as a W whose left side is vertical
+      {/* Stylized "V" shape (Filled Polygon)
+        - Symmetrical outer bounds slanting inward to the bottom.
+        - The left arm is thicker at the bottom, while the right arm tapers.
+        - The inner right notch features a perfectly vertical cut.
       */}
       <path
-        d="M4 4 L4 42 L18 20 L32 42 L44 4"
-        stroke={color}
-        strokeWidth="5.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
+        d="M 10 10 L 45 10 L 75 75 L 75 10 L 110 10 L 85 110 L 35 110 Z"
+        fill={color}
       />
-      {/* 
-        Open "C":
-          Starts top-right, curves around to form an open arc 
+      {/* Geometric "C" shape (Filled Compound Path)
+        - Formed by a thick, perfectly circular outer and inner arc.
+        - Both the top and bottom right terminals are cut perfectly vertically.
       */}
       <path
-        d="M78 14 C70 5, 54 5, 48 22 C42 38, 51 50, 66 50 C73 50, 78 46, 80 40"
-        stroke={color}
-        strokeWidth="5.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
+        d="M 175 11.01 A 50 50 0 1 0 175 108.99 L 175 71.18 A 15 15 0 1 1 175 48.82 Z"
+        fill={color}
       />
     </svg>
   );
