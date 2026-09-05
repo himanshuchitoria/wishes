@@ -43,33 +43,26 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-4 z-50 w-full px-4 sm:px-6 pointer-events-none transition-all duration-500">
+      <header className="sticky top-6 z-50 w-full px-4 sm:px-6 pointer-events-none transition-all duration-500">
         <div className="mx-auto max-w-5xl pointer-events-auto">
-          <div className="h-14 rounded-full border border-white/10 bg-zinc-950/60 backdrop-blur-2xl shadow-[0_8px_30px_rgb(0,0,0,0.4)] flex items-center justify-between px-2 pr-4 relative overflow-hidden">
+          <div className="h-16 bg-white border-[4px] border-black shadow-[8px_8px_0_0_#000] flex items-center justify-between px-2 pr-4 transform -rotate-1 hover:rotate-0 transition-transform">
             
-            {/* Ambient inner glow */}
-            <div className="absolute inset-0 bg-gradient-to-r from-rose-500/5 via-transparent to-orange-500/5 pointer-events-none" />
-
             {/* Brand Logo */}
             <Link
               href="/"
               onClick={() => soundFX.playPop()}
-              className="flex items-center gap-2 group z-10 pl-2"
+              className="flex items-center gap-2 group z-10 pl-2 bg-yellow-400 border-[2px] border-black px-2 py-1 shadow-[2px_2px_0_0_#000] hover:bg-rose-500 hover:text-white transition-colors"
             >
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-rose-500 via-orange-500 to-amber-400 p-[1px] shadow-lg shadow-rose-500/20 group-hover:scale-110 transition-transform duration-300">
-                <div className="w-full h-full bg-zinc-950 rounded-full flex items-center justify-center">
-                  <Code2 className="w-4 h-4 text-white group-hover:text-amber-300 transition-colors" />
-                </div>
-              </div>
+              <Code2 className="w-5 h-5 text-black group-hover:text-white transition-colors" />
               <div className="flex items-center gap-1.5 hidden sm:flex">
-                <span className="text-sm font-extrabold tracking-tight text-white group-hover:text-rose-400 transition-colors">
-                  chitoria<span className="text-rose-500">.dev</span>
+                <span className="text-sm font-black uppercase tracking-widest text-black group-hover:text-white transition-colors">
+                  chitoria.dev
                 </span>
               </div>
             </Link>
 
             {/* Desktop Navigation Links */}
-            <nav className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2 z-10">
+            <nav className="hidden md:flex items-center gap-2 absolute left-1/2 -translate-x-1/2 z-10">
               {navLinks.map((link) => {
                 const Icon = link.icon;
                 const isActive = pathname === link.href;
@@ -78,18 +71,14 @@ export default function Navbar() {
                     key={link.name}
                     href={link.href}
                     onClick={() => soundFX.playPop()}
-                    className="relative group px-4 py-1.5 rounded-full text-[13px] font-semibold transition-all duration-300"
+                    className={`relative group px-3 py-1 border-[2px] border-transparent hover:border-black text-[13px] font-black uppercase tracking-widest transition-all ${
+                      isActive ? 'bg-cyan-400 border-black shadow-[4px_4px_0_0_#000] text-black transform rotate-2' : 'text-black hover:bg-yellow-400 hover:shadow-[4px_4px_0_0_#000] hover:-rotate-2'
+                    }`}
                   >
-                    {isActive && (
-                      <div className="absolute inset-0 bg-white/10 rounded-full" />
-                    )}
-                    <span className={`relative flex items-center gap-1.5 ${isActive ? 'text-white' : 'text-zinc-400 group-hover:text-white'}`}>
-                      <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-rose-400' : 'text-zinc-500 group-hover:text-zinc-300'} transition-colors`} />
+                    <span className="relative flex items-center gap-1.5">
+                      <Icon className="w-3.5 h-3.5" />
                       {link.name}
                     </span>
-                    {isActive && (
-                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,1)]" />
-                    )}
                   </Link>
                 );
               })}
@@ -100,7 +89,7 @@ export default function Navbar() {
               {user ? (
                 <button
                   onClick={handleSignOut}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-1.5 font-black uppercase text-xs tracking-widest text-black border-[2px] border-transparent hover:border-black hover:bg-rose-500 hover:text-white hover:shadow-[4px_4px_0_0_#000] transition-all transform rotate-1"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                   Logout
@@ -109,7 +98,7 @@ export default function Navbar() {
                 <Link
                   href="/auth"
                   onClick={() => soundFX.playPop()}
-                  className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold text-zinc-950 bg-white hover:scale-105 hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all"
+                  className="flex items-center gap-1.5 px-4 py-2 font-black uppercase tracking-widest text-xs text-white bg-black border-[2px] border-black hover:bg-cyan-400 hover:text-black shadow-[4px_4px_0_0_rgba(6,182,212,1)] transition-all transform rotate-2"
                 >
                   <User className="w-3.5 h-3.5" />
                   Sign In
@@ -123,9 +112,9 @@ export default function Navbar() {
                 soundFX.playPop();
                 setMobileMenuOpen(!mobileMenuOpen);
               }}
-              className="md:hidden p-2 -mr-1 rounded-full text-zinc-400 hover:text-white hover:bg-white/10 transition-colors z-10"
+              className="md:hidden p-2 rounded-none bg-yellow-400 border-[2px] border-black text-black shadow-[4px_4px_0_0_#000] active:translate-y-1 active:shadow-[0_0_0_0_#000] transition-all z-10"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? <X className="w-5 h-5 font-bold" /> : <Menu className="w-5 h-5 font-bold" />}
             </button>
           </div>
         </div>
@@ -133,8 +122,12 @@ export default function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-zinc-950/80 backdrop-blur-md md:hidden pt-24 px-4 flex flex-col">
-          <nav className="flex flex-col gap-2">
+        <div className="fixed inset-0 z-40 bg-white md:hidden pt-32 px-6 flex flex-col font-sans">
+          <div 
+            className="absolute inset-0 pointer-events-none opacity-[0.1] z-0" 
+            style={{ backgroundImage: 'radial-gradient(circle, #000 2px, transparent 2.5px)', backgroundSize: '16px 16px' }}
+          />
+          <nav className="flex flex-col gap-4 relative z-10">
             {navLinks.map((link) => {
               const Icon = link.icon;
               const isActive = pathname === link.href;
@@ -146,29 +139,29 @@ export default function Navbar() {
                     soundFX.playPop();
                     setMobileMenuOpen(false);
                   }}
-                  className={`flex items-center gap-3 p-4 rounded-2xl text-lg font-bold transition-all ${
+                  className={`flex items-center gap-4 p-4 text-xl font-black uppercase tracking-widest border-[4px] border-black transition-all ${
                     isActive
-                      ? 'bg-gradient-to-r from-rose-500/20 to-transparent text-white border border-rose-500/30'
-                      : 'text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent'
+                      ? 'bg-cyan-400 shadow-[8px_8px_0_0_#000] text-black transform rotate-1'
+                      : 'bg-white text-black hover:bg-yellow-400 hover:shadow-[8px_8px_0_0_#000]'
                   }`}
                 >
-                  <Icon className={`w-5 h-5 ${isActive ? 'text-rose-400' : 'text-zinc-500'}`} />
+                  <Icon className="w-6 h-6" />
                   {link.name}
                 </Link>
               );
             })}
-          </nav>
-          
-          <div className="mt-8 pt-8 border-t border-white/10">
+            
+            <div className="h-2 bg-black w-full my-4" />
+
             {user ? (
               <button
                 onClick={() => {
                   handleSignOut();
                   setMobileMenuOpen(false);
                 }}
-                className="w-full flex items-center justify-center gap-2 p-4 rounded-2xl text-lg font-bold text-rose-400 bg-rose-500/10 border border-rose-500/20"
+                className="flex items-center gap-4 p-4 text-xl font-black uppercase tracking-widest bg-rose-500 text-white border-[4px] border-black shadow-[8px_8px_0_0_#000] transform -rotate-1 active:translate-y-2 active:shadow-[0_0_0_0_#000] transition-all"
               >
-                <LogOut className="w-5 h-5" />
+                <LogOut className="w-6 h-6" />
                 Sign Out
               </button>
             ) : (
@@ -178,13 +171,13 @@ export default function Navbar() {
                   soundFX.playPop();
                   setMobileMenuOpen(false);
                 }}
-                className="w-full flex items-center justify-center gap-2 p-4 rounded-2xl text-lg font-bold text-zinc-950 bg-white"
+                className="flex items-center gap-4 p-4 text-xl font-black uppercase tracking-widest bg-black text-white border-[4px] border-black shadow-[8px_8px_0_0_rgba(6,182,212,1)] transform rotate-1 active:translate-y-2 active:shadow-[0_0_0_0_rgba(6,182,212,1)] transition-all"
               >
-                <User className="w-5 h-5" />
+                <User className="w-6 h-6" />
                 Sign In
               </Link>
             )}
-          </div>
+          </nav>
         </div>
       )}
     </>

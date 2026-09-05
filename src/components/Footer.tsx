@@ -13,51 +13,50 @@ export default function Footer() {
   const isDashboard = pathname === '/dashboard';
 
   return (
-    <footer className={`relative overflow-hidden border-t border-white/5 bg-zinc-950 pt-20 pb-10 ${isDashboard ? 'mt-0' : 'mt-32'}`}>
+    <footer className={`relative overflow-hidden border-t-[8px] border-black bg-cyan-400 pt-20 pb-10 ${isDashboard ? 'mt-0' : 'mt-32'}`}>
       
+      {/* Global Halftone Pattern Background */}
+      <div 
+        className="absolute inset-0 pointer-events-none opacity-[0.2] z-0" 
+        style={{ backgroundImage: 'radial-gradient(circle, #000 2px, transparent 2.5px)', backgroundSize: '16px 16px' }}
+      />
+
       {/* Massive Background Typography Effect */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full text-center pointer-events-none select-none overflow-hidden h-full flex items-center justify-center">
-        <h2 className="text-[11vw] sm:text-[13vw] lg:text-[15vw] font-black leading-none tracking-tighter bg-gradient-to-b from-white/[0.08] to-transparent bg-clip-text text-transparent transform -translate-y-1/4">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full text-center pointer-events-none select-none overflow-hidden h-full flex items-center justify-center z-[1] opacity-30 transform -rotate-2">
+        <h2 className="text-[15vw] sm:text-[18vw] lg:text-[20vw] font-black leading-none tracking-tighter text-transparent" style={{ WebkitTextStroke: '4px black' }}>
           CHITORIA
         </h2>
       </div>
 
-      {/* Ambient Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-rose-500/5 blur-[120px] rounded-full pointer-events-none" />
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-8 mb-12 sm:mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-8 mb-16">
           
           {/* Brand & Mission (Takes up 5 columns) */}
           <div className="md:col-span-12 lg:col-span-5 space-y-6">
             <Link
               href="/"
               onClick={() => soundFX.playPop()}
-              className="inline-flex items-center gap-2.5 group"
+              className="inline-flex items-center gap-2.5 group bg-white border-[4px] border-black px-4 py-2 shadow-[8px_8px_0_0_#000] transform -rotate-1 hover:rotate-0 hover:bg-yellow-400 transition-all"
             >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-500 via-orange-500 to-amber-400 p-[1px] shadow-lg shadow-rose-500/20 group-hover:scale-105 transition-transform duration-300">
-                <div className="w-full h-full bg-zinc-950 rounded-[11px] flex items-center justify-center">
-                  <Code2 className="w-5 h-5 text-white group-hover:text-amber-300 transition-colors" />
-                </div>
-              </div>
+              <Code2 className="w-8 h-8 text-black" />
               <div className="flex flex-col">
-                <span className="text-xl font-extrabold tracking-tight text-white group-hover:text-rose-400 transition-colors">
-                  chitoria<span className="text-rose-500">.dev</span>
+                <span className="text-2xl font-black uppercase tracking-widest text-black">
+                  chitoria.dev
                 </span>
               </div>
             </Link>
             
-            <p className="text-sm leading-relaxed text-zinc-400 max-w-sm">
+            <p className="text-lg font-bold leading-relaxed text-black max-w-sm bg-white inline-block p-2 border-[4px] border-black shadow-[4px_4px_0_0_#000] transform rotate-1">
               The AI-powered birthday delivery engine. Send brutal pop-art roasts or unforgettable classic tearjerkers at exact local midnight.
             </p>
             
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-zinc-300">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <div className="flex flex-wrap items-center gap-4">
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-yellow-400 border-[4px] border-black text-sm font-black uppercase text-black shadow-[4px_4px_0_0_#000] transform -rotate-2">
+                <Sparkles className="w-4 h-4 fill-current" />
                 100% Free Tier
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-zinc-300">
-                <Shield className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-400 border-[4px] border-black text-sm font-black uppercase text-black shadow-[4px_4px_0_0_#000] transform rotate-1">
+                <Shield className="w-4 h-4 fill-current" />
                 Privacy First
               </span>
             </div>
@@ -65,25 +64,25 @@ export default function Footer() {
 
           {/* Navigation Links (3 columns) */}
           <div className="md:col-span-4 lg:col-span-3">
-            <h4 className="font-bold text-white mb-6 text-sm flex items-center gap-2">
+            <h4 className="font-black text-black uppercase tracking-widest mb-6 text-xl bg-white inline-block px-2 border-[4px] border-black shadow-[4px_4px_0_0_#000]">
               Platform
             </h4>
-            <ul className="space-y-3.5 text-sm">
+            <ul className="space-y-4 text-base font-black uppercase tracking-widest">
               <li>
-                <Link href="/create" onClick={() => soundFX.playPop()} className="text-zinc-400 hover:text-rose-400 hover:translate-x-1 transition-all inline-flex items-center gap-1.5 group">
-                  <ArrowRight className="w-3 h-3 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" />
+                <Link href="/create" onClick={() => soundFX.playPop()} className="text-black hover:text-white hover:bg-black inline-flex items-center gap-2 group px-2 py-1 border-[4px] border-transparent hover:border-black transition-all">
+                  <ArrowRight className="w-4 h-4 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all" />
                   Immersive Studio
                 </Link>
               </li>
               <li>
-                <Link href="/dashboard" onClick={() => soundFX.playPop()} className="text-zinc-400 hover:text-rose-400 hover:translate-x-1 transition-all inline-flex items-center gap-1.5 group">
-                  <ArrowRight className="w-3 h-3 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" />
+                <Link href="/dashboard" onClick={() => soundFX.playPop()} className="text-black hover:text-white hover:bg-black inline-flex items-center gap-2 group px-2 py-1 border-[4px] border-transparent hover:border-black transition-all">
+                  <ArrowRight className="w-4 h-4 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all" />
                   Calendar Hub
                 </Link>
               </li>
               <li>
-                <Link href="/wishes" onClick={() => soundFX.playPop()} className="text-zinc-400 hover:text-rose-400 hover:translate-x-1 transition-all inline-flex items-center gap-1.5 group">
-                  <ArrowRight className="w-3 h-3 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" />
+                <Link href="/wishes" onClick={() => soundFX.playPop()} className="text-black hover:text-white hover:bg-black inline-flex items-center gap-2 group px-2 py-1 border-[4px] border-transparent hover:border-black transition-all">
+                  <ArrowRight className="w-4 h-4 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all" />
                   Delivery Queue
                 </Link>
               </li>
@@ -92,26 +91,24 @@ export default function Footer() {
 
           {/* Delivery Aliases (4 columns) */}
           <div className="md:col-span-8 lg:col-span-4">
-            <h4 className="font-bold text-white mb-6 text-sm flex items-center gap-2">
-              <Mail className="w-4 h-4 text-rose-400" />
-              Delivery Aliases
+            <h4 className="font-black text-black uppercase tracking-widest mb-6 text-xl bg-white inline-block px-2 border-[4px] border-black shadow-[4px_4px_0_0_#000] transform -rotate-1">
+              <span className="flex items-center gap-2">
+                <Mail className="w-5 h-5 text-black fill-current" />
+                Delivery Aliases
+              </span>
             </h4>
-            <div className="flex flex-wrap gap-2">
-              <div className="group cursor-default flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 border border-white/10 hover:border-amber-500/50 hover:bg-amber-500/10 transition-colors">
-                <span className="w-2 h-2 rounded-full bg-amber-500 group-hover:shadow-[0_0_8px_#f59e0b]" />
-                <code className="text-xs font-mono text-zinc-300 group-hover:text-amber-400">roast@chitoria.dev</code>
+            <div className="flex flex-wrap gap-4">
+              <div className="group cursor-default flex items-center gap-2 px-3 py-2 bg-yellow-400 border-[4px] border-black shadow-[4px_4px_0_0_#000] hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#000] transition-all transform rotate-1">
+                <span className="w-3 h-3 rounded-full bg-black group-hover:animate-ping" />
+                <code className="text-sm font-black tracking-widest text-black">roast@chitoria.dev</code>
               </div>
-              <div className="group cursor-default flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 border border-white/10 hover:border-rose-500/50 hover:bg-rose-500/10 transition-colors">
-                <span className="w-2 h-2 rounded-full bg-rose-500 group-hover:shadow-[0_0_8px_#f43f5e]" />
-                <code className="text-xs font-mono text-zinc-300 group-hover:text-rose-400">forever@chitoria.dev</code>
+              <div className="group cursor-default flex items-center gap-2 px-3 py-2 bg-rose-500 border-[4px] border-black shadow-[4px_4px_0_0_#000] hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#000] transition-all transform -rotate-2">
+                <span className="w-3 h-3 rounded-full bg-black group-hover:animate-ping" />
+                <code className="text-sm font-black tracking-widest text-white">forever@chitoria.dev</code>
               </div>
-              <div className="group cursor-default flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 border border-white/10 hover:border-cyan-500/50 hover:bg-cyan-500/10 transition-colors">
-                <span className="w-2 h-2 rounded-full bg-cyan-500 group-hover:shadow-[0_0_8px_#06b6d4]" />
-                <code className="text-xs font-mono text-zinc-300 group-hover:text-cyan-400">truth@chitoria.dev</code>
-              </div>
-              <div className="group cursor-default flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 border border-white/10 hover:border-emerald-500/50 hover:bg-emerald-500/10 transition-colors">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 group-hover:shadow-[0_0_8px_#10b981]" />
-                <code className="text-xs font-mono text-zinc-300 group-hover:text-emerald-400">secret@chitoria.dev</code>
+              <div className="group cursor-default flex items-center gap-2 px-3 py-2 bg-white border-[4px] border-black shadow-[4px_4px_0_0_#000] hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#000] transition-all transform rotate-2">
+                <span className="w-3 h-3 rounded-full bg-black group-hover:animate-ping" />
+                <code className="text-sm font-black tracking-widest text-black">truth@chitoria.dev</code>
               </div>
             </div>
           </div>
@@ -119,14 +116,14 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-6 sm:pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-          <p className="text-[10px] sm:text-xs font-medium text-zinc-500">
+        <div className="pt-8 border-t-[8px] border-black flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left bg-white p-6 shadow-[8px_8px_0_0_#000] transform rotate-1">
+          <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-black">
             © {new Date().getFullYear()} chitoria.dev. All rights reserved.
           </p>
-          <div className="flex items-center gap-1.5 text-[10px] sm:text-xs font-medium text-zinc-500 bg-black/20 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-white/5 whitespace-nowrap">
+          <div className="flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-widest text-white bg-black px-4 py-2 border-[4px] border-black transform -rotate-2">
             <span>Crafted with</span>
-            <Heart className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-rose-500 fill-rose-500 animate-pulse" />
-            <span>for unforgettable celebrations</span>
+            <Heart className="w-4 h-4 text-rose-500 fill-rose-500 animate-bounce" />
+            <span>for celebrations</span>
           </div>
         </div>
       </div>
