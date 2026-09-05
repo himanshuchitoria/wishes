@@ -3,7 +3,16 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Sparkles, Calendar, Flame, ShieldAlert, User, Menu, X, LogOut } from 'lucide-react';
+import {
+  NavDashboardIcon,
+  NavStudioIcon,
+  NavQueueIcon,
+  NavSettingsIcon,
+  NavUserIcon,
+  NavLogoutIcon,
+  NavMenuIcon,
+  NavCloseIcon,
+} from '@/components/NavIcons';
 import WcLogo from '@/components/WcLogo';
 import { soundFX } from '@/lib/audio';
 import { supabase } from '@/lib/supabase/client';
@@ -36,10 +45,10 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { name: 'Dashboard', href: '/dashboard', icon: Calendar },
-    { name: 'Studio', href: '/create', icon: Sparkles },
-    { name: 'Queue', href: '/wishes', icon: Flame },
-    { name: 'Settings', href: '/settings', icon: ShieldAlert },
+    { name: 'Dashboard', href: '/dashboard', icon: NavDashboardIcon },
+    { name: 'Studio', href: '/create', icon: NavStudioIcon },
+    { name: 'Queue', href: '/wishes', icon: NavQueueIcon },
+    { name: 'Settings', href: '/settings', icon: NavSettingsIcon },
   ];
 
   return (
@@ -75,7 +84,7 @@ export default function Navbar() {
                     }`}
                   >
                     <span className="relative flex items-center gap-1.5">
-                      <Icon className="w-3.5 h-3.5" />
+                      <Icon size={15} className="w-3.5 h-3.5 shrink-0" />
                       {link.name}
                     </span>
                   </Link>
@@ -90,7 +99,7 @@ export default function Navbar() {
                   onClick={handleSignOut}
                   className="flex items-center gap-1.5 px-3 py-1.5 font-black uppercase text-xs tracking-widest text-black border-[2px] border-transparent hover:border-black hover:bg-rose-500 hover:text-white hover:shadow-[4px_4px_0_0_#000] transition-all transform rotate-1"
                 >
-                  <LogOut className="w-3.5 h-3.5" />
+                  <NavLogoutIcon size={14} className="w-3.5 h-3.5 shrink-0" />
                   Logout
                 </button>
               ) : (
@@ -99,7 +108,7 @@ export default function Navbar() {
                   onClick={() => soundFX.playPop()}
                   className="flex items-center gap-1.5 px-4 py-2 font-black uppercase tracking-widest text-xs text-white bg-black border-[2px] border-black hover:bg-cyan-400 hover:text-black shadow-[4px_4px_0_0_rgba(6,182,212,1)] transition-all transform rotate-2"
                 >
-                  <User className="w-3.5 h-3.5" />
+                  <NavUserIcon size={14} className="w-3.5 h-3.5 shrink-0" />
                   Sign In
                 </Link>
               )}
@@ -113,7 +122,7 @@ export default function Navbar() {
               }}
               className="md:hidden p-2 rounded-none bg-yellow-400 border-[2px] border-black text-black shadow-[4px_4px_0_0_#000] active:translate-y-1 active:shadow-[0_0_0_0_#000] transition-all z-10"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5 font-bold" /> : <Menu className="w-5 h-5 font-bold" />}
+              {mobileMenuOpen ? <NavCloseIcon size={20} className="w-5 h-5" /> : <NavMenuIcon size={20} className="w-5 h-5" />}
             </button>
           </div>
         </div>
@@ -144,7 +153,7 @@ export default function Navbar() {
                       : 'bg-white text-black hover:bg-yellow-400 hover:shadow-[6px_6px_0_0_#000]'
                   }`}
                 >
-                  <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+                  <Icon size={22} className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
                   {link.name}
                 </Link>
               );
@@ -160,7 +169,7 @@ export default function Navbar() {
                 }}
                 className="flex items-center gap-3 p-3 text-base sm:text-xl font-black uppercase tracking-widest bg-rose-500 text-white border-[4px] border-black shadow-[6px_6px_0_0_#000] transform -rotate-1 active:translate-y-2 active:shadow-[0_0_0_0_#000] transition-all"
               >
-                <LogOut className="w-5 h-5 sm:w-6 sm:h-6" />
+                <NavLogoutIcon size={22} className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
                 Sign Out
               </button>
             ) : (
@@ -172,7 +181,7 @@ export default function Navbar() {
                 }}
                 className="flex items-center gap-3 p-3 text-base sm:text-xl font-black uppercase tracking-widest bg-black text-white border-[4px] border-black shadow-[6px_6px_0_0_rgba(6,182,212,1)] transform rotate-1 active:translate-y-2 active:shadow-[0_0_0_0_rgba(6,182,212,1)] transition-all"
               >
-                <User className="w-5 h-5 sm:w-6 sm:h-6" />
+                <NavUserIcon size={22} className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
                 Sign In
               </Link>
             )}
