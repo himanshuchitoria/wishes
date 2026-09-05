@@ -20,6 +20,7 @@ import PhoneMockup from '@/components/PhoneMockup';
 import VibeSlider from '@/components/VibeSlider';
 import { soundFX } from '@/lib/audio';
 import { supabase } from '@/lib/supabase/client';
+import { useToast } from '@/components/Toast';
 import type { User } from '@supabase/supabase-js';
 
 // Custom Comic SVGs
@@ -53,6 +54,7 @@ function HomeContent() {
 
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!supabase) return;
@@ -61,14 +63,20 @@ function HomeContent() {
       setUser(session?.user ?? null);
     });
 
-    // Fallback: If Supabase redirects to root with a code (e.g., due to unconfigured Redirect URLs)
+    // Fallback: If Supabase redirects to root with a code or error
     const code = searchParams.get('code');
+    const errorDesc = searchParams.get('error_description');
+    
     if (code) {
       router.push(`/auth/callback?code=${code}&next=/auth/update-password`);
+    } else if (errorDesc) {
+      // e.g., link expired or consumed by email scanner
+      toast(errorDesc.replace(/\+/g, ' '), 'error');
+      router.replace('/');
     }
 
     return () => subscription.unsubscribe();
-  }, [searchParams, router]);
+  }, [searchParams, router, toast]);
 
   return (
     <div className="flex flex-col items-center w-full overflow-hidden bg-white text-black font-sans relative selection:bg-rose-500 selection:text-white">
