@@ -24,11 +24,6 @@ import { getCountdown, getNextBirthdayDate } from '@/lib/utils';
 import CountdownTimer from '@/components/CountdownTimer';
 import { soundFX } from '@/lib/audio';
 import { useToast } from '@/components/Toast';
-import BackgroundEffects from '@/components/BackgroundEffects';
-import ScratchCard from '@/components/ScratchCard';
-import EnvelopeReveal from '@/components/EnvelopeReveal';
-import GlitchReveal from '@/components/GlitchReveal';
-import InstantReveal from '@/components/InstantReveal';
 
 import SweetTemplate from '@/components/templates/SweetTemplate';
 import SentimentalTemplate from '@/components/templates/SentimentalTemplate';
@@ -45,7 +40,7 @@ export default function BirthdayRevealPage() {
   const [contributions, setContributions] = useState<GroupContribution[]>([]);
   const [isEarly, setIsEarly] = useState<boolean>(false);
   const [hasUnboxed, setHasUnboxed] = useState<boolean>(false);
-  const [isMuted, setIsMuted] = useState<boolean>(false);
+  const [isMuted, setIsMuted] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -57,6 +52,7 @@ export default function BirthdayRevealPage() {
           setWish(data.wish);
           setContributions(data.contributions || []);
           setIsEarly(data.is_early);
+          
         } else if (res.status === 404) {
           setError('This wish has been deleted or no longer exists.');
         } else {
@@ -68,16 +64,14 @@ export default function BirthdayRevealPage() {
       }
     };
     fetchReveal();
-
-    return () => {
-      soundFX.stopTrack();
-    };
   }, [revealToken]);
 
   const handleReveal = () => {
     setHasUnboxed(true);
+    // Unmute automatically on interaction to allow audio playback if desired
+    setIsMuted(false);
     
-    // Play vibe-based sting sound
+    // Play aesthetic vibe-based sound
     if (wish?.vibe === 'roast' || wish?.vibe === 'snarky') {
       soundFX.playAirhorn();
     } else if (wish?.vibe === 'sweet' || wish?.vibe === 'sentimental') {
@@ -86,28 +80,15 @@ export default function BirthdayRevealPage() {
       soundFX.playCelebration();
     }
     
-    // Play background soundtrack if set
-    const track = wish?.message_payload?.musicTrack;
-    if (track && track !== 'none' && !isMuted) {
-      soundFX.playTrack(track);
-    }
+    confetti({
+      particleCount: 120,
+      spread: 90,
+      origin: { y: 0.6 },
+    });
     
     // Background call to mark as read exactly upon unboxing
     fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"}/reveal/${revealToken}/read`, { method: 'POST' })
       .catch(err => console.error('Failed to mark as read', err));
-  };
-
-  const handleToggleMute = () => {
-    const nextMuted = !isMuted;
-    setIsMuted(nextMuted);
-    if (nextMuted) {
-      soundFX.stopTrack();
-    } else {
-      const track = wish?.message_payload?.musicTrack;
-      if (track && track !== 'none') {
-        soundFX.playTrack(track);
-      }
-    }
   };
 
   const handleShare = () => {
@@ -168,9 +149,6 @@ export default function BirthdayRevealPage() {
 
   if (!wish) return null;
 
-  const revealType = wish.message_payload?.revealType;
-  const effects = wish.message_payload?.effects || 'confetti';
-
   const renderTemplate = () => {
     const props = { wish, hasUnboxed, onUnbox: handleReveal };
     switch (wish.vibe) {
@@ -185,101 +163,41 @@ export default function BirthdayRevealPage() {
 
   return (
     <>
-      {/* 1. Pre-reveal custom mechanisms if selected */}
-      {!hasUnboxed && revealType === 'scratch' ? (
-        <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-4 sm:p-8">
-          <div className="w-full max-w-md">
-            <div className="text-center mb-6">
-              <div className="inline-block px-3 py-1 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 text-xs font-black uppercase tracking-wider mb-2">
-                🪙 Scratch-Off Lottery
-              </div>
-              <h2 className="text-xl sm:text-2xl font-black text-white">Rub with finger or mouse to reveal</h2>
+      {renderTemplate()}
+
+      {/* State 4: Sleek Viral Footer */}
+        {hasUnboxed && (
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+            <div className="flex items-center gap-3 px-4 py-2.5 rounded-full bg-zinc-950/80 border border-white/10 backdrop-blur-xl shadow-2xl animate-in slide-in-from-bottom-8 duration-700">
+              <span className="text-[11px] text-zinc-400 whitespace-nowrap">
+                ✨ Made especially for {wish?.recipient_name} via <span className="text-zinc-200 font-semibold">chitoria.dev</span>
+              </span>
+              <div className="w-px h-3 bg-white/10" />
+              <Link
+                href="/create"
+                target="_blank"
+                onClick={() => soundFX.playPop()}
+                className="text-[11px] font-bold text-white hover:text-rose-400 transition-colors flex items-center gap-1 whitespace-nowrap"
+              >
+                Create a reveal <ArrowRight className="w-3 h-3" />
+              </Link>
             </div>
-            <ScratchCard
-              headline={wish.message_payload?.headline}
-              body={wish.message_payload?.body}
-              senderAlias={wish.sender_alias}
-              isAnonymous={wish.is_anonymous}
-              mediaUrl={wish.message_payload?.mediaUrl}
-              elements={wish.message_payload?.elements}
-              onRevealed={handleReveal}
-            />
           </div>
-        </div>
-      ) : !hasUnboxed && revealType === 'envelope' ? (
-        <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-4 sm:p-8">
-          <EnvelopeReveal
-            headline={wish.message_payload?.headline}
-            body={wish.message_payload?.body}
-            senderAlias={wish.sender_alias}
-            isAnonymous={wish.is_anonymous}
-            mediaUrl={wish.message_payload?.mediaUrl}
-            elements={wish.message_payload?.elements}
-            onRevealed={handleReveal}
-          />
-        </div>
-      ) : !hasUnboxed && revealType === 'glitch' ? (
-        <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4 sm:p-8">
-          <GlitchReveal
-            headline={wish.message_payload?.headline}
-            body={wish.message_payload?.body}
-            senderAlias={wish.sender_alias}
-            isAnonymous={wish.is_anonymous}
-            mediaUrl={wish.message_payload?.mediaUrl}
-            elements={wish.message_payload?.elements}
-            onRevealed={handleReveal}
-          />
-        </div>
-      ) : !hasUnboxed && revealType === 'instant' ? (
-        <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-4 sm:p-8">
-          <InstantReveal
-            headline={wish.message_payload?.headline}
-            body={wish.message_payload?.body}
-            senderAlias={wish.sender_alias}
-            isAnonymous={wish.is_anonymous}
-            mediaUrl={wish.message_payload?.mediaUrl}
-            elements={wish.message_payload?.elements}
-            onRevealed={handleReveal}
-          />
-        </div>
-      ) : (
-        /* Native Vibe Template */
-        renderTemplate()
-      )}
+        )}
 
-      {/* Celebration Atmospheric Particles */}
-      <BackgroundEffects effect={effects} trigger={hasUnboxed} />
-
-      {/* Sleek Viral Footer */}
+      {/* Floating Audio Toggle */}
       {hasUnboxed && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
-          <div className="flex items-center gap-3 px-4 py-2.5 rounded-full bg-zinc-950/85 border border-white/10 backdrop-blur-xl shadow-2xl animate-in slide-in-from-bottom-8 duration-700">
-            <span className="text-[11px] text-zinc-400 whitespace-nowrap">
-              ✨ Made especially for <span className="text-zinc-200 font-semibold">{wish?.recipient_name}</span> via <span className="text-zinc-200 font-semibold">chitoria.dev</span>
-            </span>
-            <div className="w-px h-3 bg-white/10" />
-            <Link
-              href="/create"
-              target="_blank"
-              onClick={() => soundFX.playPop()}
-              className="text-[11px] font-bold text-white hover:text-rose-400 transition-colors flex items-center gap-1 whitespace-nowrap"
-            >
-              Create a reveal <ArrowRight className="w-3 h-3" />
-            </Link>
-          </div>
-        </div>
-      )}
-
-      {/* Floating Audio Soundtrack Toggle */}
-      {hasUnboxed && wish.message_payload?.musicTrack && wish.message_payload.musicTrack !== 'none' && (
         <button
-          type="button"
-          onClick={handleToggleMute}
-          title={isMuted ? 'Unmute soundtrack' : 'Mute soundtrack'}
-          className="fixed top-6 right-6 z-50 w-11 h-11 rounded-full bg-black/60 border border-white/15 backdrop-blur-md flex items-center justify-center text-white/80 hover:text-white hover:bg-black/80 transition-all shadow-xl"
+          onClick={() => setIsMuted(!isMuted)}
+          className="fixed top-6 right-6 z-50 w-10 h-10 rounded-full bg-black/40 border border-white/10 backdrop-blur-md flex items-center justify-center text-white/70 hover:text-white hover:bg-black/60 transition-all shadow-xl"
         >
-          {isMuted ? <VolumeX className="w-5 h-5 text-zinc-400" /> : <Volume2 className="w-5 h-5 text-amber-400 animate-pulse" />}
+          {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
         </button>
+      )}
+      
+      {/* Ambient Audio (Optional loops could go here. For now, it represents the aesthetic audio requirement) */}
+      {!isMuted && hasUnboxed && (
+         <audio src="/sounds/ambient-pad.mp3" autoPlay loop muted={isMuted} className="hidden" />
       )}
     </>
   );

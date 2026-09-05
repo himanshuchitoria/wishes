@@ -4,8 +4,6 @@ import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
 import { soundFX } from '@/lib/audio';
 import { Heart, Sparkles } from 'lucide-react';
-import { CanvasElement } from '@/types';
-import StickerOverlay from './StickerOverlay';
 import ImageModal from './ImageModal';
 
 interface EnvelopeRevealProps {
@@ -14,7 +12,6 @@ interface EnvelopeRevealProps {
   senderAlias?: string;
   isAnonymous?: boolean;
   mediaUrl?: string;
-  elements?: CanvasElement[];
   onRevealed?: () => void;
   accentColor?: string;
 }
@@ -25,7 +22,6 @@ export default function EnvelopeReveal({
   senderAlias,
   isAnonymous,
   mediaUrl,
-  elements = [],
   onRevealed,
 }: EnvelopeRevealProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -84,7 +80,7 @@ export default function EnvelopeReveal({
         </div>
       ) : (
         /* Unfolded Letter */
-        <div className="w-full max-w-lg bg-gradient-to-b from-zinc-900 via-zinc-900/95 to-zinc-950 border border-rose-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 animate-in fade-in zoom-in-95 duration-500 relative">
+        <div className="w-full max-w-lg bg-gradient-to-b from-zinc-900 via-zinc-900/95 to-zinc-950 border border-rose-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 animate-in fade-in zoom-in-95 duration-500">
           <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-lg bg-rose-500/20 flex items-center justify-center">
@@ -134,9 +130,6 @@ export default function EnvelopeReveal({
               <Heart className="w-4 h-4 text-rose-400 fill-rose-400" />
             </div>
           </div>
-
-          {/* Sticker Overlay */}
-          {elements.length > 0 && <StickerOverlay elements={elements} />}
         </div>
       )}
       

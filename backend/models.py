@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any
 from datetime import date, time, datetime
 
 class WishPayload(BaseModel):
@@ -8,8 +8,6 @@ class WishPayload(BaseModel):
     theme: Optional[str] = None
     aiPromptInputs: Optional[Dict[str, Any]] = None
     revealType: Optional[str] = None
-    effects: Optional[str] = None
-    elements: Optional[List[Dict[str, Any]]] = None
     mediaUrl: Optional[str] = None
     musicTrack: Optional[str] = None
 
