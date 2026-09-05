@@ -13,7 +13,7 @@ export default function Footer() {
   const isDashboard = pathname === '/dashboard';
 
   return (
-    <footer className={`relative overflow-hidden border-t-[8px] border-black bg-cyan-400 pt-20 pb-10 mt-0`}>
+    <footer className={`relative overflow-hidden border-t-[8px] border-black bg-cyan-400 pt-12 sm:pt-20 pb-8 sm:pb-10 mt-0`}>
       
       {/* Global Halftone Pattern Background */}
       <div 
@@ -40,13 +40,13 @@ export default function Footer() {
             >
               <Code2 className="w-8 h-8 text-black" />
               <div className="flex flex-col">
-                <span className="text-2xl font-black uppercase tracking-widest text-black">
+                <span className="text-xl sm:text-2xl font-black uppercase tracking-widest text-black">
                   chitoria.dev
                 </span>
               </div>
             </Link>
             
-            <p className="text-lg font-bold leading-relaxed text-black max-w-sm bg-white inline-block p-2 border-[4px] border-black shadow-[4px_4px_0_0_#000] transform rotate-1">
+            <p className="text-sm sm:text-lg font-bold leading-relaxed text-black max-w-sm bg-white inline-block p-2 border-[4px] border-black shadow-[4px_4px_0_0_#000] transform rotate-1">
               The AI-powered birthday delivery engine. Send brutal pop-art roasts or unforgettable classic tearjerkers at exact local midnight.
             </p>
             
@@ -64,10 +64,10 @@ export default function Footer() {
 
           {/* Navigation Links (3 columns) */}
           <div className="md:col-span-4 lg:col-span-3">
-            <h4 className="font-black text-black uppercase tracking-widest mb-6 text-xl bg-white inline-block px-2 border-[4px] border-black shadow-[4px_4px_0_0_#000]">
+            <h4 className="font-black text-black uppercase tracking-widest mb-4 sm:mb-6 text-lg sm:text-xl bg-white inline-block px-2 border-[4px] border-black shadow-[4px_4px_0_0_#000]">
               Platform
             </h4>
-            <ul className="space-y-4 text-base font-black uppercase tracking-widest">
+            <ul className="space-y-3 sm:space-y-4 text-sm sm:text-base font-black uppercase tracking-widest">
               <li>
                 <Link href="/create" onClick={() => soundFX.playPop()} className="text-black hover:text-white hover:bg-black inline-flex items-center gap-2 group px-2 py-1 border-[4px] border-transparent hover:border-black transition-all">
                   <ArrowRight className="w-4 h-4 opacity-0 -ml-6 group-hover:opacity-100 group-hover:ml-0 transition-all" />
@@ -91,24 +91,24 @@ export default function Footer() {
 
           {/* Delivery Aliases (4 columns) */}
           <div className="md:col-span-8 lg:col-span-4">
-            <h4 className="font-black text-black uppercase tracking-widest mb-6 text-xl bg-white inline-block px-2 border-[4px] border-black shadow-[4px_4px_0_0_#000] transform -rotate-1">
+            <h4 className="font-black text-black uppercase tracking-widest mb-4 sm:mb-6 text-lg sm:text-xl bg-white inline-block px-2 border-[4px] border-black shadow-[4px_4px_0_0_#000] transform -rotate-1">
               <span className="flex items-center gap-2">
-                <Mail className="w-5 h-5 text-black fill-current" />
+                <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-black fill-current" />
                 Delivery Aliases
               </span>
             </h4>
-            <div className="flex flex-wrap gap-4">
-              <div className="group cursor-default flex items-center gap-2 px-3 py-2 bg-yellow-400 border-[4px] border-black shadow-[4px_4px_0_0_#000] hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#000] transition-all transform rotate-1">
-                <span className="w-3 h-3 rounded-full bg-black group-hover:animate-ping" />
-                <code className="text-sm font-black tracking-widest text-black">roast@chitoria.dev</code>
+            <div className="flex flex-wrap gap-2 sm:gap-4">
+              <div className="group cursor-default flex items-center gap-2 px-2 py-1.5 sm:px-3 sm:py-2 bg-yellow-400 border-[4px] border-black shadow-[4px_4px_0_0_#000] hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#000] transition-all transform rotate-1">
+                <span className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-black group-hover:animate-ping" />
+                <code className="text-xs sm:text-sm font-black tracking-widest text-black">roast@chitoria.dev</code>
               </div>
-              <div className="group cursor-default flex items-center gap-2 px-3 py-2 bg-rose-500 border-[4px] border-black shadow-[4px_4px_0_0_#000] hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#000] transition-all transform -rotate-2">
-                <span className="w-3 h-3 rounded-full bg-black group-hover:animate-ping" />
-                <code className="text-sm font-black tracking-widest text-white">forever@chitoria.dev</code>
+              <div className="group cursor-default flex items-center gap-2 px-2 py-1.5 sm:px-3 sm:py-2 bg-rose-500 border-[4px] border-black shadow-[4px_4px_0_0_#000] hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#000] transition-all transform -rotate-2">
+                <span className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-black group-hover:animate-ping" />
+                <code className="text-xs sm:text-sm font-black tracking-widest text-white">forever@chitoria.dev</code>
               </div>
-              <div className="group cursor-default flex items-center gap-2 px-3 py-2 bg-white border-[4px] border-black shadow-[4px_4px_0_0_#000] hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#000] transition-all transform rotate-2">
-                <span className="w-3 h-3 rounded-full bg-black group-hover:animate-ping" />
-                <code className="text-sm font-black tracking-widest text-black">truth@chitoria.dev</code>
+              <div className="group cursor-default flex items-center gap-2 px-2 py-1.5 sm:px-3 sm:py-2 bg-white border-[4px] border-black shadow-[4px_4px_0_0_#000] hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#000] transition-all transform rotate-2">
+                <span className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-black group-hover:animate-ping" />
+                <code className="text-xs sm:text-sm font-black tracking-widest text-black">truth@chitoria.dev</code>
               </div>
             </div>
           </div>

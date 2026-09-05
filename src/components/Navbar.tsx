@@ -45,7 +45,7 @@ export default function Navbar() {
     <>
       <header className="sticky top-0 z-50 w-full px-0 sm:px-4 pt-0 sm:pt-4 pointer-events-none transition-all duration-500">
         <div className="mx-auto max-w-5xl pointer-events-auto">
-          <div className="h-16 bg-white border-[4px] border-black shadow-[8px_8px_0_0_#000] flex items-center justify-between px-2 pr-4 transform -rotate-1 hover:rotate-0 transition-transform">
+          <div className="h-14 sm:h-16 bg-white border-[4px] border-black shadow-[8px_8px_0_0_#000] flex items-center justify-between px-2 pr-4 transform -rotate-1 hover:rotate-0 transition-transform">
             
             {/* Brand Logo */}
             <Link
@@ -122,12 +122,12 @@ export default function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-white md:hidden pt-32 px-6 flex flex-col font-sans">
+        <div className="fixed inset-0 z-40 bg-white md:hidden pt-20 sm:pt-24 px-4 sm:px-6 flex flex-col font-sans">
           <div 
             className="absolute inset-0 pointer-events-none opacity-[0.1] z-0" 
             style={{ backgroundImage: 'radial-gradient(circle, #000 2px, transparent 2.5px)', backgroundSize: '16px 16px' }}
           />
-          <nav className="flex flex-col gap-4 relative z-10">
+          <nav className="flex flex-col gap-3 relative z-10">
             {navLinks.map((link) => {
               const Icon = link.icon;
               const isActive = pathname === link.href;
@@ -139,13 +139,13 @@ export default function Navbar() {
                     soundFX.playPop();
                     setMobileMenuOpen(false);
                   }}
-                  className={`flex items-center gap-4 p-4 text-xl font-black uppercase tracking-widest border-[4px] border-black transition-all ${
+                  className={`flex items-center gap-3 p-3 text-base sm:text-xl font-black uppercase tracking-widest border-[4px] border-black transition-all ${
                     isActive
-                      ? 'bg-cyan-400 shadow-[8px_8px_0_0_#000] text-black transform rotate-1'
-                      : 'bg-white text-black hover:bg-yellow-400 hover:shadow-[8px_8px_0_0_#000]'
+                      ? 'bg-cyan-400 shadow-[6px_6px_0_0_#000] text-black transform rotate-1'
+                      : 'bg-white text-black hover:bg-yellow-400 hover:shadow-[6px_6px_0_0_#000]'
                   }`}
                 >
-                  <Icon className="w-6 h-6" />
+                  <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
                   {link.name}
                 </Link>
               );
@@ -159,9 +159,9 @@ export default function Navbar() {
                   handleSignOut();
                   setMobileMenuOpen(false);
                 }}
-                className="flex items-center gap-4 p-4 text-xl font-black uppercase tracking-widest bg-rose-500 text-white border-[4px] border-black shadow-[8px_8px_0_0_#000] transform -rotate-1 active:translate-y-2 active:shadow-[0_0_0_0_#000] transition-all"
+                className="flex items-center gap-3 p-3 text-base sm:text-xl font-black uppercase tracking-widest bg-rose-500 text-white border-[4px] border-black shadow-[6px_6px_0_0_#000] transform -rotate-1 active:translate-y-2 active:shadow-[0_0_0_0_#000] transition-all"
               >
-                <LogOut className="w-6 h-6" />
+                <LogOut className="w-5 h-5 sm:w-6 sm:h-6" />
                 Sign Out
               </button>
             ) : (
@@ -171,9 +171,9 @@ export default function Navbar() {
                   soundFX.playPop();
                   setMobileMenuOpen(false);
                 }}
-                className="flex items-center gap-4 p-4 text-xl font-black uppercase tracking-widest bg-black text-white border-[4px] border-black shadow-[8px_8px_0_0_rgba(6,182,212,1)] transform rotate-1 active:translate-y-2 active:shadow-[0_0_0_0_rgba(6,182,212,1)] transition-all"
+                className="flex items-center gap-3 p-3 text-base sm:text-xl font-black uppercase tracking-widest bg-black text-white border-[4px] border-black shadow-[6px_6px_0_0_rgba(6,182,212,1)] transform rotate-1 active:translate-y-2 active:shadow-[0_0_0_0_rgba(6,182,212,1)] transition-all"
               >
-                <User className="w-6 h-6" />
+                <User className="w-5 h-5 sm:w-6 sm:h-6" />
                 Sign In
               </Link>
             )}

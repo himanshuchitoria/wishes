@@ -107,7 +107,7 @@ function AuthContent() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex flex-col lg:flex-row w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-24 items-center justify-center gap-12 lg:gap-24 relative overflow-hidden bg-white text-black selection:bg-cyan-400 selection:text-black">
+    <div className="min-h-[calc(100vh-4rem)] flex flex-col lg:flex-row w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-24 items-center justify-center gap-8 sm:gap-12 lg:gap-24 relative overflow-hidden bg-white text-black selection:bg-cyan-400 selection:text-black">
       
       {/* Global Halftone Pattern Background */}
       <div 
@@ -123,7 +123,7 @@ function AuthContent() {
       </div>
 
       {/* Left Form Panel */}
-      <div className="w-full max-w-md bg-yellow-400 p-6 sm:p-10 border-[8px] border-black shadow-[16px_16px_0_0_#000] relative z-20 transform -rotate-1">
+      <div className="w-full max-w-md bg-yellow-400 p-5 sm:p-10 border-[6px] sm:border-[8px] border-black shadow-[12px_12px_0_0_#000] sm:shadow-[16px_16px_0_0_#000] relative z-20 transform -rotate-1">
         
         {/* Header Badge */}
         <div className="absolute -top-5 -left-5 bg-rose-500 text-white px-4 py-2 border-[4px] border-black shadow-[4px_4px_0_0_#000] transform -rotate-6">
@@ -135,7 +135,7 @@ function AuthContent() {
 
         {/* Header Text */}
         <div className="space-y-2 mt-4 mb-8">
-          <h1 className="text-4xl sm:text-5xl font-black text-black tracking-tighter uppercase leading-none">
+          <h1 className="text-3xl sm:text-5xl font-black text-black tracking-tighter uppercase leading-none">
             {mode === 'signin'
               ? 'WELCOME BACK'
               : mode === 'signup'

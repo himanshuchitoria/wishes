@@ -57,7 +57,7 @@ export default function HomePage() {
       />
 
       {/* 1. HERO SECTION (COMIC COVER) */}
-      <section className="relative w-full pt-16 pb-20 lg:pt-32 lg:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-16 z-10 border-b-[8px] border-black">
+      <section className="relative w-full pt-12 pb-16 lg:pt-32 lg:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16 z-10 border-b-[8px] border-black">
         
         {/* Massive Background Text behind everything */}
         <div className="absolute top-10 left-0 w-full overflow-hidden z-[-1] flex flex-col pointer-events-none select-none opacity-20 transform -rotate-3">
@@ -71,7 +71,7 @@ export default function HomePage() {
             <span className="text-sm font-black tracking-widest uppercase">Issue #1: The Ultimate Gift</span>
           </div>
 
-          <h1 className="text-6xl sm:text-7xl lg:text-8xl font-black tracking-tighter uppercase leading-[0.9] text-black drop-shadow-[4px_4px_0_rgba(255,235,59,1)]">
+          <h1 className="text-5xl sm:text-6xl lg:text-8xl font-black tracking-tighter uppercase leading-[0.9] text-black drop-shadow-[4px_4px_0_rgba(255,235,59,1)]">
             NEVER SEND A BORING HBD AGAIN.
           </h1>
 
@@ -86,7 +86,7 @@ export default function HomePage() {
             <Link
               href="/create"
               onClick={() => soundFX.playPop()}
-              className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-5 text-xl font-black text-black bg-cyan-400 border-[6px] border-black hover:bg-yellow-400 shadow-[8px_8px_0_0_#000] hover:shadow-[12px_12px_0_0_#000] hover:-translate-y-1 active:translate-y-2 active:shadow-[0_0_0_0_#000] transition-all transform -rotate-2"
+              className="w-full sm:w-auto flex items-center justify-center gap-3 px-6 py-4 sm:px-8 sm:py-5 text-lg sm:text-xl font-black text-black bg-cyan-400 border-[6px] border-black hover:bg-yellow-400 shadow-[8px_8px_0_0_#000] hover:shadow-[12px_12px_0_0_#000] hover:-translate-y-1 active:translate-y-2 active:shadow-[0_0_0_0_#000] transition-all transform -rotate-2"
             >
               <Zap className="w-6 h-6 fill-current" />
               <span>LAUNCH REVEAL</span>
@@ -138,7 +138,7 @@ export default function HomePage() {
           </div>
 
           {/* Comic Panel Container for Slider */}
-          <div className="max-w-4xl mx-auto bg-white p-8 md:p-12 border-[8px] border-black shadow-[16px_16px_0_0_#000] relative transform -rotate-1">
+          <div className="max-w-4xl mx-auto bg-white p-6 sm:p-8 md:p-12 border-[6px] sm:border-[8px] border-black shadow-[12px_12px_0_0_#000] sm:shadow-[16px_16px_0_0_#000] relative transform -rotate-1">
             {/* Cartoon Ornaments */}
             <div className="absolute -top-12 -left-12 w-24 h-24 bg-rose-500 rounded-full border-[6px] border-black flex items-center justify-center shadow-[8px_8px_0_0_#000] z-30 transform -rotate-12">
                <Flame className="w-12 h-12 text-white fill-white" />
