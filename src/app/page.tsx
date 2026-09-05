@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
+import { useSearchParams, useRouter } from 'next/navigation';
 import {
   Sparkles,
   Flame,
@@ -45,10 +46,13 @@ const SpeechBubble = ({ text, className, color = "bg-white" }: { text: string, c
   </div>
 );
 
-export default function HomePage() {
+function HomeContent() {
   const [selectedVibe, setSelectedVibe] = useState<WishVibe>('roast');
   const [user, setUser] = useState<User | null>(null);
   const currentConfig = VIBE_CONFIGS[selectedVibe];
+
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   useEffect(() => {
     if (!supabase) return;
@@ -56,8 +60,15 @@ export default function HomePage() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
+
+    // Fallback: If Supabase redirects to root with a code (e.g., due to unconfigured Redirect URLs)
+    const code = searchParams.get('code');
+    if (code) {
+      router.push(`/auth/callback?code=${code}&next=/auth/update-password`);
+    }
+
     return () => subscription.unsubscribe();
-  }, []);
+  }, [searchParams, router]);
 
   return (
     <div className="flex flex-col items-center w-full overflow-hidden bg-white text-black font-sans relative selection:bg-rose-500 selection:text-white">
@@ -280,5 +291,13 @@ export default function HomePage() {
       </section>
 
     </div>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white" />}>
+      <HomeContent />
+    </Suspense>
   );
 }
