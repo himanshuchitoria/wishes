@@ -152,7 +152,7 @@ export default function SettingsPage() {
 
   if (!profile) {
     return (
-      <div className="w-full h-[60vh] flex items-center justify-center bg-yellow-400">
+      <div className="w-full min-h-screen flex items-center justify-center bg-yellow-400 pt-24 pb-12">
         <div className="text-center space-y-4 border-[8px] border-black bg-white p-8 shadow-[16px_16px_0_0_#000] transform -rotate-2">
           <Settings className="w-16 h-16 animate-spin mx-auto text-black" />
           <h2 className="text-3xl font-black uppercase tracking-tighter text-black">Loading...</h2>
@@ -177,7 +177,7 @@ export default function SettingsPage() {
         </h1>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 space-y-12 pt-16 sm:pt-20">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 space-y-12 pt-24 sm:pt-28">
         
         {/* Header */}
         <div className="border-b-[8px] border-black pb-8">

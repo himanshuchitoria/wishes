@@ -138,7 +138,7 @@ export default function GroupContributionPage() {
   const targetDate = wish ? getNextBirthdayDate(wish.birth_date, wish.delivery_time) : new Date();
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12 sm:pt-28 sm:pb-16 space-y-8">
       {error ? (
         <div className="p-8 sm:p-12 rounded-3xl bg-zinc-950/80 border border-rose-500/30 backdrop-blur-xl shadow-2xl text-center space-y-4 max-w-md mx-auto mt-20">
           <div className="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 mx-auto">

@@ -57,7 +57,7 @@ export default function HomePage() {
       />
 
       {/* 1. HERO SECTION (COMIC COVER) */}
-      <section className="relative w-full pt-12 pb-16 lg:pt-32 lg:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16 z-10 border-b-[8px] border-black">
+      <section className="relative w-full pt-24 pb-16 sm:pt-28 lg:pt-36 lg:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16 z-10 border-b-[8px] border-black">
         
         {/* Massive Background Text behind everything */}
         <div className="absolute top-10 left-0 w-full overflow-hidden z-[-1] flex flex-col pointer-events-none select-none opacity-20 transform -rotate-3">

@@ -44,7 +44,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full px-2 sm:px-4 pt-2 sm:pt-3 pointer-events-none transition-all duration-500">
+      <header className="fixed top-0 left-0 right-0 z-50 w-full px-2 sm:px-4 pt-2 sm:pt-3 pointer-events-none transition-all duration-500">
         <div className="mx-auto max-w-5xl pointer-events-auto">
           <div className="h-12 sm:h-14 bg-white border-[4px] border-black shadow-[8px_8px_0_0_#000] flex items-center justify-between px-2 pr-4 transform -rotate-1 hover:rotate-0 transition-transform">
             

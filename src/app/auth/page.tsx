@@ -107,7 +107,7 @@ function AuthContent() {
   };
 
   return (
-    <div className="min-h-screen bg-white w-full relative flex flex-col lg:flex-row items-center justify-center px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-24 gap-8 sm:gap-12 lg:gap-24 overflow-hidden text-black selection:bg-cyan-400 selection:text-black">
+    <div className="min-h-screen bg-white w-full relative flex flex-col lg:flex-row items-center justify-center px-4 sm:px-6 lg:px-8 pt-24 pb-12 sm:pt-28 sm:pb-16 lg:py-24 gap-8 sm:gap-12 lg:gap-24 overflow-hidden text-black selection:bg-cyan-400 selection:text-black">
       
       {/* Global Halftone Pattern Background */}
       <div 
